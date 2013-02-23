@@ -37,5 +37,20 @@ public class MainActivity extends Activity {
 			}
 		});
 	}
+	
+	//Handler for sentence hint
+	public void onHint1ButtonClick() {
+		//TODO
+	}
+	
+	//handler for similar word hint
+	public void onHint2ButtonClick() {
+		//TODO
+	}
+	
+	//handler for giving up and getting answer
+	public void onHint3ButtonClick() {
+		//TODO
+	}
 
 }
