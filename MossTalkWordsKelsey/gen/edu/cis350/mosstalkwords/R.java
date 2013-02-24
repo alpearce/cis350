@@ -13,16 +13,26 @@ public final class R {
     public static final class drawable {
         public static final int apple=0x7f020000;
         public static final int applesmall=0x7f020001;
-        public static final int bird=0x7f020002;
-        public static final int carrot=0x7f020003;
-        public static final int cat=0x7f020004;
-        public static final int corn=0x7f020005;
-        public static final int cow=0x7f020006;
-        public static final int dog=0x7f020007;
-        public static final int elephant=0x7f020008;
-        public static final int flower=0x7f020009;
-        public static final int ic_launcher=0x7f02000a;
-        public static final int tomato=0x7f02000b;
+        public static final int asparagus=0x7f020002;
+        public static final int avocado=0x7f020003;
+        public static final int bird=0x7f020004;
+        public static final int broccoli=0x7f020005;
+        public static final int carrot=0x7f020006;
+        public static final int cat=0x7f020007;
+        public static final int cauliflower=0x7f020008;
+        public static final int corn=0x7f020009;
+        public static final int cow=0x7f02000a;
+        public static final int dog=0x7f02000b;
+        public static final int elephant=0x7f02000c;
+        public static final int flower=0x7f02000d;
+        public static final int giraffe=0x7f02000e;
+        public static final int ic_launcher=0x7f02000f;
+        public static final int octopus=0x7f020010;
+        public static final int pineapple=0x7f020011;
+        public static final int pinecone=0x7f020012;
+        public static final int pumpkin=0x7f020013;
+        public static final int rooster=0x7f020014;
+        public static final int tomato=0x7f020015;
     }
     public static final class id {
         public static final int btnChangeImage=0x7f070001;
