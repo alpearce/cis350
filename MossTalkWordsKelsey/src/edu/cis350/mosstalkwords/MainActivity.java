@@ -41,7 +41,7 @@ public class MainActivity extends Activity {
 	public void loadData()
 	{
 		Stimulus livingHardStimuli[] = new Stimulus [10];
-		//livingHardStimuli[0] = new Stimulus();
+		livingHardStimuli[0] = new Stimulus(null, 0, null, firstImage);
 		livingHard=new StimulusSet("LivingHard", livingHardStimuli);
 	}
 	
