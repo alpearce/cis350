@@ -11,7 +11,6 @@ import android.view.Menu;
 public class MainActivity extends Activity {
 	Button nextButton;
 	ImageView firstImage;
-	StimulusSet livingHard;
 	StimulusSet livingEasySet;
 	StimulusSet livingHardSet;
 	StimulusSet nonlivingEasySet;
@@ -33,7 +32,6 @@ public class MainActivity extends Activity {
 	}
 	public void addListenerForButton()
 	{
-		firstImage=(ImageView) findViewById(R.id.imageView1);
 		
 		//firstImage=(ImageView) findViewById(livingHard.getStimuli()[0].getImage());//this gives a picture id not the imageview id
 		firstImage=((ImageView) findViewById(R.id.imageView1));
@@ -43,7 +41,6 @@ public class MainActivity extends Activity {
 		{
 			public void onClick(View arg0)
 			{
-				firstImage.setImageResource(R.drawable.bird);
 				imageCounter++;
 				imageCounter=imageCounter%10;
 				//firstImage.setImageResource(R.drawable.bird);
@@ -51,13 +48,12 @@ public class MainActivity extends Activity {
 			}
 		});
 	}
-
+	
 	public void loadData()
 	{
-
+<<<<<<< HEAD
 		Stimulus livingEasyStimuli[] = new Stimulus [10];
 		Stimulus livingHardStimuli[] = new Stimulus [10];
-		livingHard=new StimulusSet("LivingHard", livingHardStimuli);
 		Stimulus nonlivingEasyStimuli[] = new Stimulus [10];
 		Stimulus nonlivingHardStimuli[] = new Stimulus [10];
 		
@@ -87,9 +83,14 @@ public class MainActivity extends Activity {
 		
 		livingHardSet = new StimulusSet("Living Hard", livingHardStimuli);
 		
-
+=======
+		/*
+		Stimulus livingHardStimuli[] = new Stimulus [10];
+		livingHardStimuli[0] = new Stimulus(null, 0, null, firstImage);
+		livingHard=new StimulusSet("LivingHard", livingHardStimuli);
+		*/
+>>>>>>> 4b806a26deb44eac35f40c1670ac69404350bc3e
 	}
-	
 
 	//Handler for sentence hint
 	public void onHint1ButtonClick() {
