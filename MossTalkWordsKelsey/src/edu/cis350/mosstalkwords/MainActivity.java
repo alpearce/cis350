@@ -11,12 +11,13 @@ import android.view.Menu;
 public class MainActivity extends Activity {
 	Button nextButton;
 	ImageView firstImage;
-	StimulusSet livingHard;
 	StimulusSet livingEasySet;
 	StimulusSet livingHardSet;
 	StimulusSet nonlivingEasySet;
 	StimulusSet nonlivingHardSet;
+	StimulusSet currentSet;
 	int imageCounter=0;
+	StimulusSet allStimulusSets []= {livingEasySet,livingHardSet, nonlivingEasySet, nonlivingHardSet};
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -114,7 +115,10 @@ public class MainActivity extends Activity {
 
 	}
 	
-
+	public void onNextSetButtonClick()
+	{
+		
+	}
 	//Handler for sentence hint
 	public void onHint1ButtonClick() {
 		//TODO
