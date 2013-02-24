@@ -11,11 +11,12 @@ import android.view.Menu;
 public class MainActivity extends Activity {
 	Button nextButton;
 	ImageView firstImage;
+	StimulusSet livingHard;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+		loadData();
 		addListenerForButton();
 	}
 
@@ -36,6 +37,12 @@ public class MainActivity extends Activity {
 				firstImage.setImageResource(R.drawable.bird);
 			}
 		});
+	}
+	public void loadData()
+	{
+		Stimulus livingHardStimuli[] = new Stimulus [10];
+		//livingHardStimuli[0] = new Stimulus();
+		livingHard=new StimulusSet("LivingHard", livingHardStimuli);
 	}
 	
 	//Handler for sentence hint
