@@ -36,8 +36,8 @@
    <LinearLayout
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:layout_centerHorizontal="true"
        android:layout_alignParentBottom="true"
+<<<<<<< HEAD
        android:orientation="horizontal" >
 		<Button 
 		    android:id="@+id/hint1button"
@@ -54,19 +54,45 @@
 
        <Button
            android:layout_width="60dp"
-           android:layout_height="wrap_content"
-           android:onClick="onHint2ButtonClick"
-           android:text="@string/hint2" />
+=======
+       android:layout_centerHorizontal="true"
+       android:orientation="vertical" >
 
-       <Button
+       <LinearLayout
            android:layout_width="wrap_content"
+>>>>>>> Score
            android:layout_height="wrap_content"
-           android:onClick="onHint3ButtonClick"
-           android:text="@string/hint3" />
+           android:orientation="horizontal" >
+
+           <Button
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:onClick="onNextSetButtonClick"
+               android:text="@string/nextSet" />
+
+           <Button
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:onClick="onHint1ButtonClick"
+               android:text="@string/hint1" />
+
+           <Button
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:onClick="onHint2ButtonClick"
+               android:text="@string/hint2" />
+
+           <Button
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:onClick="onHint3ButtonClick"
+               android:text="@string/hint3" />
+
+       </LinearLayout>
 
        <Button
            android:id="@+id/speakButton"
-           android:layout_width="wrap_content"
+           android:layout_width="fill_parent"
            android:layout_height="wrap_content"
            android:text="@string/speak" />
 
