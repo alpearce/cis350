@@ -184,6 +184,7 @@ public final class R {
         public static final int soccerballhint1=0x7f040075;
         public static final int soccerballhint2=0x7f040076;
         public static final int soccerballhint3=0x7f040077;
+        public static final int speak=0x7f040081;
         public static final int tablehint1=0x7f040048;
         public static final int tablehint2=0x7f040049;
         public static final int tablehint3=0x7f04004a;
