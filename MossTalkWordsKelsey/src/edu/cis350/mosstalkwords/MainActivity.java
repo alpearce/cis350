@@ -77,13 +77,13 @@ public class MainActivity extends Activity {
 			public void onClick(View arg0)
 			{
 
-				firstImage.setImageResource(R.drawable.bird);
-				imageCounter++;
-				imageCounter=imageCounter%(currentSet.getStimuli().length);
 				//firstImage.setImageResource(R.drawable.bird);
-				firstImage.setImageResource((currentSet.getStimuli()[imageCounter].getImage()));
-				TextView hintView= (TextView)findViewById(R.id.hintText);
-				hintView.setText("");
+				//imageCounter++;
+				//imageCounter=imageCounter%(currentSet.getStimuli().length);
+				//firstImage.setImageResource(R.drawable.bird);
+				//firstImage.setImageResource((currentSet.getStimuli()[imageCounter].getImage()));
+				//TextView hintView= (TextView)findViewById(R.id.hintText);
+				//hintView.setText("");
 				nextImage();
 			}
 		});
@@ -100,12 +100,14 @@ public class MainActivity extends Activity {
 
 	//moved contents of nextimage here so it can be accessed below
 	public void nextImage() {
-		firstImage.setImageResource(R.drawable.bird);
+		//firstImage.setImageResource(R.drawable.bird);
 		imageCounter++;
 		imageCounter=imageCounter%(currentSet.getStimuli().length);
 		//firstImage.setImageResource(R.drawable.bird);
 		firstImage.setImageResource((currentSet.getStimuli()[imageCounter].getImage()));
 		currentImage = currentSet.getStimuli()[imageCounter].getName();
+		TextView hintView= (TextView)findViewById(R.id.hintText);
+		hintView.setText("");
 	}
 
 	public void loadData()
