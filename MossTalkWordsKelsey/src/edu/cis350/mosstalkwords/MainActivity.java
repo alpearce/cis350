@@ -1,20 +1,34 @@
 package edu.cis350.mosstalkwords;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.speech.RecognizerIntent;
 import android.view.View.OnClickListener;
 import android.view.View;
 import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.view.Menu;
 
 public class MainActivity extends Activity {
+	
+	private static final int REQUEST_CODE = 1234;
+	
 	Button nextButton;
 	ImageView firstImage;
+	
+	Button speakBtn;
 	StimulusSet livingEasySet;
 	StimulusSet livingHardSet;
 	StimulusSet nonlivingEasySet;
 	StimulusSet nonlivingHardSet;
+	
+	String currentImage;
 	
 	int imageCounter=0;
 	int setCounter=0;
@@ -27,6 +41,15 @@ public class MainActivity extends Activity {
 		loadData();
 		//currentSet=allStimulusSets[setCounter];
 		addListenerForButton();
+		
+		PackageManager pm = getPackageManager();
+		List RecognizerActivities = pm.queryIntentActivities(
+				new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
+		if (RecognizerActivities.size() == 0)
+		{
+			speakBtn.setEnabled(false);
+			speakBtn.setText("Recognizer unavailable!!!");
+		}
 	}
 
 	@Override
@@ -39,21 +62,39 @@ public class MainActivity extends Activity {
 	{
 		firstImage=(ImageView) findViewById(R.id.imageView1);
 		
+		speakBtn = (Button) findViewById(R.id.speakButton);
+		
 		//firstImage=(ImageView) findViewById(livingHard.getStimuli()[0].getImage());//this gives a picture id not the imageview id
 		firstImage=((ImageView) findViewById(R.id.imageView1));
 		firstImage.setImageResource(currentSet.getStimuli()[imageCounter].getImage());
+		currentImage = currentSet.getStimuli()[imageCounter].getName();
 		nextButton = (Button) findViewById(R.id.btnChangeImage);
 		nextButton.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View arg0)
 			{
-				firstImage.setImageResource(R.drawable.bird);
-				imageCounter++;
-				imageCounter=imageCounter%(currentSet.getStimuli().length);
-				//firstImage.setImageResource(R.drawable.bird);
-				firstImage.setImageResource((currentSet.getStimuli()[imageCounter].getImage()));
+				nextImage();
 			}
 		});
+		
+		speakBtn.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View arg0)
+			{
+				startVoiceRecognitionActivity();
+			}
+		});
+	}
+	
+	
+	//moved contents of nextimage here so it can be accessed below
+	public void nextImage() {
+		firstImage.setImageResource(R.drawable.bird);
+		imageCounter++;
+		imageCounter=imageCounter%(currentSet.getStimuli().length);
+		//firstImage.setImageResource(R.drawable.bird);
+		firstImage.setImageResource((currentSet.getStimuli()[imageCounter].getImage()));
+		currentImage = currentSet.getStimuli()[imageCounter].getName();
 	}
 
 	public void loadData()
@@ -90,7 +131,7 @@ public class MainActivity extends Activity {
 		
 		livingHardSet = new StimulusSet("Living Hard", livingHardStimuli);
 		
-		nonlivingEasyStimuli[0] = new Stimulus("Chair", 0, null, R.drawable.chair);
+		/*nonlivingEasyStimuli[0] = new Stimulus("Chair", 0, null, R.drawable.chair);
 		nonlivingEasyStimuli[1] = new Stimulus("Table", 0, null, R.drawable.table);
 		nonlivingEasyStimuli[2] = new Stimulus("Lamp", 0, null, R.drawable.lamp);
 		nonlivingEasyStimuli[3] = new Stimulus("Bed", 0, null, R.drawable.bed);
@@ -99,7 +140,7 @@ public class MainActivity extends Activity {
 		nonlivingEasyStimuli[6] = new Stimulus("Shirt", 0, null, R.drawable.shirt);
 		nonlivingEasyStimuli[7] = new Stimulus("Shoes", 0, null, R.drawable.shoes);
 		nonlivingEasyStimuli[8] = new Stimulus("Hat", 0, null, R.drawable.hat);
-		nonlivingEasyStimuli[9] = new Stimulus("Money", 0, null, R.drawable.money);
+		nonlivingEasyStimuli[9] = new Stimulus("Money", 0, null, R.drawable.money);*/
 		
 		nonlivingEasySet = new StimulusSet("Nonliving Easy", nonlivingEasyStimuli);
 		
@@ -111,17 +152,13 @@ public class MainActivity extends Activity {
 				 					getResources().getString(R.string.textbookhint2), 
 				 					getResources().getString(R.string.textbookhint3)};
 		
-		 String [] televisionhints = {getResources().getString(R.string.televisionhint1),
+		 /*String [] televisionhints = {getResources().getString(R.string.televisionhint1),
 				 					  getResources().getString(R.string.televisionhint2), 
-				 					  getResources().getString(R.string.televisionhint3)};
+				 					  getResources().getString(R.string.televisionhint3)};*/
 		 
 		 String [] refrigeratorhints = {getResources().getString(R.string.refrigeratorhint1),
 				 						getResources().getString(R.string.refrigeratorhint2), 
 				 						getResources().getString(R.string.refrigeratorhint3)};
-		 
-		 String [] basketballhints = {getResources().getString(R.string.basketballhint1),
-				 					  getResources().getString(R.string.basketballhint2), 
-				 					  getResources().getString(R.string.basketballhint3)};
 		 
 		 String [] basketballhints = {getResources().getString(R.string.basketballhint1),
 				 					  getResources().getString(R.string.basketballhint2), 
@@ -145,7 +182,7 @@ public class MainActivity extends Activity {
 				 				  getResources().getString(R.string.gloveshint2), 
 				 				  getResources().getString(R.string.gloveshint3)};
 		 
-		nonlivingHardStimuli[0] = new Stimulus("Computer", 1, computerhints, R.drawable.computer);
+		/*nonlivingHardStimuli[0] = new Stimulus("Computer", 1, computerhints, R.drawable.computer);
 		nonlivingHardStimuli[1] = new Stimulus("Textbook", 1, textbookhints, R.drawable.textbook);
 		nonlivingHardStimuli[2] = new Stimulus("Television", 1, televisionhints, R.drawable.tv);
 		nonlivingHardStimuli[3] = new Stimulus("Refrigerator", 1, refrigeratorhints, R.drawable.fridge);
@@ -154,7 +191,7 @@ public class MainActivity extends Activity {
 		nonlivingHardStimuli[6] = new Stimulus("Soccerball", 1, soccerballhints, R.drawable.soccerball);
 		nonlivingHardStimuli[7] = new Stimulus("Pocket", 1, pockethints, R.drawable.pocket);
 		nonlivingHardStimuli[8] = new Stimulus("Zipper", 1, zipperhints, R.drawable.zipper);
-		nonlivingHardStimuli[9] = new Stimulus("Gloves", 1, gloveshints, R.drawable.gloves);
+		nonlivingHardStimuli[9] = new Stimulus("Gloves", 1, gloveshints, R.drawable.gloves);*/
 		
 		nonlivingHardSet= new StimulusSet("Nonliving Hard", nonlivingHardStimuli);
 		
@@ -176,6 +213,31 @@ public class MainActivity extends Activity {
 		setCounter=setCounter%allStimulusSets.length;
 		currentSet=allStimulusSets[setCounter];
 		firstImage.setImageResource((currentSet.getStimuli()[imageCounter].getImage()));
+	}
+	
+	private void startVoiceRecognitionActivity()
+	{
+		Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+		intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+				RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+		intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say what you see in the picture...");
+		startActivityForResult(intent, REQUEST_CODE);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		if (requestCode == REQUEST_CODE && resultCode == RESULT_OK)
+		{
+			// Populate the resultList with the String values the recognition engine thought it heard
+			ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+			for (String s: matches) {
+				if (s.equalsIgnoreCase(currentImage)) {
+					nextImage();
+				}
+			}
+		}
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 	//Handler for sentence hint
 	public void onHint1ButtonClick() {
