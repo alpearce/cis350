@@ -103,16 +103,58 @@ public class MainActivity extends Activity {
 		
 		nonlivingEasySet = new StimulusSet("Nonliving Easy", nonlivingEasyStimuli);
 		
-		nonlivingHardStimuli[0] = new Stimulus("Computer", 1, null, R.drawable.computer);
-		nonlivingHardStimuli[1] = new Stimulus("Textbook", 1, null, R.drawable.textbook);
-		nonlivingHardStimuli[2] = new Stimulus("Television", 1, null, R.drawable.tv);
-		nonlivingHardStimuli[3] = new Stimulus("Refrigerator", 1, null, R.drawable.fridge);
-		nonlivingHardStimuli[4] = new Stimulus("Basketball", 1, null, R.drawable.basketball);
-		nonlivingHardStimuli[5] = new Stimulus("Football", 1, null, R.drawable.football);
-		nonlivingHardStimuli[6] = new Stimulus("Soccerball", 1, null, R.drawable.soccerball);
-		nonlivingHardStimuli[7] = new Stimulus("Pocket", 1, null, R.drawable.pocket);
-		nonlivingHardStimuli[8] = new Stimulus("Zipper", 1, null, R.drawable.zipper);
-		nonlivingHardStimuli[9] = new Stimulus("Gloves", 1, null, R.drawable.gloves);
+		 String [] computerhints = {getResources().getString(R.string.computerhint1),
+                 					getResources().getString(R.string.computerhint2), 
+                 					getResources().getString(R.string.computerhint3)};
+		 
+		 String [] textbookhints = {getResources().getString(R.string.textbookhint1),
+				 					getResources().getString(R.string.textbookhint2), 
+				 					getResources().getString(R.string.textbookhint3)};
+		
+		 String [] televisionhints = {getResources().getString(R.string.televisionhint1),
+				 					  getResources().getString(R.string.televisionhint2), 
+				 					  getResources().getString(R.string.televisionhint3)};
+		 
+		 String [] refrigeratorhints = {getResources().getString(R.string.refrigeratorhint1),
+				 						getResources().getString(R.string.refrigeratorhint2), 
+				 						getResources().getString(R.string.refrigeratorhint3)};
+		 
+		 String [] basketballhints = {getResources().getString(R.string.basketballhint1),
+				 					  getResources().getString(R.string.basketballhint2), 
+				 					  getResources().getString(R.string.basketballhint3)};
+		 
+		 String [] basketballhints = {getResources().getString(R.string.basketballhint1),
+				 					  getResources().getString(R.string.basketballhint2), 
+				 					  getResources().getString(R.string.basketballhint3)};
+		 
+		 String [] footballhints = {getResources().getString(R.string.footballhint1),
+				 					getResources().getString(R.string.footballhint2), 
+				 					getResources().getString(R.string.footballhint3)};
+		 
+		 String [] soccerballhints = {getResources().getString(R.string.soccerballhint1),
+				 					  getResources().getString(R.string.soccerballhint2), 
+				 					  getResources().getString(R.string.soccerballhint3)};
+		 String [] pockethints = {getResources().getString(R.string.pockethint1),
+				 				  getResources().getString(R.string.pockethint2), 
+				 				  getResources().getString(R.string.pockethint3)};
+		 String [] zipperhints = {getResources().getString(R.string.zipperhint1),
+				 				  getResources().getString(R.string.zipperhint2), 
+				 				  getResources().getString(R.string.zipperhint3)};
+		 
+		 String [] gloveshints = {getResources().getString(R.string.gloveshint1),
+				 				  getResources().getString(R.string.gloveshint2), 
+				 				  getResources().getString(R.string.gloveshint3)};
+		 
+		nonlivingHardStimuli[0] = new Stimulus("Computer", 1, computerhints, R.drawable.computer);
+		nonlivingHardStimuli[1] = new Stimulus("Textbook", 1, textbookhints, R.drawable.textbook);
+		nonlivingHardStimuli[2] = new Stimulus("Television", 1, televisionhints, R.drawable.tv);
+		nonlivingHardStimuli[3] = new Stimulus("Refrigerator", 1, refrigeratorhints, R.drawable.fridge);
+		nonlivingHardStimuli[4] = new Stimulus("Basketball", 1, basketballhints, R.drawable.basketball);
+		nonlivingHardStimuli[5] = new Stimulus("Football", 1, footballhints, R.drawable.football);
+		nonlivingHardStimuli[6] = new Stimulus("Soccerball", 1, soccerballhints, R.drawable.soccerball);
+		nonlivingHardStimuli[7] = new Stimulus("Pocket", 1, pockethints, R.drawable.pocket);
+		nonlivingHardStimuli[8] = new Stimulus("Zipper", 1, zipperhints, R.drawable.zipper);
+		nonlivingHardStimuli[9] = new Stimulus("Gloves", 1, gloveshints, R.drawable.gloves);
 		
 		nonlivingHardSet= new StimulusSet("Nonliving Hard", nonlivingHardStimuli);
 		
