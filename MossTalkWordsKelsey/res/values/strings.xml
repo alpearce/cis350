@@ -43,6 +43,9 @@
 	<string name="asparagushint1">This is a green vegetable with a stalk</string>
 	<string name="asparagushint2">horrendous</string>
 	<string name="asparagushint3">asparagus</string>
+	<string name="avocadohint1">This is a green vegetable is used to make guacomole.</string>
+	<string name="avocadohint2">motto</string>
+	<string name="avocadohint3">avocado</string>
 	<string name="broccolihint1">This is a green vegetable that looks like a tree.</string>
 	<string name="broccolihint2">hawkley</string>
 	<string name="broccolihint3">broccoli</string>
@@ -62,14 +65,14 @@
 	<string name="pineconehint2">tone</string>
 	<string name="pineconehint3">pinecone</string>
 	<string name="pumpkinhint1">This is a vegetable that is carved during Halloween</string>
-	<string name="pumpkin2hint2">drunken</string>
+	<string name="pumpkinhint2">drunken</string>
 	<string name="pumpkinhint3">pumpkin</string>
 	<string name="roosterhint1">This is the male version of a chicken. </string>
 	<string name="roosterhint2">booster</string>
 	<string name="roosterhint3">rooster</string>
-	<string name="chaithint1">This is a piece of furniture that you sit on</string>
+	<string name="chairhint1">This is a piece of furniture that you sit on</string>
 	<string name="chairhint2">hair</string>
-	<string name="chairint3">chair</string>
+	<string name="chairhint3">chair</string>
 	<string name="tablehint1">This is a piece of furniture to put things on. </string>
 	<string name="tablehint2">fable</string>
 	<string name="tablehint3">table</string>
@@ -104,7 +107,7 @@
 	<string name="textbookhint2">look</string>
 	<string name="textbookhint3">textbook</string>
 	<string name="televisionhint1">This used to watch movies and shows.</string>
-	<string name="televionhint2">precision</string>
+	<string name="televisionhint2">precision</string>
 	<string name="televisionhint3">television</string>
 	<string name="refrigeratorhint1">This is used to keep food cold. </string>
 	<string name="refrigeratorhint2">crater</string>
