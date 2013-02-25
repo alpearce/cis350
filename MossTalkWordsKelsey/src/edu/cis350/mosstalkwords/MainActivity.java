@@ -348,6 +348,7 @@ public class MainActivity extends Activity {
 		firstImage.setImageResource((currentSet.getStimuli()[imageCounter].getImage()));
 		TextView hintView= (TextView)findViewById(R.id.hintText);
 		hintView.setText("");
+		currentImage = currentSet.getStimuli()[imageCounter].getName();
 	}
 
 	private void startVoiceRecognitionActivity()
