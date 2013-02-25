@@ -1,5 +1,4 @@
 package edu.cis350.mosstalkwords;
-import android.widget.ImageView;
 
 /*This class takes in a string for the name of the "stimulus" which is just the image and the associated hints and difficulty. For that purpose, it takes in an int difficulty
  * which is either 0 or 1 for now, 0 being easy, 1 being hard. It takes in an array of hints in string form, there should be three hints per stimulus. The imageIDName is

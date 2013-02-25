@@ -9,7 +9,7 @@
     <string name="hint3">Answer</string>
     <string name="next">Next</string>
     <string name="score">Score = 0</string>
-    <string name= "nextSet"> Next Stimulus Set</string>
+	<string name="nextSet"> Next Set</string>
       <string name="applehint1">This is a red fruit that grows on trees.</string>
 	<string name="applehint2">Chapel</string>
 	<string name="applehint3">apple</string>

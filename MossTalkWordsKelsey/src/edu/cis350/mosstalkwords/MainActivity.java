@@ -15,14 +15,17 @@ public class MainActivity extends Activity {
 	StimulusSet livingHardSet;
 	StimulusSet nonlivingEasySet;
 	StimulusSet nonlivingHardSet;
-	StimulusSet currentSet;
+	
 	int imageCounter=0;
-	StimulusSet allStimulusSets []= {livingEasySet,livingHardSet, nonlivingEasySet, nonlivingHardSet};
+	int setCounter=0;
+	StimulusSet allStimulusSets [];
+	StimulusSet currentSet=livingEasySet;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		loadData();
+		//currentSet=allStimulusSets[setCounter];
 		addListenerForButton();
 	}
 
@@ -38,7 +41,7 @@ public class MainActivity extends Activity {
 		
 		//firstImage=(ImageView) findViewById(livingHard.getStimuli()[0].getImage());//this gives a picture id not the imageview id
 		firstImage=((ImageView) findViewById(R.id.imageView1));
-		firstImage.setImageResource(livingEasySet.getStimuli()[imageCounter].getImage());
+		firstImage.setImageResource(currentSet.getStimuli()[imageCounter].getImage());
 		nextButton = (Button) findViewById(R.id.btnChangeImage);
 		nextButton.setOnClickListener(new OnClickListener()
 		{
@@ -46,9 +49,9 @@ public class MainActivity extends Activity {
 			{
 				firstImage.setImageResource(R.drawable.bird);
 				imageCounter++;
-				imageCounter=imageCounter%10;
+				imageCounter=imageCounter%(currentSet.getStimuli().length);
 				//firstImage.setImageResource(R.drawable.bird);
-				firstImage.setImageResource((livingEasySet.getStimuli()[imageCounter].getImage()));
+				firstImage.setImageResource((currentSet.getStimuli()[imageCounter].getImage()));
 			}
 		});
 	}
@@ -111,13 +114,26 @@ public class MainActivity extends Activity {
 		nonlivingHardStimuli[8] = new Stimulus("Zipper", 1, null, R.drawable.zipper);
 		nonlivingHardStimuli[9] = new Stimulus("Gloves", 1, null, R.drawable.gloves);
 		
+		nonlivingHardSet= new StimulusSet("Nonliving Hard", nonlivingHardStimuli);
+		
+		allStimulusSets= new StimulusSet[4];
+		allStimulusSets[0] = livingEasySet;
+		allStimulusSets[1] = livingHardSet;
+		allStimulusSets[2] = nonlivingEasySet;
+		allStimulusSets[3] = nonlivingHardSet;
+
+		currentSet=allStimulusSets[0];
 		
 
 	}
 	
-	public void onNextSetButtonClick()
+	public void onNextSetButtonClick(View view)
 	{
-		
+		setCounter++;
+		imageCounter=0;
+		setCounter=setCounter%allStimulusSets.length;
+		currentSet=allStimulusSets[setCounter];
+		firstImage.setImageResource((currentSet.getStimuli()[imageCounter].getImage()));
 	}
 	//Handler for sentence hint
 	public void onHint1ButtonClick() {

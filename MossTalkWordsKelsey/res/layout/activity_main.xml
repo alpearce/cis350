@@ -34,7 +34,12 @@
        android:layout_centerHorizontal="true"
        android:layout_alignParentBottom="true"
        android:orientation="horizontal" >
-
+		<Button 
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+           android:onClick="onNextSetButtonClick"
+           android:text="@string/nextSet"/>
+		
        <Button
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
