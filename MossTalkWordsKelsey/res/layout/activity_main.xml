@@ -63,6 +63,13 @@
            android:layout_height="wrap_content"
            android:onClick="onHint3ButtonClick"
            android:text="@string/hint3" />
+
+       <Button
+           android:id="@+id/speakButton"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Speak" />
+
    </LinearLayout>
 
 </RelativeLayout>
