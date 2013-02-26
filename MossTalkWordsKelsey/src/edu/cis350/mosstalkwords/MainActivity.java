@@ -374,7 +374,7 @@ public class MainActivity extends Activity {
 			for (String s: matches) {
 				if (s.equalsIgnoreCase(currentImage)) {
 					score += 100;
-					MediaPlayer mp=MediaPlayer.create(MainActivity.this,R.raw.bellringingcorrect);
+					MediaPlayer mp=MediaPlayer.create(MainActivity.this,R.raw.bellringing);
 					  mp.start();
 					nextImage();
 				}
@@ -396,6 +396,8 @@ public class MainActivity extends Activity {
 		hintView.setText(currentSet.getStimuli()[imageCounter].getHints()[1]);
 	}
 
+	
+	
 	//handler for giving up and getting answer
 	public void onHint3ButtonClick(View view) {
 		TextView hintView= (TextView)findViewById(R.id.hintText);
