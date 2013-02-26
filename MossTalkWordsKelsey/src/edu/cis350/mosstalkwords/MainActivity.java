@@ -3,6 +3,7 @@ package edu.cis350.mosstalkwords;
 import java.util.ArrayList; 
 import java.util.List;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -373,6 +374,8 @@ public class MainActivity extends Activity {
 			for (String s: matches) {
 				if (s.equalsIgnoreCase(currentImage)) {
 					score += 100;
+					MediaPlayer mp=MediaPlayer.create(MainActivity.this,R.raw.bellringingcorrect);
+					  mp.start();
 					nextImage();
 				}
 			}
