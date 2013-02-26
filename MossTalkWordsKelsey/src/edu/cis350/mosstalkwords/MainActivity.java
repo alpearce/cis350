@@ -1,6 +1,6 @@
 package edu.cis350.mosstalkwords;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.List;
 
 import android.os.Bundle;
@@ -31,12 +31,13 @@ public class MainActivity extends Activity {
 
 	String currentImage;
 
-	int score;
+	int score = 0;
 	
 	int imageCounter=0;
 	int setCounter=0;
 	StimulusSet allStimulusSets [];
 	StimulusSet currentSet=livingEasySet;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -349,6 +350,7 @@ public class MainActivity extends Activity {
 		firstImage.setImageResource((currentSet.getStimuli()[imageCounter].getImage()));
 		TextView hintView= (TextView)findViewById(R.id.hintText);
 		hintView.setText("");
+		currentImage = currentSet.getStimuli()[imageCounter].getName();
 	}
 
 	private void startVoiceRecognitionActivity()
@@ -370,7 +372,7 @@ public class MainActivity extends Activity {
 			//right now score is just incremented by 100
 			for (String s: matches) {
 				if (s.equalsIgnoreCase(currentImage)) {
-					score =+ 100;
+					score += 100;
 					nextImage();
 				}
 			}
