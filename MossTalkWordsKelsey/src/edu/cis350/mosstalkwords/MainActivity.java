@@ -372,7 +372,7 @@ public class MainActivity extends Activity {
 			//goes through all the possible strings from voice and detirmines if there is a match
 			//right now score is just incremented by 100
 			for (String s: matches) {
-				if (s.equalsIgnoreCase(currentImage)) {
+				if (s.toLowerCase().contains(currentImage.toLowerCase())) {
 					score += 100;
 					MediaPlayer mp=MediaPlayer.create(MainActivity.this,R.raw.ding);
 					mp.start();
