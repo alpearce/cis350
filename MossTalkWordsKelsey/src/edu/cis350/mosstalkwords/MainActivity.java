@@ -188,18 +188,10 @@ public class MainActivity extends Activity implements ViewFactory {
 				getResources().getString(R.string.flowerhint3)};
 
 		String [] tomatohints = {getResources().getString(R.string.tomatohint1),
-<<<<<<< HEAD
 				getResources().getString(R.string.tomatohint2), 
 				getResources().getString(R.string.tomatohint3)};
 
 
-
-=======
-								 getResources().getString(R.string.tomatohint2), 
-								 getResources().getString(R.string.tomatohint3)};
-		
-				
->>>>>>> imageswitcher
 		livingEasyStimuli[0] = new Stimulus("Apple", 0, applehints, R.drawable.applesmall);
 		livingEasyStimuli[1] = new Stimulus("Bird", 0, birdhints, R.drawable.bird);
 		livingEasyStimuli[2] = new Stimulus("Carrot", 0, carrothints, R.drawable.carrot);
@@ -210,12 +202,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		livingEasyStimuli[7] = new Stimulus("Elephant", 0, elephanthints, R.drawable.elephant);
 		livingEasyStimuli[8] = new Stimulus("Flower", 0, flowerhints, R.drawable.flower);
 		livingEasyStimuli[9] = new Stimulus("Tomato", 0, tomatohints, R.drawable.tomato);
-<<<<<<< HEAD
 
-
-=======
-	
->>>>>>> imageswitcher
 		livingEasySet=new StimulusSet("Living Easy", livingEasyStimuli);
 
 		String [] giraffehints = {getResources().getString(R.string.giraffehint1),
@@ -303,16 +290,9 @@ public class MainActivity extends Activity implements ViewFactory {
 				getResources().getString(R.string.hathint2), 
 				getResources().getString(R.string.hathint3)};
 		String [] moneyhints = {getResources().getString(R.string.moneyhint1),
-<<<<<<< HEAD
-				getResources().getString(R.string.moneyhint2), 
+			  	getResources().getString(R.string.moneyhint2), 
 				getResources().getString(R.string.moneyhint3)};
-
-
-=======
-						  		getResources().getString(R.string.moneyhint2), 
-						  		getResources().getString(R.string.moneyhint3)};
 			
->>>>>>> imageswitcher
 		nonlivingEasyStimuli[0] = new Stimulus("Chair", 0, chairhints, R.drawable.chair);
 		nonlivingEasyStimuli[1] = new Stimulus("Table", 0, tablehints, R.drawable.table);
 		nonlivingEasyStimuli[2] = new Stimulus("Lamp", 0, lamphints, R.drawable.lamp);
@@ -442,10 +422,6 @@ public class MainActivity extends Activity implements ViewFactory {
 		hintView.setText(currentSet.getStimuli()[imageCounter].getHints()[1]);
 	}
 
-<<<<<<< HEAD
-=======
-	
->>>>>>> imageswitcher
 	//handler for giving up and getting answer
 	public void onHint3ButtonClick(View view) {
 		TextView hintView= (TextView)findViewById(R.id.hintText);
