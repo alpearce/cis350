@@ -1,0 +1,98 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" 
+    tools:context=".MainActivity" >
+
+    <TextView 
+        android:id="@+id/scoretext"
+        android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+    	android:layout_alignParentLeft="true"
+    	android:text="@string/score"/>
+    
+    <Button
+        android:id="@+id/btnChangeImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="@string/next" />
+    
+     <ImageView
+         android:id="@+id/imageView1"
+         android:layout_width="fill_parent"
+         android:layout_height="fill_parent"
+         android:layout_centerInParent="true"
+         android:scaleType="center"
+         android:src="@drawable/applesmall" />
+     
+     <Gallery
+      android:id="@+id/Gallery01"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"></Gallery>
+     
+	<ImageSwitcher
+      android:id="@+id/ImageSwitcher1"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"></ImageSwitcher>
+
+        <!--android:contentDescription="TODO"-->
+	<TextView android:id="@+id/hintText"
+        android:layout_width="wrap_content"
+		android:layout_height="wrap_content" 
+		android:layout_below="@id/btnChangeImage"
+		android:layout_centerHorizontal="true"
+    	android:text=""/>
+
+   <LinearLayout
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignParentBottom="true"
+       android:layout_centerHorizontal="true"
+       android:orientation="vertical" >
+
+       <LinearLayout
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:layout_weight="0.41"
+           android:orientation="horizontal" >
+
+           <Button
+               android:id="@+id/nextSetButton"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:onClick="onNextSetButtonClick"
+               android:text="@string/nextSet" />
+
+           <Button
+               android:id="@+id/hint2button"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:onClick="onHint2ButtonClick"
+               android:text="@string/hint2" />
+
+           <Button
+               android:id="@+id/hint3button"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:onClick="onHint3ButtonClick"
+               android:text="@string/hint3" />
+
+           <Button
+               android:id="@+id/hint1button"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:onClick="onHint1ButtonClick"
+               android:text="@string/hint1" />
+
+       </LinearLayout>
+
+       <Button
+           android:id="@+id/speakButton"
+           android:layout_width="fill_parent"
+           android:layout_height="match_parent"
+           android:text="@string/speak" />
+   </LinearLayout>
+
+</RelativeLayout>
