@@ -8,22 +8,29 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ViewSwitcher.ViewFactory;
 import android.speech.RecognizerIntent;
 import android.view.View.OnClickListener;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.view.Menu;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+import android.widget.ImageSwitcher;
+import android.widget.ViewSwitcher;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements ViewFactory {
 
 	private static final int REQUEST_CODE = 1234;
 
 	Button nextButton;
-	ImageView firstImage;
-
+	//ImageView firstImage;
+	ImageSwitcher firstImage;
+	
 	Button speakBtn;
 	StimulusSet livingEasySet;
 	StimulusSet livingHardSet;
@@ -43,18 +50,25 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		firstImage = (ImageSwitcher) findViewById(R.id.ImageSwitcher1);
+		firstImage.setFactory(this);
+		firstImage.setInAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
+		firstImage.setOutAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
+			
 		loadData();
 		//currentSet=allStimulusSets[setCounter];
 		addListenerForButton();
 
 		PackageManager pm = getPackageManager();
-		List RecognizerActivities = pm.queryIntentActivities(
+		List<ResolveInfo> RecognizerActivities = pm.queryIntentActivities(
 				new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
 		if (RecognizerActivities.size() == 0)
 		{
 			speakBtn.setEnabled(false);
 			speakBtn.setText("Not compatible");
 		}
+		
 	}
 
 	@Override
@@ -63,16 +77,34 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
+	
+	public View makeView() {
+		ImageView iv = new ImageView(this);
+		iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
+		iv.setLayoutParams(new ImageSwitcher.LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		iv.setBackgroundColor(0xFFFFFFFF);
+		return iv;
+	}
+	
 	public void addListenerForButton()
 	{
-		firstImage=(ImageView) findViewById(R.id.imageView1);
-
+		//firstImage=(ImageView) findViewById(R.id.imageView1);
+	
+		
 		speakBtn = (Button) findViewById(R.id.speakButton);
 
+		//already commented
 		//firstImage=(ImageView) findViewById(livingHard.getStimuli()[0].getImage());//this gives a picture id not the imageview id
-		firstImage=((ImageView) findViewById(R.id.imageView1));
+		
+		/*firstImage=((ImageView) findViewById(R.id.imageView1));
+		firstImage.setImageResource(currentSet.getStimuli()[imageCounter].getImage());
+		currentImage = currentSet.getStimuli()[imageCounter].getName();*/
+		firstImage=(ImageSwitcher) findViewById(R.id.ImageSwitcher1);
 		firstImage.setImageResource(currentSet.getStimuli()[imageCounter].getImage());
 		currentImage = currentSet.getStimuli()[imageCounter].getName();
+		
+		
 		nextButton = (Button) findViewById(R.id.btnChangeImage);
 		nextButton.setOnClickListener(new OnClickListener()
 		{
@@ -102,11 +134,11 @@ public class MainActivity extends Activity {
 
 	//moved contents of nextimage here so it can be accessed below
 	public void nextImage() {
-		//firstImage.setImageResource(R.drawable.bird);
 		imageCounter++;
 		imageCounter=imageCounter%(currentSet.getStimuli().length);
-		//firstImage.setImageResource(R.drawable.bird);
+		
 		firstImage.setImageResource((currentSet.getStimuli()[imageCounter].getImage()));
+		
 		currentImage = currentSet.getStimuli()[imageCounter].getName();
 		TextView hintView= (TextView)findViewById(R.id.hintText);
 		hintView.setText("");
@@ -114,7 +146,6 @@ public class MainActivity extends Activity {
 
 	public void loadData()
 	{
-
 		Stimulus livingEasyStimuli[] = new Stimulus [10];
 		Stimulus livingHardStimuli[] = new Stimulus [10];
 		Stimulus nonlivingEasyStimuli[] = new Stimulus [10];
@@ -160,8 +191,7 @@ public class MainActivity extends Activity {
 								 getResources().getString(R.string.tomatohint2), 
 								 getResources().getString(R.string.tomatohint3)};
 		
-		
-		
+				
 		livingEasyStimuli[0] = new Stimulus("Apple", 0, applehints, R.drawable.applesmall);
 		livingEasyStimuli[1] = new Stimulus("Bird", 0, birdhints, R.drawable.bird);
 		livingEasyStimuli[2] = new Stimulus("Carrot", 0, carrothints, R.drawable.carrot);
@@ -172,8 +202,7 @@ public class MainActivity extends Activity {
 		livingEasyStimuli[7] = new Stimulus("Elephant", 0, elephanthints, R.drawable.elephant);
 		livingEasyStimuli[8] = new Stimulus("Flower", 0, flowerhints, R.drawable.flower);
 		livingEasyStimuli[9] = new Stimulus("Tomato", 0, tomatohints, R.drawable.tomato);
-
-		
+	
 		livingEasySet=new StimulusSet("Living Easy", livingEasyStimuli);
 		
 		String [] giraffehints = {getResources().getString(R.string.giraffehint1),
@@ -263,8 +292,7 @@ public class MainActivity extends Activity {
 		String [] moneyhints = {getResources().getString(R.string.moneyhint1),
 						  		getResources().getString(R.string.moneyhint2), 
 						  		getResources().getString(R.string.moneyhint3)};
-		
-		
+			
 		nonlivingEasyStimuli[0] = new Stimulus("Chair", 0, chairhints, R.drawable.chair);
 		nonlivingEasyStimuli[1] = new Stimulus("Table", 0, tablehints, R.drawable.table);
 		nonlivingEasyStimuli[2] = new Stimulus("Lamp", 0, lamphints, R.drawable.lamp);
@@ -338,8 +366,6 @@ public class MainActivity extends Activity {
 		allStimulusSets[3] = nonlivingHardSet;
 
 		currentSet=allStimulusSets[0];
-
-
 	}
 
 	public void onNextSetButtonClick(View view)
@@ -369,7 +395,7 @@ public class MainActivity extends Activity {
 		if (requestCode == REQUEST_CODE && resultCode == RESULT_OK)
 		{
 			ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-			//goes through all the possible strings from voice and detirmines if there is a match
+			//goes through all the possible strings from voice and determines if there is a match
 			//right now score is just incremented by 100
 			for (String s: matches) {
 				if (s.equalsIgnoreCase(currentImage)) {
@@ -396,7 +422,6 @@ public class MainActivity extends Activity {
 		hintView.setText(currentSet.getStimuli()[imageCounter].getHints()[1]);
 	}
 
-	
 	
 	//handler for giving up and getting answer
 	public void onHint3ButtonClick(View view) {

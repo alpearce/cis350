@@ -65,12 +65,12 @@ public final class R {
         public static final int zipper=0x7f020029;
     }
     public static final class id {
+        public static final int ImageSwitcher1=0x7f090002;
         public static final int btnChangeImage=0x7f090001;
         public static final int hint1button=0x7f090007;
         public static final int hint2button=0x7f090005;
         public static final int hint3button=0x7f090006;
         public static final int hintText=0x7f090003;
-        public static final int imageView1=0x7f090002;
         public static final int menu_settings=0x7f090009;
         public static final int nextSetButton=0x7f090004;
         public static final int scoretext=0x7f090000;
