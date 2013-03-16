@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy/>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="android.view.ViewGroup"/>
+<fullyQualifiedTypeName name="android.widget.ViewSwitcher.ViewFactory"/>
+<fullyQualifiedTypeName name="android.view.ViewGroup.LayoutParams"/>
+<fullyQualifiedTypeName name="android.view.animation.AnimationUtils"/>
+<fullyQualifiedTypeName name="android.R.anim"/>
+<fullyQualifiedTypeName name="edu.cis350.mosstalkwords.R.id"/>
+</qualifiedTypeNameHistroy>
