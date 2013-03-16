@@ -16,18 +16,18 @@
 		<item value="-497" key="DIALOG_Y_ORIGIN"/>
 		<item value="-443" key="DIALOG_X_ORIGIN"/>
 	</section>
-	<section name="InstallationDialogSettings">
-		<item value="688" key="DIALOG_WIDTH"/>
-		<item value="-165" key="DIALOG_Y_ORIGIN"/>
-		<item value="-63" key="DIALOG_X_ORIGIN"/>
-		<item value="657" key="DIALOG_HEIGHT"/>
-		<item value="1|Lucida Grande|11.0|0|CARBON|1|Lucida Grande" key="DIALOG_FONT_NAME"/>
-	</section>
 	<section name="NewWizardAction">
 		<item value="com.android.ide.eclipse.adt.project.ImportProjectWizard.NewPrj" key="NewWizardSelectionPage.STORE_SELECTED_ID"/>
 		<list key="NewWizardSelectionPage.STORE_EXPANDED_CATEGORIES_ID">
 			<item value="com.android.ide.eclipse.wizards.category"/>
 		</list>
+	</section>
+	<section name="InstallationDialogSettings">
+		<item value="688" key="DIALOG_WIDTH"/>
+		<item value="-165" key="DIALOG_Y_ORIGIN"/>
+		<item value="657" key="DIALOG_HEIGHT"/>
+		<item value="-63" key="DIALOG_X_ORIGIN"/>
+		<item value="1|Lucida Grande|11.0|0|CARBON|1|Lucida Grande" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="ImportExportAction">
 		<item value="com.android.ide.eclipse.adt.project.ImportProjectWizard" key="ImportExportPage.STORE_SELECTED_IMPORT_WIZARD_ID"/>
