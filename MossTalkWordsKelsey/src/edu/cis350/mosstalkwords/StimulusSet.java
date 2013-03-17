@@ -19,6 +19,16 @@ public class StimulusSet {
 	{
 		return stimuli;
 	}
+	
+	//return just the names of the stimuli to use in S3 urls
+	public String[] getStimuliNames() {
+		String[] names = new String[this.stimuli.length];
+		for (int i = 0; i < names.length; i++) {
+			names[i] = stimuli[i].getName();
+		}
+		return names;
+	}
+	
 	public void setName(String name)
 	{
 		setName=name;
@@ -26,5 +36,9 @@ public class StimulusSet {
 	public void setStimuli(Stimulus [] stimuliInSet)
 	{
 		stimuli=stimuliInSet;
+	}
+	
+	public int length() {
+		return stimuli.length;
 	}
 }
