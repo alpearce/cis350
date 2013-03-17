@@ -173,7 +173,6 @@ public class MainActivity extends Activity implements ViewFactory {
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
-	
 	//Handler for sentence hint
 	public void onHint1ButtonClick(View view) {
 		//TODO
@@ -195,7 +194,6 @@ public class MainActivity extends Activity implements ViewFactory {
 		//TODO
 	}
 	
-	//put this at the bottom so it's out of the way
 	public void loadData()
 	{
 		Stimulus livingEasyStimuli[] = new Stimulus [10];
@@ -366,5 +364,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		currentSet=allStimulusSets[0];
 	}
 
+
+	
 
 }
