@@ -1,0 +1,90 @@
+package edu.cis350.mosstalkwords;
+
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.os.Bundle;
+
+/*This class takes in a name that represents the name of the stimulus set in string form. A stimulus set is just a collection of images, grouped based on difficulty or category
+ * eventually. There are setter and getter methods.*/
+public class StimulusSet {
+	String setName;
+	Stimulus[] stimuli;
+	public StimulusSet(String name, Stimulus[] stimuliInSet)
+	{
+		setName=name;
+		stimuli=stimuliInSet;
+	}
+	
+	public StimulusSet loadLivingEasy(Resources appRes) {
+		String [] applehints = {appRes.getString(R.string.applehint1),
+				getResources().getString(R.string.applehint2), 
+				getResources().getString(R.string.applehint3)};
+
+		String [] birdhints = {getResources().getString(R.string.birdhint1),
+				getResources().getString(R.string.birdhint2), 
+				getResources().getString(R.string.birdhint3)};
+
+		String [] carrothints = {getResources().getString(R.string.carrothint1),
+				getResources().getString(R.string.carrothint2), 
+				getResources().getString(R.string.carrothint3)};
+
+		String [] cathints = {getResources().getString(R.string.cathint1),
+				getResources().getString(R.string.cathint2), 
+				getResources().getString(R.string.cathint3)};
+
+		String [] cornhints = {getResources().getString(R.string.cornhint1),
+				getResources().getString(R.string.cornhint2), 
+				getResources().getString(R.string.cornhint3)};
+
+		String [] cowhints = {getResources().getString(R.string.cowhint1),
+				getResources().getString(R.string.cowhint2), 
+				getResources().getString(R.string.cowhint3)}; 
+
+		String [] doghints = {getResources().getString(R.string.doghint1),
+				getResources().getString(R.string.doghint2), 
+				getResources().getString(R.string.doghint3)};
+
+		String [] elephanthints = {getResources().getString(R.string.elephanthint1),
+				getResources().getString(R.string.elephanthint2), 
+				getResources().getString(R.string.elephanthint3)};
+
+		String [] flowerhints = {getResources().getString(R.string.flowerhint1),
+				getResources().getString(R.string.flowerhint2), 
+				getResources().getString(R.string.flowerhint3)};
+
+		String [] tomatohints = {getResources().getString(R.string.tomatohint1),
+				getResources().getString(R.string.tomatohint2), 
+				getResources().getString(R.string.tomatohint3)};
+
+
+		livingEasyStimuli[0] = new Stimulus("Apple", 0, applehints, R.drawable.applesmall);
+		livingEasyStimuli[1] = new Stimulus("Bird", 0, birdhints, R.drawable.bird);
+		livingEasyStimuli[2] = new Stimulus("Carrot", 0, carrothints, R.drawable.carrot);
+		livingEasyStimuli[3] = new Stimulus("Cat", 0, cathints, R.drawable.cat);
+		livingEasyStimuli[4] = new Stimulus("Corn", 0, cornhints, R.drawable.corn);
+		livingEasyStimuli[5] = new Stimulus("Cow", 0, cowhints, R.drawable.cow);
+		livingEasyStimuli[6] = new Stimulus("Dog", 0, doghints, R.drawable.dog);
+		livingEasyStimuli[7] = new Stimulus("Elephant", 0, elephanthints, R.drawable.elephant);
+		livingEasyStimuli[8] = new Stimulus("Flower", 0, flowerhints, R.drawable.flower);
+		livingEasyStimuli[9] = new Stimulus("Tomato", 0, tomatohints, R.drawable.tomato);
+
+		livingEasySet=new StimulusSet("Living Easy", livingEasyStimuli);
+	}
+	
+	public String getName()
+	{
+		return setName;
+	}
+	public Stimulus [] getStimuli()
+	{
+		return stimuli;
+	}
+	public void setName(String name)
+	{
+		setName=name;
+	}
+	public void setStimuli(Stimulus [] stimuliInSet)
+	{
+		stimuli=stimuliInSet;
+	}
+}
