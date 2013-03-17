@@ -418,6 +418,4 @@ public class MainActivity extends Activity implements ViewFactory {
 		allStimulusSets[3] = nonlivingHardSet;
 
 		currentSet=allStimulusSets[0];
-	
 	}
-}

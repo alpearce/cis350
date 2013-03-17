@@ -201,101 +201,47 @@ public class MainActivity extends Activity implements ViewFactory {
 		Stimulus livingEasyStimuli[] = new Stimulus [10];
 		Stimulus livingHardStimuli[] = new Stimulus [10];
 		Stimulus nonlivingEasyStimuli[] = new Stimulus [10];
-		Stimulus nonlivingHardStimuli[] = new Stimulus [10];
-
-		String [] applehints = {getResources().getString(R.string.applehint1),
-				getResources().getString(R.string.applehint2), 
-				getResources().getString(R.string.applehint3)};
-
-		String [] birdhints = {getResources().getString(R.string.birdhint1),
-				getResources().getString(R.string.birdhint2), 
-				getResources().getString(R.string.birdhint3)};
-
-		String [] carrothints = {getResources().getString(R.string.carrothint1),
-				getResources().getString(R.string.carrothint2), 
-				getResources().getString(R.string.carrothint3)};
-
-		String [] cathints = {getResources().getString(R.string.cathint1),
-				getResources().getString(R.string.cathint2), 
-				getResources().getString(R.string.cathint3)};
-
-		String [] cornhints = {getResources().getString(R.string.cornhint1),
-							   getResources().getString(R.string.cornhint2), 
-							   getResources().getString(R.string.cornhint3)};
-
-		String [] cowhints = {getResources().getString(R.string.cowhint1),
-							  getResources().getString(R.string.cowhint2), 
-							  getResources().getString(R.string.cowhint3)}; 
-
-		String [] doghints = {getResources().getString(R.string.doghint1),
-							  getResources().getString(R.string.doghint2), 
-							  getResources().getString(R.string.doghint3)};
-
-		String [] elephanthints = {getResources().getString(R.string.elephanthint1),
-							 	   getResources().getString(R.string.elephanthint2), 
-							 	   getResources().getString(R.string.elephanthint3)};
-
-		String [] flowerhints = {getResources().getString(R.string.flowerhint1),
-							     getResources().getString(R.string.flowerhint2), 
-							     getResources().getString(R.string.flowerhint3)};
-
-		String [] tomatohints = {getResources().getString(R.string.tomatohint1),
-								 getResources().getString(R.string.tomatohint2), 
-								 getResources().getString(R.string.tomatohint3)};
-
-
-		livingEasyStimuli[0] = new Stimulus("Apple", 0, applehints, R.drawable.applesmall);
-		livingEasyStimuli[1] = new Stimulus("Bird", 0, birdhints, R.drawable.bird);
-		livingEasyStimuli[2] = new Stimulus("Carrot", 0, carrothints, R.drawable.carrot);
-		livingEasyStimuli[3] = new Stimulus("Cat", 0, cathints, R.drawable.cat);
-		livingEasyStimuli[4] = new Stimulus("Corn", 0, cornhints, R.drawable.corn);
-		livingEasyStimuli[5] = new Stimulus("Cow", 0, cowhints, R.drawable.cow);
-		livingEasyStimuli[6] = new Stimulus("Dog", 0, doghints, R.drawable.dog);
-		livingEasyStimuli[7] = new Stimulus("Elephant", 0, elephanthints, R.drawable.elephant);
-		livingEasyStimuli[8] = new Stimulus("Flower", 0, flowerhints, R.drawable.flower);
-		livingEasyStimuli[9] = new Stimulus("Tomato", 0, tomatohints, R.drawable.tomato);
-
-		livingEasySet=new StimulusSet("Living Easy", livingEasyStimuli);
+		Stimulus nonlivingHardStimuli[] = new Stimulus [10];		
 
 		String [] giraffehints = {getResources().getString(R.string.giraffehint1),
-								  getResources().getString(R.string.giraffehint2), 
-								  getResources().getString(R.string.giraffehint3)}; 
+				getResources().getString(R.string.giraffehint2), 
+				getResources().getString(R.string.giraffehint3)}; 
 
 		String [] octopushints = {getResources().getString(R.string.octopushint1),
-					      		  getResources().getString(R.string.octopushint2), 
-					      		  getResources().getString(R.string.octopushint3)};
+				getResources().getString(R.string.octopushint2), 
+				getResources().getString(R.string.octopushint3)};
 
 		String [] pineapplehints = {getResources().getString(R.string.pineapplehint1),
-									getResources().getString(R.string.pineapplehint2), 
-									getResources().getString(R.string.pineapplehint3)};
+				getResources().getString(R.string.pineapplehint2), 
+				getResources().getString(R.string.pineapplehint3)};
 
 		String [] pineconehints = {getResources().getString(R.string.pineconehint1),
-								   getResources().getString(R.string.pineconehint2), 
-								   getResources().getString(R.string.pineconehint3)};
+				getResources().getString(R.string.pineconehint2), 
+				getResources().getString(R.string.pineconehint3)};
 
 		String [] pumpkinhints = {getResources().getString(R.string.pumpkinhint1),
-								  getResources().getString(R.string.pumpkinhint2), 
-								  getResources().getString(R.string.pumpkinhint3)};
+				getResources().getString(R.string.pumpkinhint2), 
+				getResources().getString(R.string.pumpkinhint3)};
 
 		String [] roosterhints = {getResources().getString(R.string.roosterhint1),
-								  getResources().getString(R.string.roosterhint2), 
-								  getResources().getString(R.string.roosterhint3)}; 
+				getResources().getString(R.string.roosterhint2), 
+				getResources().getString(R.string.roosterhint3)}; 
 
 		String [] cauliflowerhints = {getResources().getString(R.string.cauliflowerhint1),
-									  getResources().getString(R.string.cauliflowerhint2), 
-									  getResources().getString(R.string.cauliflowerhint3)};
+				getResources().getString(R.string.cauliflowerhint2), 
+				getResources().getString(R.string.cauliflowerhint3)};
 
 		String [] asparagushints = {getResources().getString(R.string.asparagushint1),
-						    		getResources().getString(R.string.asparagushint2), 
-						    		getResources().getString(R.string.asparagushint3)};
+				getResources().getString(R.string.asparagushint2), 
+				getResources().getString(R.string.asparagushint3)};
 
 		String [] avocadohints = {getResources().getString(R.string.avocadohint1),
-								  getResources().getString(R.string.avocadohint2), 
-								  getResources().getString(R.string.avocadohint3)};
+				getResources().getString(R.string.avocadohint2), 
+				getResources().getString(R.string.avocadohint3)};
 
 		String [] broccolihints = {getResources().getString(R.string.broccolihint1),
-								   getResources().getString(R.string.broccolihint2), 
-								   getResources().getString(R.string.broccolihint3)};
+				getResources().getString(R.string.broccolihint2), 
+				getResources().getString(R.string.broccolihint3)};
 
 		livingHardStimuli[0] = new Stimulus("Giraffe", 1, giraffehints, R.drawable.giraffe);
 		livingHardStimuli[1] = new Stimulus("Octopus", 1, octopushints, R.drawable.octopus);
@@ -312,39 +258,39 @@ public class MainActivity extends Activity implements ViewFactory {
 		livingHardSet = new StimulusSet("Living Hard", livingHardStimuli);
 
 		String [] chairhints = {getResources().getString(R.string.chairhint1),
-  								getResources().getString(R.string.chairhint2), 
-  								getResources().getString(R.string.chairhint3)};
+				getResources().getString(R.string.chairhint2), 
+				getResources().getString(R.string.chairhint3)};
 
 		String [] tablehints = {getResources().getString(R.string.tablehint1),
-		  						getResources().getString(R.string.tablehint2), 
-		  						getResources().getString(R.string.tablehint3)};
+				getResources().getString(R.string.tablehint2), 
+				getResources().getString(R.string.tablehint3)};
 
 		String [] lamphints = {getResources().getString(R.string.lamphint1),
-							   getResources().getString(R.string.lamphint2), 
-							   getResources().getString(R.string.lamphint3)};
+				getResources().getString(R.string.lamphint2), 
+				getResources().getString(R.string.lamphint3)};
 
 		String [] bedhints = {getResources().getString(R.string.bedhint1),
-							  getResources().getString(R.string.bedhint2), 
-							  getResources().getString(R.string.bedhint3)};
+				getResources().getString(R.string.bedhint2), 
+				getResources().getString(R.string.bedhint3)};
 		String [] phonehints = {getResources().getString(R.string.phonehint1),
-						        getResources().getString(R.string.phonehint2), 
-						        getResources().getString(R.string.phonehint3)};
+				getResources().getString(R.string.phonehint2), 
+				getResources().getString(R.string.phonehint3)};
 		String [] househints = {getResources().getString(R.string.househint1),
-							    getResources().getString(R.string.househint2), 
-							    getResources().getString(R.string.househint3)};
+				getResources().getString(R.string.househint2), 
+				getResources().getString(R.string.househint3)};
 		String [] shirthints = {getResources().getString(R.string.shirthint1),
-								getResources().getString(R.string.shirthint2), 
-								getResources().getString(R.string.shirthint3)};
+				getResources().getString(R.string.shirthint2), 
+				getResources().getString(R.string.shirthint3)};
 		String [] shoeshints = {getResources().getString(R.string.shoehint1),
-								getResources().getString(R.string.shoehint2), 
-								getResources().getString(R.string.shoehint3)};
+				getResources().getString(R.string.shoehint2), 
+				getResources().getString(R.string.shoehint3)};
 		String [] hathints = {getResources().getString(R.string.hathint1),
-							  getResources().getString(R.string.hathint2), 
-							  getResources().getString(R.string.hathint3)};
+				getResources().getString(R.string.hathint2), 
+				getResources().getString(R.string.hathint3)};
 		String [] moneyhints = {getResources().getString(R.string.moneyhint1),
-						  		getResources().getString(R.string.moneyhint2), 
-						  		getResources().getString(R.string.moneyhint3)};
-
+			  	getResources().getString(R.string.moneyhint2), 
+				getResources().getString(R.string.moneyhint3)};
+			
 		nonlivingEasyStimuli[0] = new Stimulus("Chair", 0, chairhints, R.drawable.chair);
 		nonlivingEasyStimuli[1] = new Stimulus("Table", 0, tablehints, R.drawable.table);
 		nonlivingEasyStimuli[2] = new Stimulus("Lamp", 0, lamphints, R.drawable.lamp);
@@ -359,43 +305,43 @@ public class MainActivity extends Activity implements ViewFactory {
 		nonlivingEasySet = new StimulusSet("Nonliving Easy", nonlivingEasyStimuli);
 
 		String [] computerhints = {getResources().getString(R.string.computerhint1),
-								   getResources().getString(R.string.computerhint2), 
-								   getResources().getString(R.string.computerhint3)};
+				getResources().getString(R.string.computerhint2), 
+				getResources().getString(R.string.computerhint3)};
 
 		String [] textbookhints = {getResources().getString(R.string.textbookhint1),
-								   getResources().getString(R.string.textbookhint2), 
-								   getResources().getString(R.string.textbookhint3)};
+				getResources().getString(R.string.textbookhint2), 
+				getResources().getString(R.string.textbookhint3)};
 
 		String [] televisionhints = {getResources().getString(R.string.televisionhint1),
-				 					 getResources().getString(R.string.televisionhint2), 
-				 					 getResources().getString(R.string.televisionhint3)};
+				getResources().getString(R.string.televisionhint2), 
+				getResources().getString(R.string.televisionhint3)};
 
-		 String [] refrigeratorhints = {getResources().getString(R.string.refrigeratorhint1),
-				 						getResources().getString(R.string.refrigeratorhint2), 
-				 						getResources().getString(R.string.refrigeratorhint3)};
+		String [] refrigeratorhints = {getResources().getString(R.string.refrigeratorhint1),
+				getResources().getString(R.string.refrigeratorhint2), 
+				getResources().getString(R.string.refrigeratorhint3)};
 
-		 String [] basketballhints = {getResources().getString(R.string.basketballhint1),
-				 					  getResources().getString(R.string.basketballhint2), 
-				 					  getResources().getString(R.string.basketballhint3)};
+		String [] basketballhints = {getResources().getString(R.string.basketballhint1),
+				getResources().getString(R.string.basketballhint2), 
+				getResources().getString(R.string.basketballhint3)};
 
 
-		 String [] footballhints = {getResources().getString(R.string.footballhint1),
-				 					getResources().getString(R.string.footballhint2), 
-				 					getResources().getString(R.string.footballhint3)};
+		String [] footballhints = {getResources().getString(R.string.footballhint1),
+				getResources().getString(R.string.footballhint2), 
+				getResources().getString(R.string.footballhint3)};
 
-		 String [] soccerballhints = {getResources().getString(R.string.soccerballhint1),
-				 					  getResources().getString(R.string.soccerballhint2), 
-				 					  getResources().getString(R.string.soccerballhint3)};
-		 String [] pockethints = {getResources().getString(R.string.pockethint1),
-				 				  getResources().getString(R.string.pockethint2), 
-				 				  getResources().getString(R.string.pockethint3)};
-		 String [] zipperhints = {getResources().getString(R.string.zipperhint1),
-				 				  getResources().getString(R.string.zipperhint2), 
-				 				  getResources().getString(R.string.zipperhint3)};
+		String [] soccerballhints = {getResources().getString(R.string.soccerballhint1),
+				getResources().getString(R.string.soccerballhint2), 
+				getResources().getString(R.string.soccerballhint3)};
+		String [] pockethints = {getResources().getString(R.string.pockethint1),
+				getResources().getString(R.string.pockethint2), 
+				getResources().getString(R.string.pockethint3)};
+		String [] zipperhints = {getResources().getString(R.string.zipperhint1),
+				getResources().getString(R.string.zipperhint2), 
+				getResources().getString(R.string.zipperhint3)};
 
-		 String [] gloveshints = {getResources().getString(R.string.gloveshint1),
-				 				  getResources().getString(R.string.gloveshint2), 
-				 				  getResources().getString(R.string.gloveshint3)};
+		String [] gloveshints = {getResources().getString(R.string.gloveshint1),
+				getResources().getString(R.string.gloveshint2), 
+				getResources().getString(R.string.gloveshint3)};
 
 
 		nonlivingHardStimuli[0] = new Stimulus("Computer", 1, computerhints, R.drawable.computer);
@@ -418,6 +364,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		allStimulusSets[3] = nonlivingHardSet;
 
 		currentSet=allStimulusSets[0];
-	
 	}
+
+
 }

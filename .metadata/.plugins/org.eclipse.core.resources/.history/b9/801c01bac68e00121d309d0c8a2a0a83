@@ -419,5 +419,5 @@ public class MainActivity extends Activity implements ViewFactory {
 
 		currentSet=allStimulusSets[0];
 	
-	}
+}
 }
