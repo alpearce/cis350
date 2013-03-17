@@ -51,7 +51,6 @@ public class MainActivity extends Activity implements ViewFactory {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		//set up imageswitcher with animations
 		firstImage = (ImageSwitcher) findViewById(R.id.ImageSwitcher1);
 		firstImage.setFactory(this);
 		firstImage.setInAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
@@ -67,7 +66,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		if (RecognizerActivities.size() == 0)
 		{
 			speakBtn.setEnabled(false);
-			speakBtn.setText("Not compatible"); 
+			speakBtn.setText("Not compatible");
 		}
 		
 	}
@@ -79,7 +78,6 @@ public class MainActivity extends Activity implements ViewFactory {
 		return true;
 	}
 	
-	//required method for imageswitcher 
 	public View makeView() {
 		ImageView iv = new ImageView(this);
 		iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -91,6 +89,9 @@ public class MainActivity extends Activity implements ViewFactory {
 	
 	public void addListenerForButton()
 	{
+		//firstImage=(ImageView) findViewById(R.id.imageView1);
+	
+		
 		speakBtn = (Button) findViewById(R.id.speakButton);
 
 		//already commented
@@ -103,11 +104,20 @@ public class MainActivity extends Activity implements ViewFactory {
 		firstImage.setImageResource(currentSet.getStimuli()[imageCounter].getImage());
 		currentImage = currentSet.getStimuli()[imageCounter].getName();
 		
+		
 		nextButton = (Button) findViewById(R.id.btnChangeImage);
 		nextButton.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View arg0)
 			{
+
+				//firstImage.setImageResource(R.drawable.bird);
+				//imageCounter++;
+				//imageCounter=imageCounter%(currentSet.getStimuli().length);
+				//firstImage.setImageResource(R.drawable.bird);
+				//firstImage.setImageResource((currentSet.getStimuli()[imageCounter].getImage()));
+				//TextView hintView= (TextView)findViewById(R.id.hintText);
+				//hintView.setText("");
 				nextImage();
 			}
 		});
@@ -121,6 +131,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		});
 	}
 
+
 	//moved contents of nextimage here so it can be accessed below
 	public void nextImage() {
 		imageCounter++;
@@ -133,75 +144,66 @@ public class MainActivity extends Activity implements ViewFactory {
 		hintView.setText("");
 	}
 
-		public void onNextSetButtonClick(View view)
-	{
-		setCounter++;
-		imageCounter=0;
-		setCounter=setCounter%allStimulusSets.length;
-		currentSet=allStimulusSets[setCounter];
-		firstImage.setImageResource((currentSet.getStimuli()[imageCounter].getImage()));
-		TextView hintView= (TextView)findViewById(R.id.hintText);
-		hintView.setText("");
-		currentImage = currentSet.getStimuli()[imageCounter].getName();
-	}
-
-	private void startVoiceRecognitionActivity()
-	{
-		Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-		intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-				RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-		intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say what you see in the picture...");
-		startActivityForResult(intent, REQUEST_CODE);
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
-		if (requestCode == REQUEST_CODE && resultCode == RESULT_OK)
-		{
-			ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-			//goes through all the possible strings from voice and determines if there is a match
-			//right now score is just incremented by 100
-			for (String s: matches) {
-				if (s.toLowerCase().contains(currentImage.toLowerCase())) {
-					score += 100;
-					MediaPlayer mp=MediaPlayer.create(MainActivity.this,R.raw.ding);
-					mp.start();
-					nextImage();
-				}
-			}
-		}
-		super.onActivityResult(requestCode, resultCode, data);
-	}
-	
-	//Handler for sentence hint
-	public void onHint1ButtonClick(View view) {
-		//TODO
-		TextView hintView= (TextView)findViewById(R.id.hintText);
-		hintView.setText(currentSet.getStimuli()[imageCounter].getHints()[0]);
-	}
-
-	//handler for similar word hint
-	public void onHint2ButtonClick(View view) {
-		//TODO
-		TextView hintView= (TextView)findViewById(R.id.hintText);
-		hintView.setText(currentSet.getStimuli()[imageCounter].getHints()[1]);
-	}
-
-	//handler for giving up and getting answer
-	public void onHint3ButtonClick(View view) {
-		TextView hintView= (TextView)findViewById(R.id.hintText);
-		hintView.setText(currentSet.getStimuli()[imageCounter].getHints()[2]);
-		//TODO
-	}
-	
-	//put this at the bottom so it's out of the way
 	public void loadData()
 	{
 		Stimulus livingEasyStimuli[] = new Stimulus [10];
 		Stimulus livingHardStimuli[] = new Stimulus [10];
 		Stimulus nonlivingEasyStimuli[] = new Stimulus [10];
-		Stimulus nonlivingHardStimuli[] = new Stimulus [10];		
+		Stimulus nonlivingHardStimuli[] = new Stimulus [10];
+
+		String [] applehints = {getResources().getString(R.string.applehint1),
+				getResources().getString(R.string.applehint2), 
+				getResources().getString(R.string.applehint3)};
+
+		String [] birdhints = {getResources().getString(R.string.birdhint1),
+				getResources().getString(R.string.birdhint2), 
+				getResources().getString(R.string.birdhint3)};
+
+		String [] carrothints = {getResources().getString(R.string.carrothint1),
+				getResources().getString(R.string.carrothint2), 
+				getResources().getString(R.string.carrothint3)};
+
+		String [] cathints = {getResources().getString(R.string.cathint1),
+				getResources().getString(R.string.cathint2), 
+				getResources().getString(R.string.cathint3)};
+
+		String [] cornhints = {getResources().getString(R.string.cornhint1),
+				getResources().getString(R.string.cornhint2), 
+				getResources().getString(R.string.cornhint3)};
+
+		String [] cowhints = {getResources().getString(R.string.cowhint1),
+				getResources().getString(R.string.cowhint2), 
+				getResources().getString(R.string.cowhint3)}; 
+
+		String [] doghints = {getResources().getString(R.string.doghint1),
+				getResources().getString(R.string.doghint2), 
+				getResources().getString(R.string.doghint3)};
+
+		String [] elephanthints = {getResources().getString(R.string.elephanthint1),
+				getResources().getString(R.string.elephanthint2), 
+				getResources().getString(R.string.elephanthint3)};
+
+		String [] flowerhints = {getResources().getString(R.string.flowerhint1),
+				getResources().getString(R.string.flowerhint2), 
+				getResources().getString(R.string.flowerhint3)};
+
+		String [] tomatohints = {getResources().getString(R.string.tomatohint1),
+				getResources().getString(R.string.tomatohint2), 
+				getResources().getString(R.string.tomatohint3)};
+
+
+		livingEasyStimuli[0] = new Stimulus("Apple", 0, applehints, R.drawable.applesmall);
+		livingEasyStimuli[1] = new Stimulus("Bird", 0, birdhints, R.drawable.bird);
+		livingEasyStimuli[2] = new Stimulus("Carrot", 0, carrothints, R.drawable.carrot);
+		livingEasyStimuli[3] = new Stimulus("Cat", 0, cathints, R.drawable.cat);
+		livingEasyStimuli[4] = new Stimulus("Corn", 0, cornhints, R.drawable.corn);
+		livingEasyStimuli[5] = new Stimulus("Cow", 0, cowhints, R.drawable.cow);
+		livingEasyStimuli[6] = new Stimulus("Dog", 0, doghints, R.drawable.dog);
+		livingEasyStimuli[7] = new Stimulus("Elephant", 0, elephanthints, R.drawable.elephant);
+		livingEasyStimuli[8] = new Stimulus("Flower", 0, flowerhints, R.drawable.flower);
+		livingEasyStimuli[9] = new Stimulus("Tomato", 0, tomatohints, R.drawable.tomato);
+
+		livingEasySet=new StimulusSet("Living Easy", livingEasyStimuli);
 
 		String [] giraffehints = {getResources().getString(R.string.giraffehint1),
 				getResources().getString(R.string.giraffehint2), 
@@ -366,5 +368,65 @@ public class MainActivity extends Activity implements ViewFactory {
 		currentSet=allStimulusSets[0];
 	}
 
+	public void onNextSetButtonClick(View view)
+	{
+		setCounter++;
+		imageCounter=0;
+		setCounter=setCounter%allStimulusSets.length;
+		currentSet=allStimulusSets[setCounter];
+		firstImage.setImageResource((currentSet.getStimuli()[imageCounter].getImage()));
+		TextView hintView= (TextView)findViewById(R.id.hintText);
+		hintView.setText("");
+		currentImage = currentSet.getStimuli()[imageCounter].getName();
+	}
+
+	private void startVoiceRecognitionActivity()
+	{
+		Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+		intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+				RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+		intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say what you see in the picture...");
+		startActivityForResult(intent, REQUEST_CODE);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		if (requestCode == REQUEST_CODE && resultCode == RESULT_OK)
+		{
+			ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+			//goes through all the possible strings from voice and determines if there is a match
+			//right now score is just incremented by 100
+			for (String s: matches) {
+				if (s.toLowerCase().contains(currentImage.toLowerCase())) {
+					score += 100;
+					MediaPlayer mp=MediaPlayer.create(MainActivity.this,R.raw.ding);
+					mp.start();
+					nextImage();
+				}
+			}
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+	//Handler for sentence hint
+	public void onHint1ButtonClick(View view) {
+		//TODO
+		TextView hintView= (TextView)findViewById(R.id.hintText);
+		hintView.setText(currentSet.getStimuli()[imageCounter].getHints()[0]);
+	}
+
+	//handler for similar word hint
+	public void onHint2ButtonClick(View view) {
+		//TODO
+		TextView hintView= (TextView)findViewById(R.id.hintText);
+		hintView.setText(currentSet.getStimuli()[imageCounter].getHints()[1]);
+	}
+
+	//handler for giving up and getting answer
+	public void onHint3ButtonClick(View view) {
+		TextView hintView= (TextView)findViewById(R.id.hintText);
+		hintView.setText(currentSet.getStimuli()[imageCounter].getHints()[2]);
+		//TODO
+	}
 
 }
