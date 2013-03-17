@@ -16,7 +16,9 @@ import android.view.ViewGroup.LayoutParams;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.view.Menu;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.ImageSwitcher;
 import android.widget.ViewSwitcher;
@@ -26,8 +28,9 @@ public class MainActivity extends Activity implements ViewFactory {
 	private static final int REQUEST_CODE = 1234;
 
 	Button nextButton;
-	ImageView firstImage;
-
+	//ImageView firstImage;
+	ImageSwitcher firstImage;
+	User currentUser= new User();
 	Button speakBtn;
 	StimulusSet livingEasySet;
 	StimulusSet livingHardSet;
@@ -35,30 +38,45 @@ public class MainActivity extends Activity implements ViewFactory {
 	StimulusSet nonlivingHardSet;
 
 	String currentImage;
-
+	private int stimulusSetSize=10;
+	
+	//game metrics
+	int hintsUsed=0;
+	int [] scoreArray= new int[stimulusSetSize];
 	int score = 0;
+	int streak=0;
+	int numberOfAttempts=1;//starts at one because does not increment when answered correctly
+	int [][] efficiencyArray= new int[2][stimulusSetSize];//0 is hintsUsed, 1 is numberOfAttempts 
+	//end metrics
 	
 	int imageCounter=0;
 	int setCounter=0;
 	StimulusSet allStimulusSets [];
 	StimulusSet currentSet=livingEasySet;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		firstImage = (ImageSwitcher) findViewById(R.id.ImageSwitcher1);
+		firstImage.setFactory(this);
+		firstImage.setInAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
+		firstImage.setOutAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
+			
 		loadData();
 		//currentSet=allStimulusSets[setCounter];
 		addListenerForButton();
 
 		PackageManager pm = getPackageManager();
-		List RecognizerActivities = pm.queryIntentActivities(
+		List<ResolveInfo> RecognizerActivities = pm.queryIntentActivities(
 				new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
 		if (RecognizerActivities.size() == 0)
 		{
 			speakBtn.setEnabled(false);
 			speakBtn.setText("Not compatible");
 		}
+		
 	}
 
 	@Override
@@ -68,25 +86,33 @@ public class MainActivity extends Activity implements ViewFactory {
 		return true;
 	}
 	
-	@Override
 	public View makeView() {
 		ImageView iv = new ImageView(this);
 		iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
 		iv.setLayoutParams(new ImageSwitcher.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		
+		iv.setBackgroundColor(0xFFFFFFFF);
+		return iv;
 	}
 	
 	public void addListenerForButton()
 	{
-		firstImage=(ImageView) findViewById(R.id.imageView1);
-
+		//firstImage=(ImageView) findViewById(R.id.imageView1);
+	
+		
 		speakBtn = (Button) findViewById(R.id.speakButton);
 
+		//already commented
 		//firstImage=(ImageView) findViewById(livingHard.getStimuli()[0].getImage());//this gives a picture id not the imageview id
-		firstImage=((ImageView) findViewById(R.id.imageView1));
+		
+		/*firstImage=((ImageView) findViewById(R.id.imageView1));
+		firstImage.setImageResource(currentSet.getStimuli()[imageCounter].getImage());
+		currentImage = currentSet.getStimuli()[imageCounter].getName();*/
+		firstImage=(ImageSwitcher) findViewById(R.id.ImageSwitcher1);
 		firstImage.setImageResource(currentSet.getStimuli()[imageCounter].getImage());
 		currentImage = currentSet.getStimuli()[imageCounter].getName();
+		
+		
 		nextButton = (Button) findViewById(R.id.btnChangeImage);
 		nextButton.setOnClickListener(new OnClickListener()
 		{
@@ -100,7 +126,10 @@ public class MainActivity extends Activity implements ViewFactory {
 				//firstImage.setImageResource((currentSet.getStimuli()[imageCounter].getImage()));
 				//TextView hintView= (TextView)findViewById(R.id.hintText);
 				//hintView.setText("");
+				scoreArray[imageCounter]=0;
+				streakEnded();
 				nextImage();
+				
 			}
 		});
 
@@ -116,24 +145,144 @@ public class MainActivity extends Activity implements ViewFactory {
 
 	//moved contents of nextimage here so it can be accessed below
 	public void nextImage() {
-		//firstImage.setImageResource(R.drawable.bird);
-		imageCounter++;
-		imageCounter=imageCounter%(currentSet.getStimuli().length);
-		//firstImage.setImageResource(R.drawable.bird);
+		//update efficiency metrics before resetting them
+		efficiencyArray[0][imageCounter]=hintsUsed;
+		efficiencyArray[1][imageCounter]=numberOfAttempts;
+		resetMetricsImage();
+		if(imageCounter==stimulusSetSize-1)//if at the end of the set then go into finishedSet setup
+		{
+			finishedSet();
+			
+		}
+		else
+		{
+			imageCounter++;
+			imageCounter=imageCounter%(currentSet.getStimuli().length);
+			
+			firstImage.setImageResource((currentSet.getStimuli()[imageCounter].getImage()));
+			
+			currentImage = currentSet.getStimuli()[imageCounter].getName();
+			TextView hintView= (TextView)findViewById(R.id.hintText);
+			hintView.setText("");
+		}
+	}
+	public void finishedSet()
+	{
+		if(currentUser.stimulusSetScores.containsKey(currentSet.setName))//if the stimulus set has already been played, remove the previous score array
+		{
+			currentUser.stimulusSetScores.remove(currentSet.setName);
+		}
+		currentUser.stimulusSetScores.put(currentSet.setName, scoreArray);//add the score array for the stimulus set to the user hashmap
+		currentUser.calculateStarScore(currentSet.setName);
+		currentUser.stimulusSetEfficiencies.put(currentSet.setName, efficiencyArray);//add the efficiencies for this set to the hashmap
+		currentUser.calculateAverageEfficiencyPercent(currentSet.setName);//calculate the percentage for this set
+		nextSet();
+	}
+	public void nextSet()
+	{
+		
+		resetMetricsSet();
+		setCounter++;
+		imageCounter=0;
+		setCounter=setCounter%allStimulusSets.length;
+		currentSet=allStimulusSets[setCounter];
 		firstImage.setImageResource((currentSet.getStimuli()[imageCounter].getImage()));
-		currentImage = currentSet.getStimuli()[imageCounter].getName();
 		TextView hintView= (TextView)findViewById(R.id.hintText);
 		hintView.setText("");
+		currentImage = currentSet.getStimuli()[imageCounter].getName();
+	}
+	
+	public void resetMetricsImage()
+	{
+		hintsUsed=0;
+		numberOfAttempts=1;//starts at one because does not increment when answered correctly
+	}
+	public void resetMetricsSet()
+	{
+		streak=0;
+		resetMetricsImage();
+	}
+	public void streakEnded()
+	{
+		if(currentUser.longestStreakForSets.containsKey(currentSet.setName)&&streak>currentUser.longestStreakForSets.get(currentSet.setName))//if a streak already exists, and this streak is larger, update the streak
+		{	
+			currentUser.longestStreakForSets.remove(currentSet.setName);
+			currentUser.longestStreakForSets.put(currentSet.setName, streak);
+		}
+		else if(!currentUser.longestStreakForSets.containsKey(currentSet.setName))//if there is no streak, make this the longest streak
+			currentUser.longestStreakForSets.put(currentSet.setName, streak);
+		//otherwise do nothing and reset streak counter
+		streak=0;//used next button so reset streak to zero
+	}
+	public void onNextSetButtonClick(View view)
+	{
+		nextSet();
 	}
 
+	private void startVoiceRecognitionActivity()
+	{
+		Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+		intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+				RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+		intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say what you see in the picture...");
+		startActivityForResult(intent, REQUEST_CODE);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		if (requestCode == REQUEST_CODE && resultCode == RESULT_OK)
+		{
+			ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+			//goes through all the possible strings from voice and determines if there is a match
+			//right now score is just incremented by 100
+			for (String s: matches) {
+				if (s.toLowerCase().contains(currentImage.toLowerCase())) {
+					scoreArray[imageCounter]=(300-100*hintsUsed==0?100:300-100*hintsUsed);//subtract 100 for each hint used, but if 3 are used make the score 100 anyway
+					if(hintsUsed==0)
+						streak++;
+					else
+						streakEnded();
+					MediaPlayer mp=MediaPlayer.create(MainActivity.this,R.raw.ding);
+					mp.start();
+					nextImage();
+				}
+				else
+					numberOfAttempts++;//if got it wrong the number of attempts increments
+			}
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+	//Handler for sentence hint
+	public void onHint1ButtonClick(View view) {
+		//TODO
+		TextView hintView= (TextView)findViewById(R.id.hintText);
+		hintView.setText(currentSet.getStimuli()[imageCounter].getHints()[0]);
+		hintsUsed++;
+	}
+
+	//handler for similar word hint
+	public void onHint2ButtonClick(View view) {
+		//TODO
+		TextView hintView= (TextView)findViewById(R.id.hintText);
+		hintView.setText(currentSet.getStimuli()[imageCounter].getHints()[1]);
+		hintsUsed++;
+	}
+
+	//handler for giving up and getting answer
+	public void onHint3ButtonClick(View view) {
+		TextView hintView= (TextView)findViewById(R.id.hintText);
+		hintView.setText(currentSet.getStimuli()[imageCounter].getHints()[2]);
+		//TODO
+		hintsUsed++;
+	}
 	public void loadData()
 	{
-
 		Stimulus livingEasyStimuli[] = new Stimulus [10];
 		Stimulus livingHardStimuli[] = new Stimulus [10];
 		Stimulus nonlivingEasyStimuli[] = new Stimulus [10];
 		Stimulus nonlivingHardStimuli[] = new Stimulus [10];
-		
+
 		String [] applehints = {getResources().getString(R.string.applehint1),
 				getResources().getString(R.string.applehint2), 
 				getResources().getString(R.string.applehint3)};
@@ -151,31 +300,55 @@ public class MainActivity extends Activity implements ViewFactory {
 				getResources().getString(R.string.cathint3)};
 
 		String [] cornhints = {getResources().getString(R.string.cornhint1),
+<<<<<<< HEAD
 							   getResources().getString(R.string.cornhint2), 
 							   getResources().getString(R.string.cornhint3)};
-		
+
 		String [] cowhints = {getResources().getString(R.string.cowhint1),
 							  getResources().getString(R.string.cowhint2), 
 							  getResources().getString(R.string.cowhint3)}; 
-		
+
 		String [] doghints = {getResources().getString(R.string.doghint1),
 							  getResources().getString(R.string.doghint2), 
 							  getResources().getString(R.string.doghint3)};
-		
+
 		String [] elephanthints = {getResources().getString(R.string.elephanthint1),
 							 	   getResources().getString(R.string.elephanthint2), 
 							 	   getResources().getString(R.string.elephanthint3)};
-		
+
 		String [] flowerhints = {getResources().getString(R.string.flowerhint1),
 							     getResources().getString(R.string.flowerhint2), 
 							     getResources().getString(R.string.flowerhint3)};
-		
+
 		String [] tomatohints = {getResources().getString(R.string.tomatohint1),
 								 getResources().getString(R.string.tomatohint2), 
 								 getResources().getString(R.string.tomatohint3)};
-		
-		
-		
+=======
+				getResources().getString(R.string.cornhint2), 
+				getResources().getString(R.string.cornhint3)};
+
+		String [] cowhints = {getResources().getString(R.string.cowhint1),
+				getResources().getString(R.string.cowhint2), 
+				getResources().getString(R.string.cowhint3)}; 
+
+		String [] doghints = {getResources().getString(R.string.doghint1),
+				getResources().getString(R.string.doghint2), 
+				getResources().getString(R.string.doghint3)};
+
+		String [] elephanthints = {getResources().getString(R.string.elephanthint1),
+				getResources().getString(R.string.elephanthint2), 
+				getResources().getString(R.string.elephanthint3)};
+
+		String [] flowerhints = {getResources().getString(R.string.flowerhint1),
+				getResources().getString(R.string.flowerhint2), 
+				getResources().getString(R.string.flowerhint3)};
+
+		String [] tomatohints = {getResources().getString(R.string.tomatohint1),
+				getResources().getString(R.string.tomatohint2), 
+				getResources().getString(R.string.tomatohint3)};
+>>>>>>> 678353519cda51e8fee4591cdfa3766c4664af13
+
+
 		livingEasyStimuli[0] = new Stimulus("Apple", 0, applehints, R.drawable.applesmall);
 		livingEasyStimuli[1] = new Stimulus("Bird", 0, birdhints, R.drawable.bird);
 		livingEasyStimuli[2] = new Stimulus("Carrot", 0, carrothints, R.drawable.carrot);
@@ -187,49 +360,48 @@ public class MainActivity extends Activity implements ViewFactory {
 		livingEasyStimuli[8] = new Stimulus("Flower", 0, flowerhints, R.drawable.flower);
 		livingEasyStimuli[9] = new Stimulus("Tomato", 0, tomatohints, R.drawable.tomato);
 
-		
 		livingEasySet=new StimulusSet("Living Easy", livingEasyStimuli);
-		
+
 		String [] giraffehints = {getResources().getString(R.string.giraffehint1),
 								  getResources().getString(R.string.giraffehint2), 
 								  getResources().getString(R.string.giraffehint3)}; 
-		
+
 		String [] octopushints = {getResources().getString(R.string.octopushint1),
 					      		  getResources().getString(R.string.octopushint2), 
 					      		  getResources().getString(R.string.octopushint3)};
-		
+
 		String [] pineapplehints = {getResources().getString(R.string.pineapplehint1),
 									getResources().getString(R.string.pineapplehint2), 
 									getResources().getString(R.string.pineapplehint3)};
-		
+
 		String [] pineconehints = {getResources().getString(R.string.pineconehint1),
 								   getResources().getString(R.string.pineconehint2), 
 								   getResources().getString(R.string.pineconehint3)};
-		
+
 		String [] pumpkinhints = {getResources().getString(R.string.pumpkinhint1),
 								  getResources().getString(R.string.pumpkinhint2), 
 								  getResources().getString(R.string.pumpkinhint3)};
-		
+
 		String [] roosterhints = {getResources().getString(R.string.roosterhint1),
 								  getResources().getString(R.string.roosterhint2), 
 								  getResources().getString(R.string.roosterhint3)}; 
-		
+
 		String [] cauliflowerhints = {getResources().getString(R.string.cauliflowerhint1),
 									  getResources().getString(R.string.cauliflowerhint2), 
 									  getResources().getString(R.string.cauliflowerhint3)};
-		
+
 		String [] asparagushints = {getResources().getString(R.string.asparagushint1),
 						    		getResources().getString(R.string.asparagushint2), 
 						    		getResources().getString(R.string.asparagushint3)};
-		
+
 		String [] avocadohints = {getResources().getString(R.string.avocadohint1),
 								  getResources().getString(R.string.avocadohint2), 
 								  getResources().getString(R.string.avocadohint3)};
-		
+
 		String [] broccolihints = {getResources().getString(R.string.broccolihint1),
 								   getResources().getString(R.string.broccolihint2), 
 								   getResources().getString(R.string.broccolihint3)};
-		
+
 		livingHardStimuli[0] = new Stimulus("Giraffe", 1, giraffehints, R.drawable.giraffe);
 		livingHardStimuli[1] = new Stimulus("Octopus", 1, octopushints, R.drawable.octopus);
 		livingHardStimuli[2] = new Stimulus("Pineapple", 1, pineapplehints, R.drawable.pineapple);
@@ -241,9 +413,9 @@ public class MainActivity extends Activity implements ViewFactory {
 		livingHardStimuli[8] = new Stimulus("Avocado", 1, avocadohints, R.drawable.avocado);
 		livingHardStimuli[9] = new Stimulus("Broccoli", 1, broccolihints, R.drawable.broccoli);
 
-		
+
 		livingHardSet = new StimulusSet("Living Hard", livingHardStimuli);
-		
+
 		String [] chairhints = {getResources().getString(R.string.chairhint1),
   								getResources().getString(R.string.chairhint2), 
   								getResources().getString(R.string.chairhint3)};
@@ -251,11 +423,11 @@ public class MainActivity extends Activity implements ViewFactory {
 		String [] tablehints = {getResources().getString(R.string.tablehint1),
 		  						getResources().getString(R.string.tablehint2), 
 		  						getResources().getString(R.string.tablehint3)};
-		
+
 		String [] lamphints = {getResources().getString(R.string.lamphint1),
 							   getResources().getString(R.string.lamphint2), 
 							   getResources().getString(R.string.lamphint3)};
-		
+
 		String [] bedhints = {getResources().getString(R.string.bedhint1),
 							  getResources().getString(R.string.bedhint2), 
 							  getResources().getString(R.string.bedhint3)};
@@ -277,8 +449,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		String [] moneyhints = {getResources().getString(R.string.moneyhint1),
 						  		getResources().getString(R.string.moneyhint2), 
 						  		getResources().getString(R.string.moneyhint3)};
-		
-		
+
 		nonlivingEasyStimuli[0] = new Stimulus("Chair", 0, chairhints, R.drawable.chair);
 		nonlivingEasyStimuli[1] = new Stimulus("Table", 0, tablehints, R.drawable.table);
 		nonlivingEasyStimuli[2] = new Stimulus("Lamp", 0, lamphints, R.drawable.lamp);
@@ -303,20 +474,20 @@ public class MainActivity extends Activity implements ViewFactory {
 		String [] televisionhints = {getResources().getString(R.string.televisionhint1),
 				 					 getResources().getString(R.string.televisionhint2), 
 				 					 getResources().getString(R.string.televisionhint3)};
-		 
+
 		 String [] refrigeratorhints = {getResources().getString(R.string.refrigeratorhint1),
 				 						getResources().getString(R.string.refrigeratorhint2), 
 				 						getResources().getString(R.string.refrigeratorhint3)};
-		 
+
 		 String [] basketballhints = {getResources().getString(R.string.basketballhint1),
 				 					  getResources().getString(R.string.basketballhint2), 
 				 					  getResources().getString(R.string.basketballhint3)};
 
-		 
+
 		 String [] footballhints = {getResources().getString(R.string.footballhint1),
 				 					getResources().getString(R.string.footballhint2), 
 				 					getResources().getString(R.string.footballhint3)};
-		 
+
 		 String [] soccerballhints = {getResources().getString(R.string.soccerballhint1),
 				 					  getResources().getString(R.string.soccerballhint2), 
 				 					  getResources().getString(R.string.soccerballhint3)};
@@ -326,7 +497,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		 String [] zipperhints = {getResources().getString(R.string.zipperhint1),
 				 				  getResources().getString(R.string.zipperhint2), 
 				 				  getResources().getString(R.string.zipperhint3)};
-		 
+
 		 String [] gloveshints = {getResources().getString(R.string.gloveshint1),
 				 				  getResources().getString(R.string.gloveshint2), 
 				 				  getResources().getString(R.string.gloveshint3)};
@@ -352,71 +523,11 @@ public class MainActivity extends Activity implements ViewFactory {
 		allStimulusSets[3] = nonlivingHardSet;
 
 		currentSet=allStimulusSets[0];
-
-
-	}
-
-	public void onNextSetButtonClick(View view)
-	{
-		setCounter++;
-		imageCounter=0;
-		setCounter=setCounter%allStimulusSets.length;
-		currentSet=allStimulusSets[setCounter];
-		firstImage.setImageResource((currentSet.getStimuli()[imageCounter].getImage()));
-		TextView hintView= (TextView)findViewById(R.id.hintText);
-		hintView.setText("");
-		currentImage = currentSet.getStimuli()[imageCounter].getName();
-	}
-
-	private void startVoiceRecognitionActivity()
-	{
-		Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-		intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-				RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-		intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say what you see in the picture...");
-		startActivityForResult(intent, REQUEST_CODE);
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
-		if (requestCode == REQUEST_CODE && resultCode == RESULT_OK)
-		{
-			ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-			//goes through all the possible strings from voice and detirmines if there is a match
-			//right now score is just incremented by 100
-			for (String s: matches) {
-				if (s.equalsIgnoreCase(currentImage)) {
-					score += 100;
-					MediaPlayer mp=MediaPlayer.create(MainActivity.this,R.raw.bellringing);
-					  mp.start();
-					nextImage();
-				}
-			}
-		}
-		super.onActivityResult(requestCode, resultCode, data);
-	}
-	//Handler for sentence hint
-	public void onHint1ButtonClick(View view) {
-		//TODO
-		TextView hintView= (TextView)findViewById(R.id.hintText);
-		hintView.setText(currentSet.getStimuli()[imageCounter].getHints()[0]);
-	}
-
-	//handler for similar word hint
-	public void onHint2ButtonClick(View view) {
-		//TODO
-		TextView hintView= (TextView)findViewById(R.id.hintText);
-		hintView.setText(currentSet.getStimuli()[imageCounter].getHints()[1]);
-	}
-
 	
-	
-	//handler for giving up and getting answer
-	public void onHint3ButtonClick(View view) {
-		TextView hintView= (TextView)findViewById(R.id.hintText);
-		hintView.setText(currentSet.getStimuli()[imageCounter].getHints()[2]);
-		//TODO
 	}
+<<<<<<< HEAD
+}
+=======
 
 }
+>>>>>>> 678353519cda51e8fee4591cdfa3766c4664af13
