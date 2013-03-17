@@ -4,11 +4,12 @@ import java.util.HashMap;
 
 public class User {
 	//score, speed, efficiency, streaks
-	int longestStreak=0;
+	//int longestStreak=0;
 	int score=0;
 	int maxAttemptsAllowed=3;//number of attempts considered for efficiency calculations, anything over this is considered 0 efficiency
 	public HashMap<String, Integer> starsForSets;
 	public HashMap<String, int []> stimulusSetScores;
+	public HashMap<String, Integer> longestStreakForSets;
 	public HashMap<String, int [][]> stimulusSetEfficiencies;
 	public HashMap<String, Integer> percentEfficiencyForSets;
 	public void calculateStarScore(String stimulusSetName)
