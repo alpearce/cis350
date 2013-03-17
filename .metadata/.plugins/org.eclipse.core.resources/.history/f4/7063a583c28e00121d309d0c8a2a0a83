@@ -173,7 +173,6 @@ public class MainActivity extends Activity implements ViewFactory {
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
-	
 	//Handler for sentence hint
 	public void onHint1ButtonClick(View view) {
 		//TODO

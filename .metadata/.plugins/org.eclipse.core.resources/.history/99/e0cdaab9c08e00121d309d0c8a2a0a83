@@ -10,7 +10,6 @@ public class StimulusSet {
 		setName=name;
 		stimuli=stimuliInSet;
 	}
-	
 	public String getName()
 	{
 		return setName;
