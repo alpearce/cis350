@@ -43,7 +43,9 @@ import android.widget.ViewSwitcher;
 public class MainActivity extends Activity implements ViewFactory {
 
 	private static final int REQUEST_CODE = 1234;
-
+	final int REQUIRE_HEIGHT = 1500;
+	final int REQUIRE_WIDTH = 1000;
+	
 	private LruCache<String, Bitmap> imCache; //need cache for S3 images
 	Button nextButton;
 	//ImageView firstImage;
@@ -63,9 +65,7 @@ public class MainActivity extends Activity implements ViewFactory {
 	int setCounter=0;
 	StimulusSet allStimulusSets [];
 	StimulusSet currentSet=livingEasySet;
-	boolean stimReady = false;
-
-	
+	boolean stimReady = false;	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +80,8 @@ public class MainActivity extends Activity implements ViewFactory {
 			
 		//set up cache for images
 		final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);	
-		//use 1/8th size of available memory for cache
-		final int cacheSize = maxMemory/8;
+		//use 1/2 size of available memory for cache
+		final int cacheSize = maxMemory/2;
 		imCache = new LruCache<String, Bitmap>(cacheSize) {
 			//had to add this line to get it to compile; it won't like anything
 			//less than api v12
@@ -142,24 +142,8 @@ public class MainActivity extends Activity implements ViewFactory {
 	{
 		speakBtn = (Button) findViewById(R.id.speakButton);
 
-		//already commented
-		//firstImage=(ImageView) findViewById(livingHard.getStimuli()[0].getImage());//this gives a picture id not the imageview id
-		
-		/*firstImage=((ImageView) findViewById(R.id.imageView1));
-		firstImage.setImageResource(currentSet.getStimuli()[imageCounter].getImage());
-		currentImage = currentSet.getStimuli()[imageCounter].getName();*/
-		
 		firstImage=(ImageSwitcher) findViewById(R.id.ImageSwitcher1);
-		firstImage.setImageResource(currentSet.getStimuli()[imageCounter].getImage());
 		//currentImage = currentSet.getStimuli()[imageCounter].getName();
-		
-
-		//firstImage.setImageResource(currentSet.getStimuli()[imageCounter].getImage());
-		
-		//firstImage.setImageDrawable(currentSet.getStimuli()[imageCounter].getDrawable());
-		Drawable drawableBitmap = new BitmapDrawable(getResources(),getBitmapFromCache(currentSet.getStimuli()[imageCounter].getName()));
-		firstImage.setImageDrawable(drawableBitmap);
-		currentImage = currentSet.getStimuli()[imageCounter].getName();
 			
 		nextButton = (Button) findViewById(R.id.btnChangeImage);
 		nextButton.setOnClickListener(new OnClickListener()
@@ -184,38 +168,28 @@ public class MainActivity extends Activity implements ViewFactory {
 		imageCounter++;
 		imageCounter=imageCounter%(currentSet.getStimuli().length);
 		
-		//firstImage.setImageResource((currentSet.getStimuli()[imageCounter].getImage()));
-		//firstImage.setImageDrawable(currentSet.getStimuli()[imageCounter].getDrawable());
-		Drawable drawableBitmap = new BitmapDrawable(getResources(),getBitmapFromCache(currentSet.getStimuli()[imageCounter].getName()));
-		firstImage.setImageDrawable(drawableBitmap);
-		
 		currentImage = currentSet.getStimuli()[imageCounter].getName();
+		Bitmap im = getBitmapFromCache(currentImage); 
+		if (im == null) { Log.d("nextImage","null bitmap- that's bad/" + currentImage); } 
+		else { Log.d("nextImage","should load" + currentImage); }
+		Drawable drawableBitmap = new BitmapDrawable(getResources(),im);
+		firstImage.setImageDrawable(drawableBitmap);
+		Log.d("nextImage","set image to " + currentImage);
 		TextView hintView= (TextView)findViewById(R.id.hintText);
 		hintView.setText("");
-	}
-	
-	//put this at the bottom so it's out of the way
-	
+	}	
 
 	public void onNextSetButtonClick(View view)
 	{
-		setCounter++;
+		//setCounter++; UNCOMMENT THIS
 		imageCounter=0;
 		stimReady = false;
 		setCounter=setCounter%allStimulusSets.length;
 		currentSet=allStimulusSets[setCounter];
-		new BackgroundTask().execute();
-		while(!stimReady) { } //for now, loop until ready
-		
-		//firstImage.setImageResource((currentSet.getStimuli()[imageCounter].getImage()));
-		//firstImage.setImageDrawable((currentSet.getStimuli()[imageCounter].getDrawable()));
-		
-		Drawable drawableBitmap = new BitmapDrawable(getResources(),getBitmapFromCache(currentSet.getStimuli()[imageCounter].getName()));
-		firstImage.setImageDrawable(drawableBitmap);
-
 		TextView hintView= (TextView)findViewById(R.id.hintText);
 		hintView.setText("");
-		currentImage = currentSet.getStimuli()[imageCounter].getName();
+		new BackgroundTask().execute();
+		Log.d("nextSetButton", "executed background test");			
 	}
 
 	private void startVoiceRecognitionActivity()
@@ -265,28 +239,24 @@ public class MainActivity extends Activity implements ViewFactory {
 		hintView.setText(currentSet.getStimuli()[imageCounter].getHints()[2]);
 	}
 	
-	
-	/*helper method from Android Dev documentation for determining how much
-	 * you can scale down an image based on the display size
-	 */
+	//scale down images based on display size; helps with OOM errors
 	public static int calculateInSampleSize(
         BitmapFactory.Options options, int reqWidth, int reqHeight) {
 	    // Raw height and width of image
 	    final int height = options.outHeight;
 	    final int width = options.outWidth;
-	    int inSampleSize = 1;
-	
-	    if (height > reqHeight || width > reqWidth) {
-	
-	        // Calculate ratios of height and width to requested height and width
-	        final int heightRatio = Math.round((float) height / (float) reqHeight);
-	        final int widthRatio = Math.round((float) width / (float) reqWidth);
-	
-	        // Choose the smallest ratio as inSampleSize value, this will guarantee
-	        // a final image with both dimensions larger than or equal to the
-	        // requested height and width.
-	        inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+	    int inSampleSize = 0;
+	    int newHeight = height;
+	    int newWidth = width;
+	    
+	    while (newHeight > reqHeight || newWidth > reqWidth) {
+	    	newHeight = newHeight/2; //should be power of two 
+	    	newWidth = newWidth/2;
+	    	inSampleSize += 2;
+	    	
 	    	}
+	    if (inSampleSize == 0) { inSampleSize = 1; }
+	    Log.d("async task","in sample size is:" + (inSampleSize));
 	
 	    return inSampleSize;
 	}
@@ -303,55 +273,47 @@ public class MainActivity extends Activity implements ViewFactory {
 		}
 		
 		protected Drawable[] doInBackground(String... params) {		
+			currentSet = livingEasySet; //REMOVE LATER
 			try {
 				for(int i = 0; i < remoteURLS.length; i++) {
-					/*URL aURL = new URL("https://s3.amazonaws.com/mosstalkdata/" +
-						currentSet.getName() +"2/" +  remoteURLS[i] + ".jpg");*/
 					URL aURL = new URL("https://s3.amazonaws.com/mosstalkdata/" +
-							"livingthingseasy" +"2/" +  remoteURLS[i] + ".jpg");
+						currentSet.getName() +"2/" + remoteURLS[i].toLowerCase() + ".jpg");				
 					Log.d("url", aURL.toString());
 					URLConnection conn = aURL.openConnection();
 					conn.connect();
 					Log.d("asynctask","got connected");
 					//InputStream is = conn.getInputStream();
 					BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
-					
-					
+									
 					//try to decode bitmap without running out of memory
 					BitmapFactory.Options options = new BitmapFactory.Options();
 					options.inJustDecodeBounds = true;
 					Rect r = new Rect(-1,-1,-1,-1);//me
-						//BitmapFactory.decodeStream(bis, r, options); //me
-				    	//Log.d("asynctask","decoded bounds");
-					// Calculate inSampleSize - need to figure out required dims
-					
-					bis = new BufferedInputStream(conn.getInputStream(), 1024*8);
-                    ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    int len=0;
-                    byte[] buffer = new byte[4096];
-                    while((len = bis.read(buffer)) != -1) {
-                          out.write(buffer, 0, len);
-                      }
-                    out.close();
-                    //close input stream so we can reopen and reuse
+					BitmapFactory.decodeStream(bis, r, options); //me
+				    Log.d("asynctask","decoded bounds");
 					bis.close();
-					Log.d("async", "closed bis");
-					byte[] data = out.toByteArray();
-					options.inSampleSize = calculateInSampleSize(options, 1000, 1000);
-					
-					
+				    
+				    // Calculate inSampleSize - need to figure out required dims
+				    options.inSampleSize = calculateInSampleSize(options, REQUIRE_WIDTH, REQUIRE_HEIGHT);
+				    			    					
 					// Decode bitmap with inSampleSize set
 				    options.inJustDecodeBounds = false;
-				    Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
-	                Log.d("asynctask","decoded byte array");
-				    
-					//addBitmapToCache(currentSet.getName(), bitmap);
-					//^^ that's actually right, below is a temporary hack
-					addBitmapToCache("apple",bitmap);
-					
-					//stimImages[i] = new BitmapDrawable(getResources(),bitmap);
-					
+				    conn = aURL.openConnection(); //reopen connection
+					conn.connect();
+					Log.d("asynctask","got connected second time");
+					bis = new BufferedInputStream(conn.getInputStream());
+				    Bitmap bitmap = BitmapFactory.decodeStream(bis, r, options); 					   
+				    			    
+					addBitmapToCache( remoteURLS[i] , bitmap);
+					Log.d("async task","added bitmap to cache: " + remoteURLS[i] );
+					if (i==0) { 
+						Log.d("async task","first image loaded");
+					}
+					publishProgress(i);
 				}
+
+				//stimReady = true;
+				Log.d("async task","done setting drawables");
 			} catch (MalformedURLException e) {
 				// TODO we should make a crash/error screen
 				e.printStackTrace();
@@ -362,19 +324,24 @@ public class MainActivity extends Activity implements ViewFactory {
 			} finally {  }
 			return null;
 		}
-			
-		
+				
 		protected void onProgressUpdate(Integer...progress) {
-		//TODO maybe make a progress bar for the % of images that are loaded
+			int im = progress[0];
+			
+			if (progress[0] == 1) {
+				Log.d("async task","progress update second image");
+				String name = currentSet.getStimuli()[1].getName();
+				Log.d("async task","progress update should load bird");
+				Drawable drawableBitmap = new BitmapDrawable(getResources(),getBitmapFromCache(name));
+				firstImage.setImageDrawable(drawableBitmap);
+			}
+			Log.d("async task","progress update: loaded " + im);
+			
 		}
 		
 		//after we are done downloading the data, set all the drawables
 		protected void onPostExecute(String Result) {
-			for(int i = 0; i < currentSet.length(); i++) {
-				//currentSet.getStimuli()[i].setDrawable(stimImages[i]);
-			}
-			stimReady = true;
-		Log.d("postexecute","done setting drawables");
+			
 		}
 	}
 	
@@ -437,7 +404,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		livingEasyStimuli[8] = new Stimulus("Flower", 0, flowerhints, R.drawable.flower);
 		livingEasyStimuli[9] = new Stimulus("Tomato", 0, tomatohints, R.drawable.tomato);
 
-		livingEasySet=new StimulusSet("Living Easy", livingEasyStimuli);
+		livingEasySet=new StimulusSet("livingthingseasy", livingEasyStimuli);
 
 		String [] giraffehints = {getResources().getString(R.string.giraffehint1),
 								  getResources().getString(R.string.giraffehint2), 
@@ -491,7 +458,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		livingHardStimuli[9] = new Stimulus("Broccoli", 1, broccolihints, R.drawable.broccoli);
 
 
-		livingHardSet = new StimulusSet("Living Hard", livingHardStimuli);
+		livingHardSet = new StimulusSet("nonlivingthingshard", livingHardStimuli);
 
 		String [] chairhints = {getResources().getString(R.string.chairhint1),
   								getResources().getString(R.string.chairhint2), 
@@ -538,7 +505,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		nonlivingEasyStimuli[8] = new Stimulus("Hat", 0, hathints, R.drawable.hat);
 		nonlivingEasyStimuli[9] = new Stimulus("Money", 0, moneyhints, R.drawable.money);
 
-		nonlivingEasySet = new StimulusSet("Nonliving Easy", nonlivingEasyStimuli);
+		nonlivingEasySet = new StimulusSet("nonlivingthingseasy", nonlivingEasyStimuli);
 
 		String [] computerhints = {getResources().getString(R.string.computerhint1),
 								   getResources().getString(R.string.computerhint2), 
