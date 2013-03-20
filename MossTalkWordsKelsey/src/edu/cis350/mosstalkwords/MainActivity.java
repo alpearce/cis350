@@ -48,7 +48,7 @@ public class MainActivity extends Activity implements ViewFactory {
 	
 	private LruCache<String, Bitmap> imCache; //need cache for S3 images
 	Button nextButton;
-	ImageSwitcher firstImage;
+	ImageSwitcher imSwitcher;
 	User currentUser;
 	Button speakBtn;
 	StimulusSet livingEasySet;
@@ -78,10 +78,10 @@ public class MainActivity extends Activity implements ViewFactory {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		firstImage = (ImageSwitcher) findViewById(R.id.ImageSwitcher1);
-		firstImage.setFactory(this);
-		firstImage.setInAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
-		firstImage.setOutAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
+		imSwitcher = (ImageSwitcher) findViewById(R.id.ImageSwitcher1);
+		imSwitcher.setFactory(this);
+		imSwitcher.setInAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
+		imSwitcher.setOutAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
 		
 		currentUser = new User();
 			
@@ -101,6 +101,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		};
 		
 		loadData();
+		new BackgroundTask().execute();
 		addListenerForButton();
 
 		PackageManager pm = getPackageManager();
@@ -149,8 +150,8 @@ public class MainActivity extends Activity implements ViewFactory {
 	{
 		speakBtn = (Button) findViewById(R.id.speakButton);
 
-		firstImage=(ImageSwitcher) findViewById(R.id.ImageSwitcher1);
-		firstImage.setImageResource(currentSet.getStimuli()[imageCounter].getImage());
+		imSwitcher=(ImageSwitcher) findViewById(R.id.ImageSwitcher1);
+		imSwitcher.setImageResource(currentSet.getStimuli()[imageCounter].getImage());
 		currentImage = currentSet.getStimuli()[imageCounter].getName();
 		
 		
@@ -176,12 +177,12 @@ public class MainActivity extends Activity implements ViewFactory {
 		});
 	}
 
-
 	//moved contents of nextimage here so it can be accessed below
 	public void nextImage() {
 		efficiencyArray[0][imageCounter]=hintsUsed;
 		efficiencyArray[1][imageCounter]=numberOfAttempts;
 		resetMetricsImage();
+		
 		if(imageCounter==stimulusSetSize-1)//if at the end of the set then go into finishedSet setup
 		{
 			finishedSet();		
@@ -191,9 +192,14 @@ public class MainActivity extends Activity implements ViewFactory {
 			imageCounter++;
 			imageCounter=imageCounter%(currentSet.getStimuli().length);
 			
-			firstImage.setImageResource((currentSet.getStimuli()[imageCounter].getImage()));
-			
 			currentImage = currentSet.getStimuli()[imageCounter].getName();
+			Bitmap im = getBitmapFromCache(currentImage); 
+			if (im == null) { Log.d("nextImage","null bitmap- that's bad/" + currentImage); } 
+			else { Log.d("nextImage","should load" + currentImage); }
+			Drawable drawableBitmap = new BitmapDrawable(getResources(),im);
+			imSwitcher.setImageDrawable(drawableBitmap);
+			Log.d("nextImage","set image to " + currentImage);
+			
 			TextView hintView= (TextView)findViewById(R.id.hintText);
 			hintView.setText("");
 		}
@@ -216,29 +222,13 @@ public class MainActivity extends Activity implements ViewFactory {
 		setCounter++;
 		imageCounter++;
 		imageCounter=imageCounter%(currentSet.getStimuli().length);
-		
-		currentImage = currentSet.getStimuli()[imageCounter].getName();
-		Bitmap im = getBitmapFromCache(currentImage); 
-		if (im == null) { Log.d("nextImage","null bitmap- that's bad/" + currentImage); } 
-		else { Log.d("nextImage","should load" + currentImage); }
-		Drawable drawableBitmap = new BitmapDrawable(getResources(),im);
-		firstImage.setImageDrawable(drawableBitmap);
-		Log.d("nextImage","set image to " + currentImage);
-		TextView hintView= (TextView)findViewById(R.id.hintText);
-		hintView.setText("");
+		new BackgroundTask().execute();
+	
 	}	
 
 	public void onNextSetButtonClick(View view)
 	{
-		setCounter++; 
-		imageCounter=0;
-		stimReady = false;
-		setCounter=setCounter%allStimulusSets.length;
-		currentSet=allStimulusSets[setCounter];
-		TextView hintView= (TextView)findViewById(R.id.hintText);
-		hintView.setText("");
-		new BackgroundTask().execute();
-		Log.d("nextSetButton", "executed background test");			
+		nextSet();			
 	}
 	
 	public void resetMetricsImage()
@@ -268,11 +258,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		//otherwise do nothing and reset streak counter
 		streak=0;//used next button so reset streak to zero
 	}
-	public void onNextSetButtonClick(View view)
-	{
-		nextSet();
-	}
-
+	
 	private void startVoiceRecognitionActivity()
 	{
 		Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -417,7 +403,7 @@ public class MainActivity extends Activity implements ViewFactory {
 			if (progress[0] == 0) {
 				String name = currentSet.getStimuli()[1].getName();
 				Drawable drawableBitmap = new BitmapDrawable(getResources(),getBitmapFromCache(name));
-				firstImage.setImageDrawable(drawableBitmap);
+				imSwitcher.setImageDrawable(drawableBitmap);
 			}
 			Log.d("async task","progress update: loaded " + im);
 			
@@ -435,18 +421,12 @@ public class MainActivity extends Activity implements ViewFactory {
 		Stimulus nonlivingEasyStimuli[] = new Stimulus [10];
 		Stimulus nonlivingHardStimuli[] = new Stimulus [10];
 
-		String [] applehints = {getResources().getString(R.string.applehint1),
-				getResources().getString(R.string.applehint2), 
-				getResources().getString(R.string.applehint3)};
 
 		String [] birdhints = {getResources().getString(R.string.birdhint1),
 				getResources().getString(R.string.birdhint2), 
 				getResources().getString(R.string.birdhint3)};
 
-		String [] carrothints = {getResources().getString(R.string.carrothint1),
-				getResources().getString(R.string.carrothint2), 
-				getResources().getString(R.string.carrothint3)};
-
+		
 		String [] cathints = {getResources().getString(R.string.cathint1),
 				getResources().getString(R.string.cathint2), 
 				getResources().getString(R.string.cathint3)};
@@ -462,7 +442,57 @@ public class MainActivity extends Activity implements ViewFactory {
 		String [] doghints = {getResources().getString(R.string.doghint1),
 							  getResources().getString(R.string.doghint2), 
 							  getResources().getString(R.string.doghint3)};
+		
+		String [] beanhints = {getResources().getString(R.string.beanhint1),
+				  getResources().getString(R.string.beanhint2), 
+				  getResources().getString(R.string.beanhint3)};
+		
+		String [] bearhints = {getResources().getString(R.string.bearhint1),
+				  getResources().getString(R.string.bearhint2), 
+				  getResources().getString(R.string.bearhint3)};
+		
+		String [] ricehints = {getResources().getString(R.string.ricehint1),
+				  getResources().getString(R.string.ricehint2), 
+				  getResources().getString(R.string.ricehint3)};
+		
+		String [] froghints = {getResources().getString(R.string.froghint1),
+				  getResources().getString(R.string.froghint2), 
+				  getResources().getString(R.string.froghint3)};
 
+		String [] treehints = {getResources().getString(R.string.treehint1),
+				  getResources().getString(R.string.treehint2), 
+				  getResources().getString(R.string.treehint3)};
+	
+		
+		livingEasyStimuli[0] = new Stimulus("Bean", 0, beanhints, 0);
+		livingEasyStimuli[1] = new Stimulus("Bear", 0, bearhints, 0);
+		livingEasyStimuli[2] = new Stimulus("Bird", 0, birdhints, 0);
+		livingEasyStimuli[3] = new Stimulus("Cat", 0, cathints, 0);
+		livingEasyStimuli[4] = new Stimulus("Corn", 0, cornhints, 0);
+		livingEasyStimuli[5] = new Stimulus("Cow", 0, cowhints, 0);
+		livingEasyStimuli[6] = new Stimulus("Dog", 0, doghints, 0);
+		livingEasyStimuli[7] = new Stimulus("Frog", 0, froghints, 0);
+		livingEasyStimuli[8] = new Stimulus("Tree", 0, treehints, 0);
+		livingEasyStimuli[9] = new Stimulus("Rice", 0, ricehints, 0);
+		
+		
+		/*livingEasyStimuli[0] = new Stimulus("Apple", 0, applehints, R.drawable.applesmall);
+		livingEasyStimuli[1] = new Stimulus("Bird", 0, birdhints, R.drawable.bird);
+		livingEasyStimuli[2] = new Stimulus("Carrot", 0, carrothints, R.drawable.carrot);
+		livingEasyStimuli[3] = new Stimulus("Cat", 0, cathints, R.drawable.cat);
+		livingEasyStimuli[4] = new Stimulus("Corn", 0, cornhints, R.drawable.corn);
+		livingEasyStimuli[5] = new Stimulus("Cow", 0, cowhints, R.drawable.cow);
+		livingEasyStimuli[6] = new Stimulus("Dog", 0, doghints, R.drawable.dog);
+		livingEasyStimuli[7] = new Stimulus("Elephant", 0, elephanthints, R.drawable.elephant);
+		livingEasyStimuli[8] = new Stimulus("Flower", 0, flowerhints, R.drawable.flower);
+		livingEasyStimuli[9] = new Stimulus("Tomato", 0, tomatohints, R.drawable.tomato);*/
+
+		livingEasySet=new StimulusSet("livingthingseasy", livingEasyStimuli);
+
+		String [] applehints = {getResources().getString(R.string.applehint1),
+				getResources().getString(R.string.applehint2), 
+				getResources().getString(R.string.applehint3)};
+		
 		String [] elephanthints = {getResources().getString(R.string.elephanthint1),
 							 	   getResources().getString(R.string.elephanthint2), 
 							 	   getResources().getString(R.string.elephanthint3)};
@@ -475,19 +505,10 @@ public class MainActivity extends Activity implements ViewFactory {
 								 getResources().getString(R.string.tomatohint2), 
 								 getResources().getString(R.string.tomatohint3)};
 
-		livingEasyStimuli[0] = new Stimulus("Apple", 0, applehints, R.drawable.applesmall);
-		livingEasyStimuli[1] = new Stimulus("Bird", 0, birdhints, R.drawable.bird);
-		livingEasyStimuli[2] = new Stimulus("Carrot", 0, carrothints, R.drawable.carrot);
-		livingEasyStimuli[3] = new Stimulus("Cat", 0, cathints, R.drawable.cat);
-		livingEasyStimuli[4] = new Stimulus("Corn", 0, cornhints, R.drawable.corn);
-		livingEasyStimuli[5] = new Stimulus("Cow", 0, cowhints, R.drawable.cow);
-		livingEasyStimuli[6] = new Stimulus("Dog", 0, doghints, R.drawable.dog);
-		livingEasyStimuli[7] = new Stimulus("Elephant", 0, elephanthints, R.drawable.elephant);
-		livingEasyStimuli[8] = new Stimulus("Flower", 0, flowerhints, R.drawable.flower);
-		livingEasyStimuli[9] = new Stimulus("Tomato", 0, tomatohints, R.drawable.tomato);
-
-		livingEasySet=new StimulusSet("livingthingseasy", livingEasyStimuli);
-
+		String [] carrothints = {getResources().getString(R.string.carrothint1),
+				getResources().getString(R.string.carrothint2), 
+				getResources().getString(R.string.carrothint3)};
+		
 		String [] giraffehints = {getResources().getString(R.string.giraffehint1),
 								  getResources().getString(R.string.giraffehint2), 
 								  getResources().getString(R.string.giraffehint3)}; 
@@ -528,19 +549,26 @@ public class MainActivity extends Activity implements ViewFactory {
 								   getResources().getString(R.string.broccolihint2), 
 								   getResources().getString(R.string.broccolihint3)};
 
+		String [] strawberryhints =  {getResources().getString(R.string.strawberryhint1),
+								   getResources().getString(R.string.strawberryhint2), 
+								   getResources().getString(R.string.strawberryhint3)};
+
+
 		livingHardStimuli[0] = new Stimulus("Giraffe", 1, giraffehints, R.drawable.giraffe);
 		livingHardStimuli[1] = new Stimulus("Octopus", 1, octopushints, R.drawable.octopus);
 		livingHardStimuli[2] = new Stimulus("Pineapple", 1, pineapplehints, R.drawable.pineapple);
-		livingHardStimuli[3] = new Stimulus("Pine Cone", 1, pineconehints, R.drawable.pinecone);
+		livingHardStimuli[3] = new Stimulus("Strawberry",1, strawberryhints, 0);
+		//livingHardStimuli[3] = new Stimulus("Pine Cone", 1, pineconehints, R.drawable.pinecone);
 		livingHardStimuli[4] = new Stimulus("Pumpkin", 1, pumpkinhints, R.drawable.pumpkin);
-		livingHardStimuli[5] = new Stimulus("Rooster", 1, roosterhints, R.drawable.rooster);
+		//livingHardStimuli[5] = new Stimulus("Rooster", 1, roosterhints, R.drawable.rooster);
+		livingHardStimuli[5] = new Stimulus("Elephant", 1, elephanthints, 0);
 		livingHardStimuli[6] = new Stimulus("Cauliflower", 1, cauliflowerhints, R.drawable.cauliflower);
 		livingHardStimuli[7] = new Stimulus("Asparagus", 1, asparagushints, R.drawable.asparagus);
 		livingHardStimuli[8] = new Stimulus("Avocado", 1, avocadohints, R.drawable.avocado);
 		livingHardStimuli[9] = new Stimulus("Broccoli", 1, broccolihints, R.drawable.broccoli);
 
 
-		livingHardSet = new StimulusSet("nonlivingthingshard", livingHardStimuli);
+		livingHardSet = new StimulusSet("livingthingshard", livingHardStimuli);
 
 		String [] chairhints = {getResources().getString(R.string.chairhint1),
   								getResources().getString(R.string.chairhint2), 

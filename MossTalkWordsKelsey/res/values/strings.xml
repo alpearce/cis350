@@ -14,22 +14,22 @@
 	<string name="applehint2">Chapel</string>
 	<string name="applehint3">apple</string>
 	<string name="birdhint1">This is a flying animal</string>
-	<string name="birdhint2">herd</string>
+	<string name="birdhint2">herd, curd, absurd</string>
 	<string name="birdhint3">bird</string>
 	<string name="carrothint1">This is an orange vegetable grown from the ground</string>
 	<string name="carrothint2">tarot</string>
 	<string name="carrothint3">carrot</string>
 	<string name="cathint1">This is a pet that purrs.</string>
-	<string name="cathint2">bat</string>
+	<string name="cathint2">bat, fat, democrat</string>
 	<string name="cathint3">cat</string>
 	<string name="cornhint1">This is a yellow vegetable that can be eaten off the cob</string>
-	<string name="cornhint2">born</string>
+	<string name="cornhint2">born, lovelorn, shorn</string>
 	<string name="cornhint3">corn</string>
 	<string name="cowhint1">This is a black and white farm animal that produces milk</string>
-	<string name="cowhint2">how</string>
+	<string name="cowhint2">how, chow, meow</string>
 	<string name="cowhint3">cow</string>
 	<string name="doghint1">This is a pet that barks.</string>
-	<string name="doghint2">log</string>
+	<string name="doghint2">fog, anolog, monologue</string>
 	<string name="doghint3">dog</string>
 	<string name="elephanthint1">This is a large animal that can be found in africa. </string>
 	<string name="elephanthint2">lint</string>
@@ -130,7 +130,39 @@
 	<string name="gloveshint1">This keeps your hands warm during the winter.</string>
 	<string name="gloveshint2">doves</string>
 	<string name="gloveshint3">gloves</string>
+	<string name="beanhint1">This is a magical fruit that makes you toot.</string>
+	<string name="beanhint2">Teen, caffeine, obscene</string>
+	<string name="beanhint3">Bean</string>
+	<string name="froghint1">This is a slimy animal that says "Ribbit"</string>
+	<string name="froghint2">Smog, jog, flog</string>
+	<string name="froghint3">Frog</string>
+	<string name="ricehint1">This food comes in many varieties, such as basmati.</string>
+	<string name="ricehint2">mice, precise, advice</string>
+	<string name="ricehint3">rice</string>
+	<string name="bearhint1">This animal hibernates during the winter</string>
+	<string name="bearhint2">stair, billionaire, declare</string>
+	<string name="bearhint3">bear</string>
+	<string name="treehint1">This is a large plant that children climb and that provides shade</string>
+	<string name="treehint2">free,spree,goatee</string>
+	<string name="treehint3">tree</string>
+	<string name="strawberryhint1">This is red fruit often made into jam</string>
+	<string name="strawberryhint2">honorary, saw ferry, nondairy</string>
+	<string name="strawberryhint3">strawberry</string>	
+	<string name="lizardhint1">Some of these reptile can change the color of their scales</string>
+	<string name="lizardhint2">gizard, wizard, blizzard</string>
+	<string name="lizardhint3">lizard</string>
+	<string name="monkeyhint1">These animals like bananas</string>
+	<string name="monkeyhint2">funky, chunky, junky</string>
+	<string name="monkeyhint3">monkey</string>
+	<string name="squirrelhint1">This animal has a big bushy tail and likes acorns</string>
+	<string name="squirrelhint2">pearl, girl, epidural</string>
+	<string name="toucanhint1">This bird has a large colorful beak</string>
+	<string name="toucanhint2">you can, blue man, new van</string>
+	
+
+
 	<string name="speak">Speak</string>
+
 	
 
     
