@@ -14,8 +14,10 @@ import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.ViewSwitcher.ViewFactory;
 import android.speech.RecognizerIntent;
@@ -55,6 +57,8 @@ public class MainActivity extends Activity implements ViewFactory {
 	StimulusSet livingHardSet;
 	StimulusSet nonlivingEasySet;
 	StimulusSet nonlivingHardSet;
+	
+	Chronometer timer;
 
 	String currentImage;
 	private int stimulusSetSize=10;
@@ -83,12 +87,15 @@ public class MainActivity extends Activity implements ViewFactory {
 		imSwitcher.setInAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
 		imSwitcher.setOutAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
 		
+		timer = (Chronometer) findViewById(R.id.chronometer1);
+		timer.start();
+		
 		currentUser = new User();
 			
 		//set up cache for images
 		final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);	
 		
-		//use 1/2 size of available memory for cache (probably a bad idea, but YOLO)
+		//use 1/2 size of available memory for cache (probably a bad idea, but YOLO) 
 		final int cacheSize = maxMemory/2;
 		imCache = new LruCache<String, Bitmap>(cacheSize) {
 			//had to add this line to get it to compile; it won't like anything
@@ -201,10 +208,11 @@ public class MainActivity extends Activity implements ViewFactory {
 			hintView.setText("");
 			
 			//just to test
-			score += 100;
 			TextView scoreTextView = (TextView)findViewById(R.id.scoretext);
 			scoreTextView.setText("Score: " + String.valueOf(score));
 		}
+		
+		timer.setBase(SystemClock.elapsedRealtime());
 	}
 	public void finishedSet()
 	{
