@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ViewSwitcher.ViewFactory;
 import android.speech.RecognizerIntent;
+import android.util.Log;
 import android.view.View.OnClickListener;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -28,9 +29,8 @@ public class MainActivity extends Activity implements ViewFactory {
 	private static final int REQUEST_CODE = 1234;
 
 	Button nextButton;
-	//ImageView firstImage;
 	ImageSwitcher firstImage;
-	User currentUser= new User();
+	User currentUser;
 	Button speakBtn;
 	StimulusSet livingEasySet;
 	StimulusSet livingHardSet;
@@ -44,7 +44,7 @@ public class MainActivity extends Activity implements ViewFactory {
 	int hintsUsed=0;
 	int [] scoreArray= new int[stimulusSetSize];
 	int score = 0;
-	int streak=0;
+	int streak = 0;
 	int numberOfAttempts=1;//starts at one because does not increment when answered correctly
 	int [][] efficiencyArray= new int[2][stimulusSetSize];//0 is hintsUsed, 1 is numberOfAttempts 
 	//end metrics
@@ -52,7 +52,7 @@ public class MainActivity extends Activity implements ViewFactory {
 	int imageCounter=0;
 	int setCounter=0;
 	StimulusSet allStimulusSets [];
-	StimulusSet currentSet=livingEasySet;
+	StimulusSet currentSet = livingEasySet;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +63,10 @@ public class MainActivity extends Activity implements ViewFactory {
 		firstImage.setFactory(this);
 		firstImage.setInAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
 		firstImage.setOutAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
-			
+		
+		currentUser = new User();
+		
 		loadData();
-		//currentSet=allStimulusSets[setCounter];
 		addListenerForButton();
 
 		PackageManager pm = getPackageManager();
@@ -97,17 +98,8 @@ public class MainActivity extends Activity implements ViewFactory {
 	
 	public void addListenerForButton()
 	{
-		//firstImage=(ImageView) findViewById(R.id.imageView1);
-	
-		
 		speakBtn = (Button) findViewById(R.id.speakButton);
 
-		//already commented
-		//firstImage=(ImageView) findViewById(livingHard.getStimuli()[0].getImage());//this gives a picture id not the imageview id
-		
-		/*firstImage=((ImageView) findViewById(R.id.imageView1));
-		firstImage.setImageResource(currentSet.getStimuli()[imageCounter].getImage());
-		currentImage = currentSet.getStimuli()[imageCounter].getName();*/
 		firstImage=(ImageSwitcher) findViewById(R.id.ImageSwitcher1);
 		firstImage.setImageResource(currentSet.getStimuli()[imageCounter].getImage());
 		currentImage = currentSet.getStimuli()[imageCounter].getName();
@@ -118,18 +110,9 @@ public class MainActivity extends Activity implements ViewFactory {
 		{
 			public void onClick(View arg0)
 			{
-
-				//firstImage.setImageResource(R.drawable.bird);
-				//imageCounter++;
-				//imageCounter=imageCounter%(currentSet.getStimuli().length);
-				//firstImage.setImageResource(R.drawable.bird);
-				//firstImage.setImageResource((currentSet.getStimuli()[imageCounter].getImage()));
-				//TextView hintView= (TextView)findViewById(R.id.hintText);
-				//hintView.setText("");
 				scoreArray[imageCounter]=0;
 				streakEnded();
 				nextImage();
-				
 			}
 		});
 
@@ -145,14 +128,12 @@ public class MainActivity extends Activity implements ViewFactory {
 
 	//moved contents of nextimage here so it can be accessed below
 	public void nextImage() {
-		//update efficiency metrics before resetting them
 		efficiencyArray[0][imageCounter]=hintsUsed;
 		efficiencyArray[1][imageCounter]=numberOfAttempts;
 		resetMetricsImage();
 		if(imageCounter==stimulusSetSize-1)//if at the end of the set then go into finishedSet setup
 		{
-			finishedSet();
-			
+			finishedSet();		
 		}
 		else
 		{
@@ -180,7 +161,6 @@ public class MainActivity extends Activity implements ViewFactory {
 	}
 	public void nextSet()
 	{
-		
 		resetMetricsSet();
 		setCounter++;
 		imageCounter=0;
@@ -199,11 +179,16 @@ public class MainActivity extends Activity implements ViewFactory {
 	}
 	public void resetMetricsSet()
 	{
-		streak=0;
+		//streak=0; streak should keep going between sets
 		resetMetricsImage();
 	}
 	public void streakEnded()
 	{
+		if (currentUser == null) {Log.d("null pointer","current user is null");}
+		if (currentUser.longestStreakForSets==null) {Log.d("null pointer", "CULSFS is null");}
+		if (currentSet == null) {Log.d("null pointer","currentSet is null");}
+		if (currentSet.setName == null) {Log.d("null pointer", "current set name null");}
+		
 		if(currentUser.longestStreakForSets.containsKey(currentSet.setName)&&streak>currentUser.longestStreakForSets.get(currentSet.setName))//if a streak already exists, and this streak is larger, update the streak
 		{	
 			currentUser.longestStreakForSets.remove(currentSet.setName);
@@ -255,7 +240,6 @@ public class MainActivity extends Activity implements ViewFactory {
 	}
 	//Handler for sentence hint
 	public void onHint1ButtonClick(View view) {
-		//TODO
 		TextView hintView= (TextView)findViewById(R.id.hintText);
 		hintView.setText(currentSet.getStimuli()[imageCounter].getHints()[0]);
 		hintsUsed++;
@@ -263,7 +247,6 @@ public class MainActivity extends Activity implements ViewFactory {
 
 	//handler for similar word hint
 	public void onHint2ButtonClick(View view) {
-		//TODO
 		TextView hintView= (TextView)findViewById(R.id.hintText);
 		hintView.setText(currentSet.getStimuli()[imageCounter].getHints()[1]);
 		hintsUsed++;
@@ -273,7 +256,6 @@ public class MainActivity extends Activity implements ViewFactory {
 	public void onHint3ButtonClick(View view) {
 		TextView hintView= (TextView)findViewById(R.id.hintText);
 		hintView.setText(currentSet.getStimuli()[imageCounter].getHints()[2]);
-		//TODO
 		hintsUsed++;
 	}
 	public void loadData()
