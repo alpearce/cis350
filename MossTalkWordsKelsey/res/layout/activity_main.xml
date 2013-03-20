@@ -6,20 +6,6 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
-    <TextView
-        android:id="@+id/scoretext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:text="@string/score" />
-
-    <Button
-        android:id="@+id/btnChangeImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:text="@string/next" />
-
     <!--
            <ImageView
          android:id="@+id/imageView1"
@@ -67,13 +53,7 @@
             android:layout_weight="0.41"
             android:orientation="horizontal" >
 
-            <Button
-                android:id="@+id/nextSetButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onNextSetButtonClick"
-                android:text="@string/nextSet" />
-
+       
             <Button
                 android:id="@+id/hint2button"
                 android:layout_width="wrap_content"
@@ -102,5 +82,30 @@
             android:layout_height="match_parent"
             android:text="@string/speak" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/nextSetButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:onClick="onNextSetButtonClick"
+        android:text="@string/nextSet" />
+
+    <Button
+        android:id="@+id/btnChangeImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/next" />
+
+    <TextView
+        android:id="@+id/scoretext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/score" />
 
 </RelativeLayout>

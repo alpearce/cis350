@@ -199,6 +199,11 @@ public class MainActivity extends Activity implements ViewFactory {
 			
 			TextView hintView= (TextView)findViewById(R.id.hintText);
 			hintView.setText("");
+			
+			//just to test
+			score += 100;
+			TextView scoreTextView = (TextView)findViewById(R.id.scoretext);
+			scoreTextView.setText("Score: " + String.valueOf(score));
 		}
 	}
 	public void finishedSet()
@@ -221,6 +226,8 @@ public class MainActivity extends Activity implements ViewFactory {
 		currentSet = allStimulusSets[setCounter];
 		imageCounter=0;
 		new BackgroundTask().execute();	
+		TextView hintView= (TextView)findViewById(R.id.hintText);
+		hintView.setText("");
 	}	
 
 	public void onNextSetButtonClick(View view)
@@ -276,6 +283,10 @@ public class MainActivity extends Activity implements ViewFactory {
 			for (String s: matches) {
 				if (s.toLowerCase().contains(currentImage.toLowerCase())) {
 					scoreArray[imageCounter]=(300-100*hintsUsed==0?100:300-100*hintsUsed);//subtract 100 for each hint used, but if 3 are used make the score 100 anyway
+					score += scoreArray[imageCounter];
+					TextView scoreTextView = (TextView)findViewById(R.id.scoretext);
+					scoreTextView.setText("Score: " + String.valueOf(score));
+					
 					if(hintsUsed==0)
 						streak++;
 					else
