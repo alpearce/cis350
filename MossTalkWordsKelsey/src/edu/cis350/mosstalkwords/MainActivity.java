@@ -48,7 +48,6 @@ public class MainActivity extends Activity implements ViewFactory {
 	
 	private LruCache<String, Bitmap> imCache; //need cache for S3 images
 	Button nextButton;
-	//ImageView firstImage;
 	ImageSwitcher firstImage;
 	
 	Button speakBtn;
@@ -80,7 +79,8 @@ public class MainActivity extends Activity implements ViewFactory {
 			
 		//set up cache for images
 		final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);	
-		//use 1/2 size of available memory for cache
+		
+		//use 1/2 size of available memory for cache (probably a bad idea, but YOLO)
 		final int cacheSize = maxMemory/2;
 		imCache = new LruCache<String, Bitmap>(cacheSize) {
 			//had to add this line to get it to compile; it won't like anything
@@ -181,7 +181,7 @@ public class MainActivity extends Activity implements ViewFactory {
 
 	public void onNextSetButtonClick(View view)
 	{
-		//setCounter++; UNCOMMENT THIS
+		setCounter++; 
 		imageCounter=0;
 		stimReady = false;
 		setCounter=setCounter%allStimulusSets.length;
@@ -255,7 +255,7 @@ public class MainActivity extends Activity implements ViewFactory {
 	    	inSampleSize += 2;
 	    	
 	    	}
-	    if (inSampleSize == 0) { inSampleSize = 1; }
+	    if (inSampleSize == 0) { inSampleSize = 2; }
 	    Log.d("async task","in sample size is:" + (inSampleSize));
 	
 	    return inSampleSize;
@@ -263,8 +263,6 @@ public class MainActivity extends Activity implements ViewFactory {
 	
 	//async task for interfacing with Amazon S3 without blocking main thread
 	class BackgroundTask extends AsyncTask<String, Integer, Drawable[]> {
-		//Drawable[] stimImages;
-		//public String[] remoteURLS = currentSet.getStimuliNames();
 		public String[] remoteURLS = livingEasySet.getStimuliNames();
 		
 		@Override
@@ -273,7 +271,6 @@ public class MainActivity extends Activity implements ViewFactory {
 		}
 		
 		protected Drawable[] doInBackground(String... params) {		
-			currentSet = livingEasySet; //REMOVE LATER
 			try {
 				for(int i = 0; i < remoteURLS.length; i++) {
 					URL aURL = new URL("https://s3.amazonaws.com/mosstalkdata/" +
@@ -282,9 +279,9 @@ public class MainActivity extends Activity implements ViewFactory {
 					URLConnection conn = aURL.openConnection();
 					conn.connect();
 					Log.d("asynctask","got connected");
-					//InputStream is = conn.getInputStream();
+					
 					BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
-									
+					
 					//try to decode bitmap without running out of memory
 					BitmapFactory.Options options = new BitmapFactory.Options();
 					options.inJustDecodeBounds = true;
@@ -328,17 +325,14 @@ public class MainActivity extends Activity implements ViewFactory {
 		protected void onProgressUpdate(Integer...progress) {
 			int im = progress[0];
 			
-			if (progress[0] == 1) {
-				Log.d("async task","progress update second image");
+			if (progress[0] == 0) {
 				String name = currentSet.getStimuli()[1].getName();
-				Log.d("async task","progress update should load bird");
 				Drawable drawableBitmap = new BitmapDrawable(getResources(),getBitmapFromCache(name));
 				firstImage.setImageDrawable(drawableBitmap);
 			}
 			Log.d("async task","progress update: loaded " + im);
 			
-		}
-		
+		}	
 		//after we are done downloading the data, set all the drawables
 		protected void onPostExecute(String Result) {
 			
@@ -558,7 +552,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		nonlivingHardStimuli[8] = new Stimulus("Zipper", 1, zipperhints, R.drawable.zipper);
 		nonlivingHardStimuli[9] = new Stimulus("Gloves", 1, gloveshints, R.drawable.gloves);
 
-		nonlivingHardSet= new StimulusSet("Nonliving Hard", nonlivingHardStimuli);
+		nonlivingHardSet= new StimulusSet("nonlivingthingshard", nonlivingHardStimuli);
 
 		allStimulusSets= new StimulusSet[4];
 		allStimulusSets[0] = livingEasySet;
