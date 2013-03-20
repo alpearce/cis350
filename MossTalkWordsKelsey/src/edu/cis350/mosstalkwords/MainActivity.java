@@ -225,6 +225,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		setCounter=setCounter%allStimulusSets.length;
 		currentSet = allStimulusSets[setCounter];
 		imageCounter=0;
+		clearCache();
 		new BackgroundTask().execute();	
 		TextView hintView= (TextView)findViewById(R.id.hintText);
 		hintView.setText("");
@@ -483,18 +484,6 @@ public class MainActivity extends Activity implements ViewFactory {
 		livingEasyStimuli[8] = new Stimulus("Tree", 0, treehints, 0);
 		livingEasyStimuli[9] = new Stimulus("Rice", 0, ricehints, 0);
 		
-		
-		/*livingEasyStimuli[0] = new Stimulus("Apple", 0, applehints, R.drawable.applesmall);
-		livingEasyStimuli[1] = new Stimulus("Bird", 0, birdhints, R.drawable.bird);
-		livingEasyStimuli[2] = new Stimulus("Carrot", 0, carrothints, R.drawable.carrot);
-		livingEasyStimuli[3] = new Stimulus("Cat", 0, cathints, R.drawable.cat);
-		livingEasyStimuli[4] = new Stimulus("Corn", 0, cornhints, R.drawable.corn);
-		livingEasyStimuli[5] = new Stimulus("Cow", 0, cowhints, R.drawable.cow);
-		livingEasyStimuli[6] = new Stimulus("Dog", 0, doghints, R.drawable.dog);
-		livingEasyStimuli[7] = new Stimulus("Elephant", 0, elephanthints, R.drawable.elephant);
-		livingEasyStimuli[8] = new Stimulus("Flower", 0, flowerhints, R.drawable.flower);
-		livingEasyStimuli[9] = new Stimulus("Tomato", 0, tomatohints, R.drawable.tomato);*/
-
 		livingEasySet=new StimulusSet("livingthingseasy", livingEasyStimuli);
 
 		String [] applehints = {getResources().getString(R.string.applehint1),

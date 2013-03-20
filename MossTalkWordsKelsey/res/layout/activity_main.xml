@@ -29,8 +29,6 @@
 
     </ImageSwitcher>
 
-    <!-- android:contentDescription="TODO" -->
-
     <TextView
         android:id="@+id/hintText"
         android:layout_width="wrap_content"
@@ -62,18 +60,18 @@
                 android:text="@string/hint2" />
 
             <Button
-                android:id="@+id/hint3button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onHint3ButtonClick"
-                android:text="@string/hint3" />
-
-            <Button
                 android:id="@+id/hint1button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onHint1ButtonClick"
                 android:text="@string/hint1" />
+
+            <Button
+                android:id="@+id/hint3button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onHint3ButtonClick"
+                android:text="@string/hint3" />
         </LinearLayout>
 
         <Button
@@ -83,23 +81,6 @@
             android:text="@string/speak" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/nextSetButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:onClick="onNextSetButtonClick"
-        android:text="@string/nextSet" />
-
-    <Button
-        android:id="@+id/btnChangeImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/next" />
-
     <TextView
         android:id="@+id/scoretext"
         android:layout_width="wrap_content"
@@ -107,5 +88,22 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:text="@string/score" />
+
+    <Button
+        android:id="@+id/btnChangeImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/next" />
+
+    <Button
+        android:id="@+id/nextSetButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:onClick="onNextSetButtonClick"
+        android:text="@string/nextSet" />
 
 </RelativeLayout>
