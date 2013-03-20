@@ -15,4 +15,11 @@ gen/
 # Local configuration file (sdk path, etc)
 local.properties
 
-.metadata*
+<<<<<<< Updated upstream
+# log files where all the conflicts show up
+*.log
+
+*.metadata*
+=======
+.metatdata*
+>>>>>>> Stashed changes
