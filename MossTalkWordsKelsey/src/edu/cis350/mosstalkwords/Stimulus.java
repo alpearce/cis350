@@ -7,17 +7,17 @@ import android.graphics.drawable.Drawable;
  * R.drawable.exampleImageName. That is represented as an int and can be used to change the Image Resource or Image Drawable of an ImageView. There are setter and getter 
  * methods for each input.*/
 public class Stimulus {
+	public static final int NUMHINTS = 3;
 	String name;
 	String hints [];
 	int difficulty;
 	int image;
 	Drawable image_drawable; //for use with new S3 stuff
-	public Stimulus(String stimulusName, int stimulusDifficulty, String stimulusHints[], int imageIDName)
+	public Stimulus(String stimulusName, int stimulusDifficulty, String stimulusHints[])
 	{
 		name=stimulusName;
 		hints=stimulusHints;
 		difficulty= stimulusDifficulty;
-		image=imageIDName;
 	}
 	public void setImage(int imageIDName)
 	{
