@@ -106,4 +106,12 @@
         android:onClick="onNextSetButtonClick"
         android:text="@string/nextSet" />
 
+    <Chronometer
+        android:id="@+id/chronometer1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/hintText"
+        android:layout_below="@+id/scoretext"
+        android:text="Chronometer" />
+
 </RelativeLayout>
