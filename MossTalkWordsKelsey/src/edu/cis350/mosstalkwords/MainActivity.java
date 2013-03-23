@@ -1,9 +1,13 @@
 package edu.cis350.mosstalkwords;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -70,8 +74,8 @@ public class MainActivity extends Activity implements ViewFactory {
 	
 	int imageCounter=0;
 	int setCounter=0;
-	StimulusSet allStimulusSets [];
-	StimulusSet currentSet = livingEasySet;
+	ArrayList<StimulusSet> allStimulusSets;
+	StimulusSet currentSet;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +104,9 @@ public class MainActivity extends Activity implements ViewFactory {
 			}
 		};
 		
-		loadData();
-		new BackgroundTask().execute();
+		//loadData();
+		new InitCategoriesBackgroundTask().execute();
+		//new ImageBackgroundTask().execute();
 		addListenerForButton();
 
 		PackageManager pm = getPackageManager();
@@ -187,9 +192,9 @@ public class MainActivity extends Activity implements ViewFactory {
 		else
 		{
 			imageCounter++;
-			imageCounter=imageCounter%(currentSet.getStimuli().length);
+			imageCounter=imageCounter%(currentSet.getStimuli().size());
 			
-			currentImage = currentSet.getStimuli()[imageCounter].getName();
+			currentImage = currentSet.getStimuli().get(imageCounter).getName();
 			Bitmap im = getBitmapFromCache(currentImage); 
 			if (im == null) { Log.d("nextImage","null bitmap- that's bad/" + currentImage); } 
 			else { Log.d("nextImage","should load" + currentImage); }
@@ -222,11 +227,11 @@ public class MainActivity extends Activity implements ViewFactory {
 	{
 		resetMetricsSet();
 		setCounter++;
-		setCounter=setCounter%allStimulusSets.length;
-		currentSet = allStimulusSets[setCounter];
+		setCounter=setCounter%allStimulusSets.size();
+		currentSet = allStimulusSets.get(setCounter);
 		imageCounter=0;
 		clearCache();
-		new BackgroundTask().execute();	
+		new ImageBackgroundTask().execute();	
 		TextView hintView= (TextView)findViewById(R.id.hintText);
 		hintView.setText("");
 	}	
@@ -305,21 +310,21 @@ public class MainActivity extends Activity implements ViewFactory {
 	//Handler for sentence hint
 	public void onHint1ButtonClick(View view) {
 		TextView hintView= (TextView)findViewById(R.id.hintText);
-		hintView.setText(currentSet.getStimuli()[imageCounter].getHints()[0]);
+		hintView.setText(currentSet.getStimuli().get(imageCounter).getHints()[0]);
 		hintsUsed++;
 	}
 
 	//handler for similar word hint
 	public void onHint2ButtonClick(View view) {
 		TextView hintView= (TextView)findViewById(R.id.hintText);
-		hintView.setText(currentSet.getStimuli()[imageCounter].getHints()[1]);
+		hintView.setText(currentSet.getStimuli().get(imageCounter).getHints()[1]);
 		hintsUsed++;
 	}
 
 	//handler for giving up and getting answer
 	public void onHint3ButtonClick(View view) {
 		TextView hintView= (TextView)findViewById(R.id.hintText);
-		hintView.setText(currentSet.getStimuli()[imageCounter].getHints()[2]);
+		hintView.setText(currentSet.getStimuli().get(imageCounter).getHints()[2]);
 		hintsUsed++;
 	}
 	
@@ -345,20 +350,88 @@ public class MainActivity extends Activity implements ViewFactory {
 	    return inSampleSize;
 	}
 	
+	
+	class InitCategoriesBackgroundTask extends AsyncTask<String, Integer, Void> {
+		String s3append = "2"; //until we merge our datasets, all of ours end in 2
+		protected Void doInBackground(String... params) {
+			allStimulusSets = new ArrayList<StimulusSet>();
+			try {
+				//load the categories
+				URL aURL = new URL("https://s3.amazonaws.com/mosstalkdata/categories" + s3append + ".txt");				
+				Log.d("url", aURL.toString());
+	
+				BufferedReader bread = new BufferedReader(new InputStreamReader(aURL.openStream()));
+				int setIdx = 0;
+				String line;
+				while((line = bread.readLine()) != null) {
+					allStimulusSets.add(new StimulusSet(line));
+					Log.d("initcat","stimulusSets[" +setIdx+ "] = " + line);
+					setIdx++;
+				}
+				currentSet = allStimulusSets.get(0);//set current set to first set
+				new LoadHintsBackgroundTask().execute();
+			} catch (MalformedURLException e) {
+				// TODO we should make a crash/error screen
+				e.printStackTrace();
+				Log.e("exception","malformedURL");
+			} catch (IOException e) {
+				e.printStackTrace();
+				Log.e("exception","IOexception");
+			} finally {  }
+			return null;
+		}		
+	}
+	
+	class LoadHintsBackgroundTask extends AsyncTask<String, Integer, Void> {
+		String s3append = "2"; //until we merge our datasets, all of ours end in 2
+		protected Void doInBackground(String... params) {
+			String setName = currentSet.getName();
+			//String[] imageNames = currentSet.getStimuliNames();		
+			ArrayList<Stimulus> tmpSet = new ArrayList<Stimulus>();	
+			try {		
+				URL aURL = new URL("https://s3.amazonaws.com/mosstalkdata/" +
+						setName + "/" + "hints.txt");				
+				Log.d("url", aURL.toString());
+				BufferedReader bread = new BufferedReader(new InputStreamReader(aURL.openStream()));
+				//lines invariant: name = hint3. hint1, hint2, empty line
+				String line;
+				while((line = bread.readLine()) != null) {	//load the 
+					String[] hints = new String[Stimulus.NUMHINTS];
+					String name = line;
+					Log.d("initset","read name = " + name);
+					hints[0] = bread.readLine();//should be sentence
+					Log.d("initset","read sentence = " + hints[0]);
+					hints[1] = bread.readLine();//should be rhymes
+					Log.d("initset","read rhymes = " + hints[1]);
+					bread.readLine();//skip blank line
+					hints[2] = name;
+					Stimulus tmp = new Stimulus(name, 1, hints);//everything is difficulty 1 right now. deal.
+					tmpSet.add(tmp);
+				}
+				currentSet.setStimuli(tmpSet);	
+				new ImageBackgroundTask().execute();
+			} catch (MalformedURLException e) {
+				// TODO we should make a crash/error screen
+				e.printStackTrace();
+				Log.e("exception","malformedURL");
+			} catch (IOException e) {
+				e.printStackTrace();
+				Log.e("exception","IOexception");
+			} finally {  }
+			return null;
+		}		
+	}
+
+	
 	//async task for interfacing with Amazon S3 without blocking main thread
-	class BackgroundTask extends AsyncTask<String, Integer, Drawable[]> {
+	class ImageBackgroundTask extends AsyncTask<String, Integer, Drawable[]> {
 		public String[] remoteURLS = currentSet.getStimuliNames();
-		
-		@Override
-		protected void onPreExecute() {
-		//TODO could make a textview that says "loading images" or some such
-		}
 		
 		protected Drawable[] doInBackground(String... params) {		
 			try {
 				for(int i = 0; i < remoteURLS.length; i++) {
 					URL aURL = new URL("https://s3.amazonaws.com/mosstalkdata/" +
-						currentSet.getName() +"2/" + remoteURLS[i].toLowerCase() + ".jpg");				
+						currentSet.getName() +"/" + remoteURLS[i].toLowerCase() + ".jpg");				
 					Log.d("url", aURL.toString());
 					URLConnection conn = aURL.openConnection();
 					conn.connect();
@@ -392,9 +465,6 @@ public class MainActivity extends Activity implements ViewFactory {
 					}
 					publishProgress(i);
 				}
-
-				//stimReady = true;
-				Log.d("async task","done setting drawables");
 			} catch (MalformedURLException e) {
 				// TODO we should make a crash/error screen
 				e.printStackTrace();
@@ -407,274 +477,16 @@ public class MainActivity extends Activity implements ViewFactory {
 		}
 				
 		protected void onProgressUpdate(Integer...progress) {
-			int im = progress[0];
-			
+			int im = progress[0];			
 			if (progress[0] == 0) {
-				String name = currentSet.getStimuli()[0].getName();
+				String name = currentSet.getStimuli().get(0).getName();
 				Drawable drawableBitmap = new BitmapDrawable(getResources(),getBitmapFromCache(name));
 				imSwitcher.setImageDrawable(drawableBitmap);
 			}
-			Log.d("async task","progress update: loaded " + im);
-			
+			Log.d("async task","progress update: loaded " + im);			
 		}	
-		//after we are done downloading the data, set all the drawables
-		protected void onPostExecute(String Result) {
-			
+		protected void onPostExecute(String Result) {			
 		}
 	}
 	
-	public void loadData()
-	{
-		Stimulus livingEasyStimuli[] = new Stimulus [10];
-		Stimulus livingHardStimuli[] = new Stimulus [10];
-		Stimulus nonlivingEasyStimuli[] = new Stimulus [10];
-		Stimulus nonlivingHardStimuli[] = new Stimulus [10];
-
-
-		String [] birdhints = {getResources().getString(R.string.birdhint1),
-				getResources().getString(R.string.birdhint2), 
-				getResources().getString(R.string.birdhint3)};
-
-		
-		String [] cathints = {getResources().getString(R.string.cathint1),
-				getResources().getString(R.string.cathint2), 
-				getResources().getString(R.string.cathint3)};
-
-		String [] cornhints = {getResources().getString(R.string.cornhint1),
-							   getResources().getString(R.string.cornhint2), 
-							   getResources().getString(R.string.cornhint3)};
-
-		String [] cowhints = {getResources().getString(R.string.cowhint1),
-							  getResources().getString(R.string.cowhint2), 
-							  getResources().getString(R.string.cowhint3)}; 
-
-		String [] doghints = {getResources().getString(R.string.doghint1),
-							  getResources().getString(R.string.doghint2), 
-							  getResources().getString(R.string.doghint3)};
-		
-		String [] beanhints = {getResources().getString(R.string.beanhint1),
-				  getResources().getString(R.string.beanhint2), 
-				  getResources().getString(R.string.beanhint3)};
-		
-		String [] bearhints = {getResources().getString(R.string.bearhint1),
-				  getResources().getString(R.string.bearhint2), 
-				  getResources().getString(R.string.bearhint3)};
-		
-		String [] ricehints = {getResources().getString(R.string.ricehint1),
-				  getResources().getString(R.string.ricehint2), 
-				  getResources().getString(R.string.ricehint3)};
-		
-		String [] froghints = {getResources().getString(R.string.froghint1),
-				  getResources().getString(R.string.froghint2), 
-				  getResources().getString(R.string.froghint3)};
-
-		String [] treehints = {getResources().getString(R.string.treehint1),
-				  getResources().getString(R.string.treehint2), 
-				  getResources().getString(R.string.treehint3)};
-	
-		
-		livingEasyStimuli[0] = new Stimulus("Bean", 0, beanhints, 0);
-		livingEasyStimuli[1] = new Stimulus("Bear", 0, bearhints, 0);
-		livingEasyStimuli[2] = new Stimulus("Bird", 0, birdhints, 0);
-		livingEasyStimuli[3] = new Stimulus("Cat", 0, cathints, 0);
-		livingEasyStimuli[4] = new Stimulus("Corn", 0, cornhints, 0);
-		livingEasyStimuli[5] = new Stimulus("Cow", 0, cowhints, 0);
-		livingEasyStimuli[6] = new Stimulus("Dog", 0, doghints, 0);
-		livingEasyStimuli[7] = new Stimulus("Frog", 0, froghints, 0);
-		livingEasyStimuli[8] = new Stimulus("Tree", 0, treehints, 0);
-		livingEasyStimuli[9] = new Stimulus("Rice", 0, ricehints, 0);
-		
-		livingEasySet=new StimulusSet("livingthingseasy", livingEasyStimuli);
-
-		String [] applehints = {getResources().getString(R.string.applehint1),
-				getResources().getString(R.string.applehint2), 
-				getResources().getString(R.string.applehint3)};
-		
-		String [] elephanthints = {getResources().getString(R.string.elephanthint1),
-							 	   getResources().getString(R.string.elephanthint2), 
-							 	   getResources().getString(R.string.elephanthint3)};
-
-		String [] flowerhints = {getResources().getString(R.string.flowerhint1),
-							     getResources().getString(R.string.flowerhint2), 
-							     getResources().getString(R.string.flowerhint3)};
-
-		String [] tomatohints = {getResources().getString(R.string.tomatohint1),
-								 getResources().getString(R.string.tomatohint2), 
-								 getResources().getString(R.string.tomatohint3)};
-
-		String [] carrothints = {getResources().getString(R.string.carrothint1),
-				getResources().getString(R.string.carrothint2), 
-				getResources().getString(R.string.carrothint3)};
-		
-		String [] giraffehints = {getResources().getString(R.string.giraffehint1),
-								  getResources().getString(R.string.giraffehint2), 
-								  getResources().getString(R.string.giraffehint3)}; 
-
-		String [] octopushints = {getResources().getString(R.string.octopushint1),
-					      		  getResources().getString(R.string.octopushint2), 
-					      		  getResources().getString(R.string.octopushint3)};
-
-		String [] pineapplehints = {getResources().getString(R.string.pineapplehint1),
-									getResources().getString(R.string.pineapplehint2), 
-									getResources().getString(R.string.pineapplehint3)};
-
-		String [] pineconehints = {getResources().getString(R.string.pineconehint1),
-								   getResources().getString(R.string.pineconehint2), 
-								   getResources().getString(R.string.pineconehint3)};
-
-		String [] pumpkinhints = {getResources().getString(R.string.pumpkinhint1),
-								  getResources().getString(R.string.pumpkinhint2), 
-								  getResources().getString(R.string.pumpkinhint3)};
-
-		String [] roosterhints = {getResources().getString(R.string.roosterhint1),
-								  getResources().getString(R.string.roosterhint2), 
-								  getResources().getString(R.string.roosterhint3)}; 
-
-		String [] cauliflowerhints = {getResources().getString(R.string.cauliflowerhint1),
-									  getResources().getString(R.string.cauliflowerhint2), 
-									  getResources().getString(R.string.cauliflowerhint3)};
-
-		String [] asparagushints = {getResources().getString(R.string.asparagushint1),
-						    		getResources().getString(R.string.asparagushint2), 
-						    		getResources().getString(R.string.asparagushint3)};
-
-		String [] avocadohints = {getResources().getString(R.string.avocadohint1),
-								  getResources().getString(R.string.avocadohint2), 
-								  getResources().getString(R.string.avocadohint3)};
-
-		String [] broccolihints = {getResources().getString(R.string.broccolihint1),
-								   getResources().getString(R.string.broccolihint2), 
-								   getResources().getString(R.string.broccolihint3)};
-
-		String [] strawberryhints =  {getResources().getString(R.string.strawberryhint1),
-								   getResources().getString(R.string.strawberryhint2), 
-								   getResources().getString(R.string.strawberryhint3)};
-
-
-		livingHardStimuli[0] = new Stimulus("Giraffe", 1, giraffehints, R.drawable.giraffe);
-		livingHardStimuli[1] = new Stimulus("Octopus", 1, octopushints, R.drawable.octopus);
-		livingHardStimuli[2] = new Stimulus("Pineapple", 1, pineapplehints, R.drawable.pineapple);
-		livingHardStimuli[3] = new Stimulus("Strawberry",1, strawberryhints, 0);
-		//livingHardStimuli[3] = new Stimulus("Pine Cone", 1, pineconehints, R.drawable.pinecone);
-		livingHardStimuli[4] = new Stimulus("Pumpkin", 1, pumpkinhints, R.drawable.pumpkin);
-		//livingHardStimuli[5] = new Stimulus("Rooster", 1, roosterhints, R.drawable.rooster);
-		livingHardStimuli[5] = new Stimulus("Elephant", 1, elephanthints, 0);
-		livingHardStimuli[6] = new Stimulus("Cauliflower", 1, cauliflowerhints, R.drawable.cauliflower);
-		livingHardStimuli[7] = new Stimulus("Asparagus", 1, asparagushints, R.drawable.asparagus);
-		livingHardStimuli[8] = new Stimulus("Avocado", 1, avocadohints, R.drawable.avocado);
-		livingHardStimuli[9] = new Stimulus("Broccoli", 1, broccolihints, R.drawable.broccoli);
-
-
-		livingHardSet = new StimulusSet("livingthingshard", livingHardStimuli);
-
-		String [] chairhints = {getResources().getString(R.string.chairhint1),
-  								getResources().getString(R.string.chairhint2), 
-  								getResources().getString(R.string.chairhint3)};
-
-		String [] tablehints = {getResources().getString(R.string.tablehint1),
-		  						getResources().getString(R.string.tablehint2), 
-		  						getResources().getString(R.string.tablehint3)};
-
-		String [] lamphints = {getResources().getString(R.string.lamphint1),
-							   getResources().getString(R.string.lamphint2), 
-							   getResources().getString(R.string.lamphint3)};
-
-		String [] bedhints = {getResources().getString(R.string.bedhint1),
-							  getResources().getString(R.string.bedhint2), 
-							  getResources().getString(R.string.bedhint3)};
-		String [] phonehints = {getResources().getString(R.string.phonehint1),
-						        getResources().getString(R.string.phonehint2), 
-						        getResources().getString(R.string.phonehint3)};
-		String [] househints = {getResources().getString(R.string.househint1),
-							    getResources().getString(R.string.househint2), 
-							    getResources().getString(R.string.househint3)};
-		String [] shirthints = {getResources().getString(R.string.shirthint1),
-								getResources().getString(R.string.shirthint2), 
-								getResources().getString(R.string.shirthint3)};
-		String [] shoeshints = {getResources().getString(R.string.shoehint1),
-								getResources().getString(R.string.shoehint2), 
-								getResources().getString(R.string.shoehint3)};
-		String [] hathints = {getResources().getString(R.string.hathint1),
-							  getResources().getString(R.string.hathint2), 
-							  getResources().getString(R.string.hathint3)};
-		String [] moneyhints = {getResources().getString(R.string.moneyhint1),
-						  		getResources().getString(R.string.moneyhint2), 
-						  		getResources().getString(R.string.moneyhint3)};
-
-		nonlivingEasyStimuli[0] = new Stimulus("Chair", 0, chairhints, R.drawable.chair);
-		nonlivingEasyStimuli[1] = new Stimulus("Table", 0, tablehints, R.drawable.table);
-		nonlivingEasyStimuli[2] = new Stimulus("Lamp", 0, lamphints, R.drawable.lamp);
-		nonlivingEasyStimuli[3] = new Stimulus("Bed", 0, bedhints, R.drawable.bed);
-		nonlivingEasyStimuli[4] = new Stimulus("Phone", 0, phonehints, R.drawable.phone);
-		nonlivingEasyStimuli[5] = new Stimulus("House", 0, househints, R.drawable.house);
-		nonlivingEasyStimuli[6] = new Stimulus("Shirt", 0, shirthints, R.drawable.shirt);
-		nonlivingEasyStimuli[7] = new Stimulus("Shoes", 0, shoeshints, R.drawable.shoes);
-		nonlivingEasyStimuli[8] = new Stimulus("Hat", 0, hathints, R.drawable.hat);
-		nonlivingEasyStimuli[9] = new Stimulus("Money", 0, moneyhints, R.drawable.money);
-
-		nonlivingEasySet = new StimulusSet("nonlivingthingseasy", nonlivingEasyStimuli);
-
-		String [] computerhints = {getResources().getString(R.string.computerhint1),
-								   getResources().getString(R.string.computerhint2), 
-								   getResources().getString(R.string.computerhint3)};
-
-		String [] textbookhints = {getResources().getString(R.string.textbookhint1),
-								   getResources().getString(R.string.textbookhint2), 
-								   getResources().getString(R.string.textbookhint3)};
-
-		String [] televisionhints = {getResources().getString(R.string.televisionhint1),
-				 					 getResources().getString(R.string.televisionhint2), 
-				 					 getResources().getString(R.string.televisionhint3)};
-
-		 String [] refrigeratorhints = {getResources().getString(R.string.refrigeratorhint1),
-				 						getResources().getString(R.string.refrigeratorhint2), 
-				 						getResources().getString(R.string.refrigeratorhint3)};
-
-		 String [] basketballhints = {getResources().getString(R.string.basketballhint1),
-				 					  getResources().getString(R.string.basketballhint2), 
-				 					  getResources().getString(R.string.basketballhint3)};
-
-
-		 String [] footballhints = {getResources().getString(R.string.footballhint1),
-				 					getResources().getString(R.string.footballhint2), 
-				 					getResources().getString(R.string.footballhint3)};
-
-		 String [] soccerballhints = {getResources().getString(R.string.soccerballhint1),
-				 					  getResources().getString(R.string.soccerballhint2), 
-				 					  getResources().getString(R.string.soccerballhint3)};
-		 String [] pockethints = {getResources().getString(R.string.pockethint1),
-				 				  getResources().getString(R.string.pockethint2), 
-				 				  getResources().getString(R.string.pockethint3)};
-		 String [] zipperhints = {getResources().getString(R.string.zipperhint1),
-				 				  getResources().getString(R.string.zipperhint2), 
-				 				  getResources().getString(R.string.zipperhint3)};
-
-		 String [] gloveshints = {getResources().getString(R.string.gloveshint1),
-				 				  getResources().getString(R.string.gloveshint2), 
-				 				  getResources().getString(R.string.gloveshint3)};
-
-
-		nonlivingHardStimuli[0] = new Stimulus("Computer", 1, computerhints, R.drawable.computer);
-		nonlivingHardStimuli[1] = new Stimulus("Textbook", 1, textbookhints, R.drawable.textbook);
-		nonlivingHardStimuli[2] = new Stimulus("Television", 1, televisionhints, R.drawable.tv);
-		nonlivingHardStimuli[3] = new Stimulus("Refrigerator", 1, refrigeratorhints, R.drawable.fridge);
-		nonlivingHardStimuli[4] = new Stimulus("Basketball", 1, basketballhints, R.drawable.basketball);
-		nonlivingHardStimuli[5] = new Stimulus("Football", 1, footballhints, R.drawable.football);
-		nonlivingHardStimuli[6] = new Stimulus("Soccerball", 1, soccerballhints, R.drawable.soccerball);
-		nonlivingHardStimuli[7] = new Stimulus("Pocket", 1, pockethints, R.drawable.pocket);
-		nonlivingHardStimuli[8] = new Stimulus("Zipper", 1, zipperhints, R.drawable.zipper);
-		nonlivingHardStimuli[9] = new Stimulus("Gloves", 1, gloveshints, R.drawable.gloves);
-
-		nonlivingHardSet= new StimulusSet("nonlivingthingshard", nonlivingHardStimuli);
-
-		allStimulusSets= new StimulusSet[4];
-		allStimulusSets[0] = livingEasySet;
-		allStimulusSets[1] = livingHardSet;
-		allStimulusSets[2] = nonlivingEasySet;
-		allStimulusSets[3] = nonlivingHardSet;
-
-		currentSet=allStimulusSets[0];
-	
-	}
-
 }
