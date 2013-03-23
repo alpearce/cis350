@@ -52,7 +52,8 @@ public class MainActivity extends Activity implements ViewFactory {
 	final int REQUIRE_HEIGHT = 1500;
 	final int REQUIRE_WIDTH = 1000;
 	
-	private LruCache<String, Bitmap> imCache; //need cache for S3 images
+	//private LruCache<String, Bitmap> imCache; //need cache for S3 images
+	private ImageCache imCache;
 	Button nextButton;
 	ImageSwitcher imSwitcher;
 	User currentUser;
@@ -95,22 +96,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		timer.start();
 		
 		currentUser = new User();
-			
-		//set up cache for images
-		final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);	
-		
-		//use 1/2 size of available memory for cache (probably a bad idea, but YOLO) 
-		final int cacheSize = maxMemory/2;
-		imCache = new LruCache<String, Bitmap>(cacheSize) {
-			//had to add this line to get it to compile; it won't like anything
-			//less than api v12
-			@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
-			@Override
-			protected int sizeOf(String key, Bitmap bitmap) {
-				return bitmap.getByteCount() / 1024;
-			}
-		};
-		
+				
 		//loadData();
 		new InitCategoriesBackgroundTask().execute();
 		//new ImageBackgroundTask().execute();
@@ -144,27 +130,11 @@ public class MainActivity extends Activity implements ViewFactory {
 		return iv;
 	}
 	
-	public void addBitmapToCache(String key, Bitmap bitmap) {
-		if (getBitmapFromCache(key)==null) {
-			imCache.put(key, bitmap);
-		}
-	}
-	
-	public Bitmap getBitmapFromCache(String key) {
-		return imCache.get(key);
-	}
-	
-	public void clearCache() {
-		imCache.evictAll();
-	}
-	
 	public void addListenerForButton()
 	{
 		speakBtn = (Button) findViewById(R.id.speakButton);
 
 		imSwitcher=(ImageSwitcher) findViewById(R.id.ImageSwitcher1);
-		//imSwitcher.setImageResource(currentSet.getStimuli()[imageCounter].getImage());
-		//currentImage = currentSet.getStimuli()[imageCounter].getName();
 		
 		nextButton = (Button) findViewById(R.id.btnChangeImage);
 		nextButton.setOnClickListener(new OnClickListener()
@@ -186,7 +156,6 @@ public class MainActivity extends Activity implements ViewFactory {
 		});
 	}
 
-	//moved contents of nextimage here so it can be accessed below
 	public void nextImage() {
 		efficiencyArray[0][imageCounter]=hintsUsed;
 		efficiencyArray[1][imageCounter]=numberOfAttempts;
@@ -202,7 +171,7 @@ public class MainActivity extends Activity implements ViewFactory {
 			imageCounter=imageCounter%(currentSet.getStimuli().size());
 			
 			currentImage = currentSet.getStimuli().get(imageCounter).getName();
-			Bitmap im = getBitmapFromCache(currentImage); 
+			Bitmap im = imCache.getBitmapFromCache(currentImage); 
 			if (im == null) { Log.d("nextImage","null bitmap- that's bad/" + currentImage); } 
 			else { Log.d("nextImage","should load" + currentImage); }
 			Drawable drawableBitmap = new BitmapDrawable(getResources(),im);
@@ -212,9 +181,6 @@ public class MainActivity extends Activity implements ViewFactory {
 			TextView hintView= (TextView)findViewById(R.id.hintText);
 			hintView.setText("");
 			
-			//just to test
-			TextView scoreTextView = (TextView)findViewById(R.id.scoretext);
-			scoreTextView.setText("Score: " + String.valueOf(score));
 		}
 		
 		timer.setBase(SystemClock.elapsedRealtime());
@@ -238,7 +204,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		setCounter=setCounter%allStimulusSets.size();
 		currentSet = allStimulusSets.get(setCounter);
 		imageCounter=0;
-		clearCache();
+		imCache.clearCache();
 		new ImageBackgroundTask().execute();	
 		TextView hintView= (TextView)findViewById(R.id.hintText);
 		hintView.setText("");
@@ -335,7 +301,8 @@ public class MainActivity extends Activity implements ViewFactory {
 		hintView.setText(currentSet.getStimuli().get(imageCounter).getHints()[2]);
 		hintsUsed++;
 	}
-	
+
+/*-----------------------------------Background Tasks for Cache--------------------------------*/
 	//scale down images based on display size; helps with OOM errors
 	public static int calculateInSampleSize(
         BitmapFactory.Options options, int reqWidth, int reqHeight) {
@@ -349,9 +316,8 @@ public class MainActivity extends Activity implements ViewFactory {
 	    while (newHeight > reqHeight || newWidth > reqWidth) {
 	    	newHeight = newHeight/2; //should be power of two 
 	    	newWidth = newWidth/2;
-	    	inSampleSize += 2;
-	    	
-	    	}
+	    	inSampleSize += 2;	
+	    }
 	    if (inSampleSize == 0) { inSampleSize = 2; }
 	    Log.d("async task","in sample size is:" + (inSampleSize));
 	
@@ -430,8 +396,6 @@ public class MainActivity extends Activity implements ViewFactory {
 		}		
 	}
 
-	
-	//async task for interfacing with Amazon S3 without blocking main thread
 	class ImageBackgroundTask extends AsyncTask<String, Integer, Drawable[]> {
 		public String[] remoteURLS = currentSet.getStimuliNames();
 		
@@ -466,7 +430,7 @@ public class MainActivity extends Activity implements ViewFactory {
 					bis = new BufferedInputStream(conn.getInputStream());
 				    Bitmap bitmap = BitmapFactory.decodeStream(bis, r, options); 					   
 				    			    
-					addBitmapToCache( remoteURLS[i] , bitmap);
+					imCache.addBitmapToCache( remoteURLS[i] , bitmap);
 					Log.d("async task","added bitmap to cache: " + remoteURLS[i] );
 					if (i==0) { 
 						Log.d("async task","first image loaded");
@@ -488,7 +452,7 @@ public class MainActivity extends Activity implements ViewFactory {
 			int im = progress[0];			
 			if (progress[0] == 0) {
 				String name = currentSet.getStimuli().get(0).getName();
-				Drawable drawableBitmap = new BitmapDrawable(getResources(),getBitmapFromCache(name));
+				Drawable drawableBitmap = new BitmapDrawable(getResources(),imCache.getBitmapFromCache(name));
 				imSwitcher.setImageDrawable(drawableBitmap);
 			}
 			Log.d("async task","progress update: loaded " + im);			
