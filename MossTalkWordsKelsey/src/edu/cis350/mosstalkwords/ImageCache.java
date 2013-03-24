@@ -2,8 +2,10 @@ package edu.cis350.mosstalkwords;
 
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.v4.util.LruCache;
+import android.util.Log;
 
 public class ImageCache {
 	private LruCache<String, Bitmap> imCache; 
@@ -40,6 +42,27 @@ public class ImageCache {
 	}
 	
 
+	//scale down images based on display size; helps with OOM errors
+	public static int calculateInSampleSize(
+        BitmapFactory.Options options, int reqWidth, int reqHeight) {
+	    // Raw height and width of image
+	    final int height = options.outHeight;
+	    final int width = options.outWidth;
+	    int inSampleSize = 0;
+	    int newHeight = height;
+	    int newWidth = width;
+	    
+	    while (newHeight > reqHeight || newWidth > reqWidth) {
+	    	newHeight = newHeight/2; //should be power of two 
+	    	newWidth = newWidth/2;
+	    	inSampleSize += 2;	
+	    }
+	    if (inSampleSize == 0) { inSampleSize = 2; }
+	    Log.d("async task","in sample size is:" + (inSampleSize));
+	
+	    return inSampleSize;
+	}
+		
 	
 	
 }
