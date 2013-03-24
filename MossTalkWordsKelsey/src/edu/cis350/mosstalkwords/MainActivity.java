@@ -98,7 +98,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		currentUser = new User();
 				
 		//loadData();
-		new InitCategoriesBackgroundTask().execute();
+		//new InitCategoriesBackgroundTask().execute();
 		//new ImageBackgroundTask().execute();
 		addListenerForButton();
 
@@ -195,6 +195,9 @@ public class MainActivity extends Activity implements ViewFactory {
 		currentUser.calculateStarScore(currentSet.setName);
 		currentUser.stimulusSetEfficiencies.put(currentSet.setName, efficiencyArray);//add the efficiencies for this set to the hashmap
 		currentUser.calculateAverageEfficiencyPercent(currentSet.setName);//calculate the percentage for this set
+		Intent endSet=new Intent(this, EndSetActivity.class);
+		endSet.putExtra("User", currentUser);
+		startActivity(endSet);
 		nextSet();
 	}
 	public void nextSet()

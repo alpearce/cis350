@@ -1,8 +1,9 @@
 package edu.cis350.mosstalkwords;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class User {
+public class User implements Serializable {
 	//score, speed, efficiency, streaks
 	//int longestStreak=0;
 	int score=0;

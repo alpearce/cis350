@@ -22,8 +22,10 @@ public final class R {
     }
     public static final class drawable {
         public static final int ic_launcher=0x7f020000;
+        public static final int onestar=0x7f020001;
     }
     public static final class id {
+        public static final int Completeness=0x7f09000c;
         public static final int ImageSwitcher1=0x7f090000;
         public static final int btnChangeImage=0x7f090002;
         public static final int chronometer1=0x7f09000a;
@@ -31,14 +33,18 @@ public final class R {
         public static final int hint2button=0x7f090004;
         public static final int hint3button=0x7f090006;
         public static final int hintText=0x7f090003;
+        public static final int improveCompleteness=0x7f09000d;
         public static final int linearLayout1=0x7f090001;
-        public static final int menu_settings=0x7f09000b;
+        public static final int menu_settings=0x7f09000f;
         public static final int nextSetButton=0x7f090009;
+        public static final int scoreBar=0x7f09000b;
         public static final int scoretext=0x7f090008;
         public static final int speakButton=0x7f090007;
+        public static final int streak=0x7f09000e;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
+        public static final int dialog_endset=0x7f030001;
     }
     public static final class menu {
         public static final int activity_main=0x7f080000;
@@ -50,13 +56,16 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f060000;
+        public static final int congrats=0x7f06000c;
         public static final int hello_world=0x7f060001;
         public static final int hint1=0x7f060003;
         public static final int hint2=0x7f060004;
         public static final int hint3=0x7f060005;
+        public static final int menu=0x7f06000b;
         public static final int menu_settings=0x7f060002;
         public static final int next=0x7f060006;
         public static final int nextSet=0x7f060008;
+        public static final int restart=0x7f06000a;
         public static final int score=0x7f060007;
         public static final int speak=0x7f060009;
     }
