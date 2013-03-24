@@ -3,6 +3,7 @@ package edu.cis350.mosstalkwords;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.DialogFragment;
@@ -20,8 +21,9 @@ public class EndSetActivity extends Activity {
 	    Intent i=getIntent();
 	    currentUser=(User) i.getSerializableExtra("User");
 	
-			LayoutInflater inflater=getParent().getLayoutInflater();
-			AlertDialog.Builder builder = new AlertDialog.Builder(getParent());
+	    Context mContext = this; //this.getApplicationContext();
+	    LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 			builder.setTitle(R.string.congrats)
 				.setView(inflater.inflate(R.layout.dialog_endset,null))
 				.setPositiveButton(R.string.restart, new DialogInterface.OnClickListener()

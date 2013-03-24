@@ -143,19 +143,25 @@ public class MainActivity extends Activity implements ViewFactory {
 			}
 		});
 	}
-
+	public void finishedSet()
+	{
+		Intent endSet=new Intent(this, EndSetActivity.class);
+		endSet.putExtra("User", currentUser);
+		startActivity(endSet);
+	}
 	public void nextImage() {
 		currentUser.updateImageEfficiency(currentSet.getName(), imageCounter, hintsUsed, numAttempts);
 		resetMetricsImage();
-		
+		System.out.println(imageCounter);
 		//if at the end of the set then go into finishedSet setup
-		if(imageCounter==stimulusSetSize-1) {
+		if(imageCounter==currentSet.getStimuli().size()-1) {
 			currentUser.finishedSet(currentSet.getName());
 			//GO INTO SCORE ACTIVITY HERE
+			finishedSet();
 		}
 		else {
 			imageCounter++;
-			imageCounter=imageCounter%(currentSet.getStimuli().size());
+			//imageCounter=imageCounter%(currentSet.getStimuli().size());
 			
 			//load next image
 			currentImage = currentSet.getStimuli().get(imageCounter).getName();
