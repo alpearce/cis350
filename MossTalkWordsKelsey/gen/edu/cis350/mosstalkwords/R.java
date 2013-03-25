@@ -40,7 +40,12 @@ public final class R {
         public static final int hintText=0x7f090003;
         public static final int improveCompleteness=0x7f09000c;
         public static final int linearLayout1=0x7f090001;
-        public static final int menu_settings=0x7f09000e;
+        public static final int livingeasy=0x7f09000e;
+        public static final int livinghard=0x7f090010;
+        public static final int livingmedium=0x7f09000f;
+        public static final int menu_settings=0x7f090013;
+        public static final int nonlivingeasy=0x7f090011;
+        public static final int nonlivinghard=0x7f090012;
         public static final int scoreBar=0x7f09000a;
         public static final int scoretext=0x7f090008;
         public static final int speakButton=0x7f090007;
@@ -49,6 +54,7 @@ public final class R {
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int dialog_endset=0x7f030001;
+        public static final int welcome_page=0x7f030002;
     }
     public static final class menu {
         public static final int activity_main=0x7f080000;

@@ -48,7 +48,7 @@ public class EndSetActivity extends Activity {
 	    String longestStreak=new Integer(currentUser.getLongestStreak(currentSet)).toString();
 	    streak.setText(streak.getText()+longestStreak);
 			AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-			builder.setTitle("           Congratulations!")//hackish extra spaces to center the title since not an option
+			builder.setTitle("          Congratulations!")//hackish extra spaces to center the title since not an option
 				.setView(layout)
 				.setPositiveButton(R.string.restart, new DialogInterface.OnClickListener()
 				{
