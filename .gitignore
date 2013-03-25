@@ -16,3 +16,5 @@ gen/
 local.properties
 
 .metadata*
+
+.DS_Store
