@@ -91,11 +91,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		
 		timer = (Chronometer) findViewById(R.id.chronometer1);
 		timer.start();
-		
-<<<<<<< HEAD
-		
-		currentUser = new User();
-	 
+
 		
 		TextView txtView = (TextView)findViewById(R.id.chronometer1);
 		TextView scoreView = (TextView)findViewById(R.id.scoretext);
@@ -110,11 +106,10 @@ public class MainActivity extends Activity implements ViewFactory {
 		/*new InitCategoriesBackgroundTask().execute();**********************REMEMBER TO UNCOMMENT THIS***/
 		
 		//new ImageBackgroundTask().execute();
-=======
+
 				
 		new InitCategoriesBackgroundTask().execute();
-		
->>>>>>> 8d53c90684087662aece3897270ea13c31075ef8
+
 		addListenerForButton();
 
 		PackageManager pm = getPackageManager();
@@ -150,21 +145,15 @@ public class MainActivity extends Activity implements ViewFactory {
 		imSwitcher=(ImageSwitcher) findViewById(R.id.ImageSwitcher1);
 		
 		nextButton = (Button) findViewById(R.id.btnChangeImage);
-<<<<<<< HEAD
+
 		nextButton.setBackgroundColor(Color.WHITE);
 		nextButton.setOnClickListener(new OnClickListener()
 		{
-			public void onClick(View arg0)
-			{
-				scoreArray[imageCounter]=0;
-				streakEnded();
-=======
-		nextButton.setOnClickListener(new OnClickListener()	{
 			//next button: user didn't get the word so score = 0 and streak ends; switch images
 			public void onClick(View arg0) {
 				currentUser.updateImageScore(currentSet.getName(), imageCounter, 0);
 				currentUser.streakEnded(currentSet);
->>>>>>> 8d53c90684087662aece3897270ea13c31075ef8
+
 				nextImage();
 			}
 		});
@@ -292,7 +281,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		hintView.setText(currentSet.getStimuli().get(imageCounter).getHints()[2]);
 		hintsUsed++;
 	}
-<<<<<<< HEAD
+
 
 /*-----------------------------------Background Tasks for Cache--------------------------------*/
 	//scale down images based on display size; helps with OOM errors
@@ -316,12 +305,12 @@ public class MainActivity extends Activity implements ViewFactory {
 	    return inSampleSize;
 	}
 	
-	/****************NEED TO UNCOMMENT THIS LATER
-=======
+
+
 /*-----------------------------------------------------------------------------------------------*/
 /*-----------------------------------Background Tasks for S3-------------------------------------*/
 /*-----------------------------------------------------------------------------------------------*/
->>>>>>> 8d53c90684087662aece3897270ea13c31075ef8
+
 	class InitCategoriesBackgroundTask extends AsyncTask<String, Integer, Void> {
 		String s3append = "2"; //until we merge our datasets, all of ours end in 2
 		protected Void doInBackground(String... params) {
@@ -352,7 +341,7 @@ public class MainActivity extends Activity implements ViewFactory {
 			return null;
 		}		
 	}
-	**********/
+
 	class LoadHintsBackgroundTask extends AsyncTask<String, Integer, Void> {
 		String s3append = "2"; //until we merge our datasets, all of ours end in 2
 		protected Void doInBackground(String... params) {
