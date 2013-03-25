@@ -124,13 +124,9 @@ public class MainActivity extends Activity implements ViewFactory {
 	}
 	private void openWelcomePage() {
 		Intent welcome = new Intent(this, WelcomeActivity.class);
-		startActivity(welcome);
+		startActivityForResult(welcome, 3);
 	}
 
-	private void startActivityForResult(Intent welcome, StimulusSet currentSet2) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -247,6 +243,11 @@ public class MainActivity extends Activity implements ViewFactory {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
+		if (requestCode == 3) {
+			//this is the index of the allStimulusSetsArray
+			int index = data.getExtras().getInt("indexOfSetsArray");
+			currentSet = allStimulusSets.get(index);
+		}
 		if (requestCode == REQUEST_CODE && resultCode == RESULT_OK)
 		{
 			ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
