@@ -37,7 +37,9 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.Menu;
@@ -95,10 +97,22 @@ public class MainActivity extends Activity implements ViewFactory {
 		timer = (Chronometer) findViewById(R.id.chronometer1);
 		timer.start();
 		
+		
 		currentUser = new User();
-				
+	 
+		
+		TextView txtView = (TextView)findViewById(R.id.chronometer1);
+		TextView scoreView = (TextView)findViewById(R.id.scoretext);
+		
+		txtView.setTextColor(Color.RED);
+		Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-BoldCondensed.ttf");
+		txtView.setTypeface(typeface);
+		scoreView.setTypeface(typeface);
 		//loadData();
-		new InitCategoriesBackgroundTask().execute();
+		
+		
+		/*new InitCategoriesBackgroundTask().execute();**********************REMEMBER TO UNCOMMENT THIS***/
+		
 		//new ImageBackgroundTask().execute();
 		addListenerForButton();
 
@@ -133,10 +147,11 @@ public class MainActivity extends Activity implements ViewFactory {
 	public void addListenerForButton()
 	{
 		speakBtn = (Button) findViewById(R.id.speakButton);
-
+		
 		imSwitcher=(ImageSwitcher) findViewById(R.id.ImageSwitcher1);
 		
 		nextButton = (Button) findViewById(R.id.btnChangeImage);
+		nextButton.setBackgroundColor(Color.WHITE);
 		nextButton.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View arg0)
@@ -324,7 +339,7 @@ public class MainActivity extends Activity implements ViewFactory {
 	    return inSampleSize;
 	}
 	
-	
+	/****************NEED TO UNCOMMENT THIS LATER
 	class InitCategoriesBackgroundTask extends AsyncTask<String, Integer, Void> {
 		String s3append = "2"; //until we merge our datasets, all of ours end in 2
 		protected Void doInBackground(String... params) {
@@ -355,7 +370,7 @@ public class MainActivity extends Activity implements ViewFactory {
 			return null;
 		}		
 	}
-	
+	**********/
 	class LoadHintsBackgroundTask extends AsyncTask<String, Integer, Void> {
 		String s3append = "2"; //until we merge our datasets, all of ours end in 2
 		protected Void doInBackground(String... params) {
