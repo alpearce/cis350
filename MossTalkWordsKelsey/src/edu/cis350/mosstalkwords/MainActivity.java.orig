@@ -37,7 +37,9 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.Menu;
@@ -90,15 +92,29 @@ public class MainActivity extends Activity implements ViewFactory {
 		timer = (Chronometer) findViewById(R.id.chronometer1);
 		timer.start();
 		
-				
 <<<<<<< HEAD
+		
+		currentUser = new User();
+	 
+		
+		TextView txtView = (TextView)findViewById(R.id.chronometer1);
+		TextView scoreView = (TextView)findViewById(R.id.scoretext);
+		
+		txtView.setTextColor(Color.RED);
+		Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-BoldCondensed.ttf");
+		txtView.setTypeface(typeface);
+		scoreView.setTypeface(typeface);
 		//loadData();
-		//new InitCategoriesBackgroundTask().execute();
+		
+		
+		/*new InitCategoriesBackgroundTask().execute();**********************REMEMBER TO UNCOMMENT THIS***/
+		
 		//new ImageBackgroundTask().execute();
 =======
+				
 		new InitCategoriesBackgroundTask().execute();
 		
->>>>>>> 5a0e73eda64b6d1b745d9f2773e5b907e801c20e
+>>>>>>> 8d53c90684087662aece3897270ea13c31075ef8
 		addListenerForButton();
 
 		PackageManager pm = getPackageManager();
@@ -130,15 +146,25 @@ public class MainActivity extends Activity implements ViewFactory {
 	public void addListenerForButton()
 	{
 		speakBtn = (Button) findViewById(R.id.speakButton);
-
+		
 		imSwitcher=(ImageSwitcher) findViewById(R.id.ImageSwitcher1);
 		
 		nextButton = (Button) findViewById(R.id.btnChangeImage);
+<<<<<<< HEAD
+		nextButton.setBackgroundColor(Color.WHITE);
+		nextButton.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View arg0)
+			{
+				scoreArray[imageCounter]=0;
+				streakEnded();
+=======
 		nextButton.setOnClickListener(new OnClickListener()	{
 			//next button: user didn't get the word so score = 0 and streak ends; switch images
 			public void onClick(View arg0) {
 				currentUser.updateImageScore(currentSet.getName(), imageCounter, 0);
 				currentUser.streakEnded(currentSet);
+>>>>>>> 8d53c90684087662aece3897270ea13c31075ef8
 				nextImage();
 			}
 		});
@@ -149,19 +175,25 @@ public class MainActivity extends Activity implements ViewFactory {
 			}
 		});
 	}
-
+	public void finishedSet()
+	{
+		Intent endSet=new Intent(this, EndSetActivity.class);
+		endSet.putExtra("User", currentUser);
+		startActivity(endSet);
+	}
 	public void nextImage() {
 		currentUser.updateImageEfficiency(currentSet.getName(), imageCounter, hintsUsed, numAttempts);
 		resetMetricsImage();
-		
+		System.out.println(imageCounter);
 		//if at the end of the set then go into finishedSet setup
-		if(imageCounter==stimulusSetSize-1) {
+		if(imageCounter==currentSet.getStimuli().size()-1) {
 			currentUser.finishedSet(currentSet.getName());
 			//GO INTO SCORE ACTIVITY HERE
+			finishedSet();
 		}
 		else {
 			imageCounter++;
-			imageCounter=imageCounter%(currentSet.getStimuli().size());
+			//imageCounter=imageCounter%(currentSet.getStimuli().size());
 			
 			//load next image
 			currentImage = currentSet.getStimuli().get(imageCounter).getName();
@@ -175,27 +207,10 @@ public class MainActivity extends Activity implements ViewFactory {
 		}
 		timer.setBase(SystemClock.elapsedRealtime());
 	}
-<<<<<<< HEAD
-	public void finishedSet()
-	{
-		if(currentUser.stimulusSetScores.containsKey(currentSet.setName))//if the stimulus set has already been played, remove the previous score array
-		{
-			currentUser.stimulusSetScores.remove(currentSet.setName);
-		}
-		currentUser.stimulusSetScores.put(currentSet.setName, scoreArray);//add the score array for the stimulus set to the user hashmap
-		currentUser.calculateStarScore(currentSet.setName);
-		currentUser.stimulusSetEfficiencies.put(currentSet.setName, efficiencyArray);//add the efficiencies for this set to the hashmap
-		currentUser.calculateAverageEfficiencyPercent(currentSet.setName);//calculate the percentage for this set
-		Intent endSet=new Intent(this, EndSetActivity.class);
-		endSet.putExtra("User", currentUser);
-		startActivity(endSet);
-		nextSet();
-=======
 	
 	public void resetMetricsImage() {
 		hintsUsed=0;
 		numAttempts=1;//starts at one because does not increment when answered correctly
->>>>>>> 5a0e73eda64b6d1b745d9f2773e5b907e801c20e
 	}
 	
 	public void nextSet() {
@@ -277,9 +292,36 @@ public class MainActivity extends Activity implements ViewFactory {
 		hintView.setText(currentSet.getStimuli().get(imageCounter).getHints()[2]);
 		hintsUsed++;
 	}
+<<<<<<< HEAD
+
+/*-----------------------------------Background Tasks for Cache--------------------------------*/
+	//scale down images based on display size; helps with OOM errors
+	public static int calculateInSampleSize(
+        BitmapFactory.Options options, int reqWidth, int reqHeight) {
+	    // Raw height and width of image
+	    final int height = options.outHeight;
+	    final int width = options.outWidth;
+	    int inSampleSize = 0;
+	    int newHeight = height;
+	    int newWidth = width;
+	    
+	    while (newHeight > reqHeight || newWidth > reqWidth) {
+	    	newHeight = newHeight/2; //should be power of two 
+	    	newWidth = newWidth/2;
+	    	inSampleSize += 2;	
+	    }
+	    if (inSampleSize == 0) { inSampleSize = 2; }
+	    Log.d("async task","in sample size is:" + (inSampleSize));
+	
+	    return inSampleSize;
+	}
+	
+	/****************NEED TO UNCOMMENT THIS LATER
+=======
 /*-----------------------------------------------------------------------------------------------*/
 /*-----------------------------------Background Tasks for S3-------------------------------------*/
 /*-----------------------------------------------------------------------------------------------*/
+>>>>>>> 8d53c90684087662aece3897270ea13c31075ef8
 	class InitCategoriesBackgroundTask extends AsyncTask<String, Integer, Void> {
 		String s3append = "2"; //until we merge our datasets, all of ours end in 2
 		protected Void doInBackground(String... params) {
@@ -310,7 +352,7 @@ public class MainActivity extends Activity implements ViewFactory {
 			return null;
 		}		
 	}
-	
+	**********/
 	class LoadHintsBackgroundTask extends AsyncTask<String, Integer, Void> {
 		String s3append = "2"; //until we merge our datasets, all of ours end in 2
 		protected Void doInBackground(String... params) {
