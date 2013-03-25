@@ -78,8 +78,6 @@ public class MainActivity extends Activity implements ViewFactory {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		openWelcomePage();
-	
 		setContentView(R.layout.activity_main);
 		
 		imSwitcher = (ImageSwitcher) findViewById(R.id.ImageSwitcher1);
@@ -87,13 +85,12 @@ public class MainActivity extends Activity implements ViewFactory {
 		imSwitcher.setInAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
 		imSwitcher.setOutAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
 		
-		imCache = new ImageCache();
-		currentUser = new User();
-		
-		
 		timer = (Chronometer) findViewById(R.id.chronometer1);
 		timer.start();
-
+		
+		
+		currentUser = new User();
+	 
 		
 		TextView txtView = (TextView)findViewById(R.id.chronometer1);
 		TextView scoreView = (TextView)findViewById(R.id.scoretext);
@@ -108,10 +105,6 @@ public class MainActivity extends Activity implements ViewFactory {
 		/*new InitCategoriesBackgroundTask().execute();**********************REMEMBER TO UNCOMMENT THIS***/
 		
 		//new ImageBackgroundTask().execute();
-
-				
-		new InitCategoriesBackgroundTask().execute();
-
 		addListenerForButton();
 
 		PackageManager pm = getPackageManager();
@@ -121,15 +114,6 @@ public class MainActivity extends Activity implements ViewFactory {
 			speakBtn.setEnabled(false);
 			speakBtn.setText("Not compatible");
 		}			
-	}
-	private void openWelcomePage() {
-		Intent welcome = new Intent(this, WelcomeActivity.class);
-		startActivity(welcome);
-	}
-
-	private void startActivityForResult(Intent welcome, StimulusSet currentSet2) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -156,15 +140,13 @@ public class MainActivity extends Activity implements ViewFactory {
 		imSwitcher=(ImageSwitcher) findViewById(R.id.ImageSwitcher1);
 		
 		nextButton = (Button) findViewById(R.id.btnChangeImage);
-
 		nextButton.setBackgroundColor(Color.WHITE);
 		nextButton.setOnClickListener(new OnClickListener()
 		{
-			//next button: user didn't get the word so score = 0 and streak ends; switch images
-			public void onClick(View arg0) {
-				currentUser.updateImageScore(currentSet.getName(), imageCounter, 0);
-				currentUser.streakEnded(currentSet);
-
+			public void onClick(View arg0)
+			{
+				scoreArray[imageCounter]=0;
+				streakEnded();
 				nextImage();
 			}
 		});
@@ -188,20 +170,12 @@ public class MainActivity extends Activity implements ViewFactory {
 		//if at the end of the set then go into finishedSet setup
 		if(imageCounter==currentSet.getStimuli().size()-1) {
 			currentUser.finishedSet(currentSet.getName());
-			imageCounter = 0;
-			Log.d("imagecounter","image counter is: " + imageCounter);
-			//call next set?
 			//GO INTO SCORE ACTIVITY HERE
 			finishedSet();
 		}
 		else {
 			imageCounter++;
-<<<<<<< HEAD
-			imageCounter=imageCounter%(currentSet.getStimuli().size());
-			Log.d("imagecounter","imagecounter is: " + imageCounter);
-=======
 			//imageCounter=imageCounter%(currentSet.getStimuli().size());
->>>>>>> b17cdc1864ba507c6e600339cc429435aedcd4a9
 			
 			//load next image
 			currentImage = currentSet.getStimuli().get(imageCounter).getName();
@@ -227,7 +201,6 @@ public class MainActivity extends Activity implements ViewFactory {
 		currentSet = allStimulusSets.get(setCounter);
 		Log.d("nextset","new set is " + currentSet.getName());
 		imageCounter=0;
-		Log.d("imagecounter","image counter is: " + imageCounter);
 		imCache.clearCache();
 		new LoadHintsBackgroundTask().execute();
 		TextView hintView= (TextView)findViewById(R.id.hintText);
@@ -302,7 +275,6 @@ public class MainActivity extends Activity implements ViewFactory {
 		hintsUsed++;
 	}
 
-
 /*-----------------------------------Background Tasks for Cache--------------------------------*/
 	//scale down images based on display size; helps with OOM errors
 	public static int calculateInSampleSize(
@@ -325,12 +297,7 @@ public class MainActivity extends Activity implements ViewFactory {
 	    return inSampleSize;
 	}
 	
-
-
-/*-----------------------------------------------------------------------------------------------*/
-/*-----------------------------------Background Tasks for S3-------------------------------------*/
-/*-----------------------------------------------------------------------------------------------*/
-
+	/****************NEED TO UNCOMMENT THIS LATER
 	class InitCategoriesBackgroundTask extends AsyncTask<String, Integer, Void> {
 		String s3append = "2"; //until we merge our datasets, all of ours end in 2
 		protected Void doInBackground(String... params) {
@@ -361,7 +328,7 @@ public class MainActivity extends Activity implements ViewFactory {
 			return null;
 		}		
 	}
-
+	**********/
 	class LoadHintsBackgroundTask extends AsyncTask<String, Integer, Void> {
 		String s3append = "2"; //until we merge our datasets, all of ours end in 2
 		protected Void doInBackground(String... params) {
@@ -461,7 +428,6 @@ public class MainActivity extends Activity implements ViewFactory {
 				String name = currentSet.getStimuli().get(0).getName();
 				Drawable drawableBitmap = new BitmapDrawable(getResources(),imCache.getBitmapFromCache(name));
 				imSwitcher.setImageDrawable(drawableBitmap);
-				imageCounter = 0;
 			}
 			Log.d("async task","progress update: loaded " + im);			
 		}	

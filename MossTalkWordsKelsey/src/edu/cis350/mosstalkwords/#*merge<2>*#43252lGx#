@@ -51,24 +51,33 @@ import android.widget.ViewSwitcher;
 public class MainActivity extends Activity implements ViewFactory {
 
 	private static final int REQUEST_CODE = 1234;
-	final int REQUIRE_HEIGHT = 1280;
-	final int REQUIRE_WIDTH = 800;
+	final int REQUIRE_HEIGHT = 1500;
+	final int REQUIRE_WIDTH = 1000;
 	
+	//private LruCache<String, Bitmap> imCache; //need cache for S3 images
 	private ImageCache imCache;
 	Button nextButton;
 	ImageSwitcher imSwitcher;
 	User currentUser;
 	Button speakBtn;
-
+	StimulusSet livingEasySet;
+	StimulusSet livingHardSet;
+	StimulusSet nonlivingEasySet;
+	StimulusSet nonlivingHardSet;
+	
 	Chronometer timer;
 
 	String currentImage;
 	private int stimulusSetSize=10;
 	
-	//game metrics--MOST OF THESE WENT TO THE USER CLASS AFTER REFACTORING
+	//game metrics
 	int hintsUsed=0;
-	int numAttempts=1;//starts at one because does not increment when answered correctly
-	///end metrics
+	int [] scoreArray= new int[stimulusSetSize];
+	int score = 0;
+	int streak = 0;
+	int numberOfAttempts=1;//starts at one because does not increment when answered correctly
+	int [][] efficiencyArray= new int[2][stimulusSetSize];//0 is hintsUsed, 1 is numberOfAttempts 
+	//end metrics
 	
 	int imageCounter=0;
 	int setCounter=0;
@@ -78,8 +87,6 @@ public class MainActivity extends Activity implements ViewFactory {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		openWelcomePage();
-	
 		setContentView(R.layout.activity_main);
 		
 		imSwitcher = (ImageSwitcher) findViewById(R.id.ImageSwitcher1);
@@ -87,13 +94,12 @@ public class MainActivity extends Activity implements ViewFactory {
 		imSwitcher.setInAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
 		imSwitcher.setOutAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
 		
-		imCache = new ImageCache();
-		currentUser = new User();
-		
-		
 		timer = (Chronometer) findViewById(R.id.chronometer1);
 		timer.start();
-
+		
+		
+		currentUser = new User();
+	 
 		
 		TextView txtView = (TextView)findViewById(R.id.chronometer1);
 		TextView scoreView = (TextView)findViewById(R.id.scoretext);
@@ -108,28 +114,17 @@ public class MainActivity extends Activity implements ViewFactory {
 		/*new InitCategoriesBackgroundTask().execute();**********************REMEMBER TO UNCOMMENT THIS***/
 		
 		//new ImageBackgroundTask().execute();
-
-				
-		new InitCategoriesBackgroundTask().execute();
-
 		addListenerForButton();
 
 		PackageManager pm = getPackageManager();
 		List<ResolveInfo> RecognizerActivities = pm.queryIntentActivities(
 				new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
-		if (RecognizerActivities.size() == 0) {
+		if (RecognizerActivities.size() == 0)
+		{
 			speakBtn.setEnabled(false);
 			speakBtn.setText("Not compatible");
-		}			
-	}
-	private void openWelcomePage() {
-		Intent welcome = new Intent(this, WelcomeActivity.class);
-		startActivity(welcome);
-	}
-
-	private void startActivityForResult(Intent welcome, StimulusSet currentSet2) {
-		// TODO Auto-generated method stub
-		
+		}
+				
 	}
 
 	@Override
@@ -156,88 +151,113 @@ public class MainActivity extends Activity implements ViewFactory {
 		imSwitcher=(ImageSwitcher) findViewById(R.id.ImageSwitcher1);
 		
 		nextButton = (Button) findViewById(R.id.btnChangeImage);
-
 		nextButton.setBackgroundColor(Color.WHITE);
 		nextButton.setOnClickListener(new OnClickListener()
 		{
-			//next button: user didn't get the word so score = 0 and streak ends; switch images
-			public void onClick(View arg0) {
-				currentUser.updateImageScore(currentSet.getName(), imageCounter, 0);
-				currentUser.streakEnded(currentSet);
-
+			public void onClick(View arg0)
+			{
+				scoreArray[imageCounter]=0;
+				streakEnded();
 				nextImage();
 			}
 		});
 
-		speakBtn.setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0) {
+		speakBtn.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View arg0)
+			{
 				startVoiceRecognitionActivity();
 			}
 		});
 	}
-	public void finishedSet()
-	{
-		Intent endSet=new Intent(this, EndSetActivity.class);
-		endSet.putExtra("User", currentUser);
-		startActivity(endSet);
-	}
+
 	public void nextImage() {
-		currentUser.updateImageEfficiency(currentSet.getName(), imageCounter, hintsUsed, numAttempts);
+		efficiencyArray[0][imageCounter]=hintsUsed;
+		efficiencyArray[1][imageCounter]=numberOfAttempts;
 		resetMetricsImage();
-		System.out.println(imageCounter);
-		//if at the end of the set then go into finishedSet setup
-		if(imageCounter==currentSet.getStimuli().size()-1) {
-			currentUser.finishedSet(currentSet.getName());
-			imageCounter = 0;
-			Log.d("imagecounter","image counter is: " + imageCounter);
-			//call next set?
-			//GO INTO SCORE ACTIVITY HERE
-			finishedSet();
+		
+		if(imageCounter==stimulusSetSize-1)//if at the end of the set then go into finishedSet setup
+		{
+			finishedSet();		
 		}
-		else {
+		else
+		{
 			imageCounter++;
-<<<<<<< HEAD
 			imageCounter=imageCounter%(currentSet.getStimuli().size());
-			Log.d("imagecounter","imagecounter is: " + imageCounter);
-=======
-			//imageCounter=imageCounter%(currentSet.getStimuli().size());
->>>>>>> b17cdc1864ba507c6e600339cc429435aedcd4a9
 			
-			//load next image
 			currentImage = currentSet.getStimuli().get(imageCounter).getName();
 			Bitmap im = imCache.getBitmapFromCache(currentImage); 
 			if (im == null) { Log.d("nextImage","null bitmap- that's bad/" + currentImage); } 
+			else { Log.d("nextImage","should load" + currentImage); }
 			Drawable drawableBitmap = new BitmapDrawable(getResources(),im);
 			imSwitcher.setImageDrawable(drawableBitmap);
+			Log.d("nextImage","set image to " + currentImage);
 			
 			TextView hintView= (TextView)findViewById(R.id.hintText);
-			hintView.setText("");	
+			hintView.setText("");
+			
 		}
+		
 		timer.setBase(SystemClock.elapsedRealtime());
 	}
-	
-	public void resetMetricsImage() {
-		hintsUsed=0;
-		numAttempts=1;//starts at one because does not increment when answered correctly
+	public void finishedSet()
+	{
+		if(currentUser.stimulusSetScores.containsKey(currentSet.setName))//if the stimulus set has already been played, remove the previous score array
+		{
+			currentUser.stimulusSetScores.remove(currentSet.setName);
+		}
+		currentUser.stimulusSetScores.put(currentSet.setName, scoreArray);//add the score array for the stimulus set to the user hashmap
+		currentUser.calculateStarScore(currentSet.setName);
+		currentUser.stimulusSetEfficiencies.put(currentSet.setName, efficiencyArray);//add the efficiencies for this set to the hashmap
+		currentUser.calculateAverageEfficiencyPercent(currentSet.setName);//calculate the percentage for this set
+		nextSet();
 	}
-	
-	public void nextSet() {
-		resetMetricsImage();
-		setCounter=(setCounter + 1)%allStimulusSets.size();
+	public void nextSet()
+	{
+		resetMetricsSet();
+		setCounter++;
+		setCounter=setCounter%allStimulusSets.size();
 		currentSet = allStimulusSets.get(setCounter);
-		Log.d("nextset","new set is " + currentSet.getName());
 		imageCounter=0;
-		Log.d("imagecounter","image counter is: " + imageCounter);
 		imCache.clearCache();
-		new LoadHintsBackgroundTask().execute();
+		new ImageBackgroundTask().execute();	
 		TextView hintView= (TextView)findViewById(R.id.hintText);
 		hintView.setText("");
 	}	
 
-	public void onNextSetButtonClick(View view) {
+	public void onNextSetButtonClick(View view)
+	{
 		nextSet();			
 	}
-
+	
+	public void resetMetricsImage()
+	{
+		hintsUsed=0;
+		numberOfAttempts=1;//starts at one because does not increment when answered correctly
+	}
+	public void resetMetricsSet()
+	{
+		//streak=0; streak should keep going between sets
+		resetMetricsImage();
+	}
+	public void streakEnded()
+	{
+		if (currentUser == null) {Log.d("null pointer","current user is null");}
+		if (currentUser.longestStreakForSets==null) {Log.d("null pointer", "CULSFS is null");}
+		if (currentSet == null) {Log.d("null pointer","currentSet is null");}
+		if (currentSet.setName == null) {Log.d("null pointer", "current set name null");}
+		
+		if(currentUser.longestStreakForSets.containsKey(currentSet.setName)&&streak>currentUser.longestStreakForSets.get(currentSet.setName))//if a streak already exists, and this streak is larger, update the streak
+		{	
+			currentUser.longestStreakForSets.remove(currentSet.setName);
+			currentUser.longestStreakForSets.put(currentSet.setName, streak);
+		}
+		else if(!currentUser.longestStreakForSets.containsKey(currentSet.setName))//if there is no streak, make this the longest streak
+			currentUser.longestStreakForSets.put(currentSet.setName, streak);
+		//otherwise do nothing and reset streak counter
+		streak=0;//used next button so reset streak to zero
+	}
+	
 	private void startVoiceRecognitionActivity()
 	{
 		Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -257,30 +277,25 @@ public class MainActivity extends Activity implements ViewFactory {
 			//right now score is just incremented by 100
 			for (String s: matches) {
 				if (s.toLowerCase().contains(currentImage.toLowerCase())) {
-					//subtract 100 for each hint used, but if 3 are used make the score 100 anyway
-					int thisImageScore = (300-100*hintsUsed == 0 ? 100:300-100*hintsUsed);
-					currentUser.updateImageScore(currentSet.getName(), imageCounter, thisImageScore);
+					scoreArray[imageCounter]=(300-100*hintsUsed==0?100:300-100*hintsUsed);//subtract 100 for each hint used, but if 3 are used make the score 100 anyway
+					score += scoreArray[imageCounter];
 					TextView scoreTextView = (TextView)findViewById(R.id.scoretext);
-					scoreTextView.setText("Score: " + String.valueOf(currentUser.getTotalScore()));
+					scoreTextView.setText("Score: " + String.valueOf(score));
 					
-					if(hintsUsed==0) {
-						currentUser.increaseStreak();
-					}
-					else {
-						currentUser.streakEnded(currentSet);
-					}
+					if(hintsUsed==0)
+						streak++;
+					else
+						streakEnded();
 					MediaPlayer mp=MediaPlayer.create(MainActivity.this,R.raw.ding);
-					mp.start(); //this could be its own class too
+					mp.start();
 					nextImage();
 				}
-				else {
-					numAttempts++;//if got it wrong the number of attempts increments
-				}
+				else
+					numberOfAttempts++;//if got it wrong the number of attempts increments
 			}
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
-	
 	//Handler for sentence hint
 	public void onHint1ButtonClick(View view) {
 		TextView hintView= (TextView)findViewById(R.id.hintText);
@@ -301,7 +316,6 @@ public class MainActivity extends Activity implements ViewFactory {
 		hintView.setText(currentSet.getStimuli().get(imageCounter).getHints()[2]);
 		hintsUsed++;
 	}
-
 
 /*-----------------------------------Background Tasks for Cache--------------------------------*/
 	//scale down images based on display size; helps with OOM errors
@@ -325,12 +339,7 @@ public class MainActivity extends Activity implements ViewFactory {
 	    return inSampleSize;
 	}
 	
-
-
-/*-----------------------------------------------------------------------------------------------*/
-/*-----------------------------------Background Tasks for S3-------------------------------------*/
-/*-----------------------------------------------------------------------------------------------*/
-
+	/****************NEED TO UNCOMMENT THIS LATER
 	class InitCategoriesBackgroundTask extends AsyncTask<String, Integer, Void> {
 		String s3append = "2"; //until we merge our datasets, all of ours end in 2
 		protected Void doInBackground(String... params) {
@@ -361,7 +370,7 @@ public class MainActivity extends Activity implements ViewFactory {
 			return null;
 		}		
 	}
-
+	**********/
 	class LoadHintsBackgroundTask extends AsyncTask<String, Integer, Void> {
 		String s3append = "2"; //until we merge our datasets, all of ours end in 2
 		protected Void doInBackground(String... params) {
@@ -388,8 +397,7 @@ public class MainActivity extends Activity implements ViewFactory {
 					Stimulus tmp = new Stimulus(name, 1, hints);//everything is difficulty 1 right now. deal.
 					tmpSet.add(tmp);
 				}
-				currentSet.setStimuli(tmpSet);
-				currentUser.initSet(setName, tmpSet.size());
+				currentSet.setStimuli(tmpSet);	
 				new ImageBackgroundTask().execute();
 			} catch (MalformedURLException e) {
 				// TODO we should make a crash/error screen
@@ -427,7 +435,7 @@ public class MainActivity extends Activity implements ViewFactory {
 					bis.close();
 				    
 				    // Calculate inSampleSize - need to figure out required dims
-				    options.inSampleSize = ImageCache.calculateInSampleSize(options, REQUIRE_WIDTH, REQUIRE_HEIGHT);
+				    options.inSampleSize = calculateInSampleSize(options, REQUIRE_WIDTH, REQUIRE_HEIGHT);
 				    			    					
 					// Decode bitmap with inSampleSize set
 				    options.inJustDecodeBounds = false;
@@ -461,7 +469,6 @@ public class MainActivity extends Activity implements ViewFactory {
 				String name = currentSet.getStimuli().get(0).getName();
 				Drawable drawableBitmap = new BitmapDrawable(getResources(),imCache.getBitmapFromCache(name));
 				imSwitcher.setImageDrawable(drawableBitmap);
-				imageCounter = 0;
 			}
 			Log.d("async task","progress update: loaded " + im);			
 		}	

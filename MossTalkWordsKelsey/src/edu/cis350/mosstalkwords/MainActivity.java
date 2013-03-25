@@ -37,7 +37,9 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.Menu;
@@ -76,6 +78,8 @@ public class MainActivity extends Activity implements ViewFactory {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		openWelcomePage();
+	
 		setContentView(R.layout.activity_main);
 		
 		imSwitcher = (ImageSwitcher) findViewById(R.id.ImageSwitcher1);
@@ -89,10 +93,25 @@ public class MainActivity extends Activity implements ViewFactory {
 		
 		timer = (Chronometer) findViewById(R.id.chronometer1);
 		timer.start();
+
 		
+		TextView txtView = (TextView)findViewById(R.id.chronometer1);
+		TextView scoreView = (TextView)findViewById(R.id.scoretext);
+		
+		txtView.setTextColor(Color.RED);
+		Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-BoldCondensed.ttf");
+		txtView.setTypeface(typeface);
+		scoreView.setTypeface(typeface);
+		//loadData();
+		
+		
+		/*new InitCategoriesBackgroundTask().execute();**********************REMEMBER TO UNCOMMENT THIS***/
+		
+		//new ImageBackgroundTask().execute();
+
 				
 		new InitCategoriesBackgroundTask().execute();
-		
+
 		addListenerForButton();
 
 		PackageManager pm = getPackageManager();
@@ -102,6 +121,15 @@ public class MainActivity extends Activity implements ViewFactory {
 			speakBtn.setEnabled(false);
 			speakBtn.setText("Not compatible");
 		}			
+	}
+	private void openWelcomePage() {
+		Intent welcome = new Intent(this, WelcomeActivity.class);
+		startActivity(welcome);
+	}
+
+	private void startActivityForResult(Intent welcome, StimulusSet currentSet2) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
@@ -124,15 +152,19 @@ public class MainActivity extends Activity implements ViewFactory {
 	public void addListenerForButton()
 	{
 		speakBtn = (Button) findViewById(R.id.speakButton);
-
+		
 		imSwitcher=(ImageSwitcher) findViewById(R.id.ImageSwitcher1);
 		
 		nextButton = (Button) findViewById(R.id.btnChangeImage);
-		nextButton.setOnClickListener(new OnClickListener()	{
+
+		nextButton.setBackgroundColor(Color.WHITE);
+		nextButton.setOnClickListener(new OnClickListener()
+		{
 			//next button: user didn't get the word so score = 0 and streak ends; switch images
 			public void onClick(View arg0) {
 				currentUser.updateImageScore(currentSet.getName(), imageCounter, 0);
 				currentUser.streakEnded(currentSet);
+
 				nextImage();
 			}
 		});
@@ -143,23 +175,30 @@ public class MainActivity extends Activity implements ViewFactory {
 			}
 		});
 	}
-
+	public void finishedSet()
+	{
+		Intent endSet=new Intent(this, EndSetActivity.class);
+		endSet.putExtra("User", currentUser);
+		startActivity(endSet);
+	}
 	public void nextImage() {
 		currentUser.updateImageEfficiency(currentSet.getName(), imageCounter, hintsUsed, numAttempts);
 		resetMetricsImage();
-		
+		System.out.println(imageCounter);
 		//if at the end of the set then go into finishedSet setup
-		if(imageCounter==stimulusSetSize-1) {
+		if(imageCounter==currentSet.getStimuli().size()-1) {
 			currentUser.finishedSet(currentSet.getName());
 			imageCounter = 0;
 			Log.d("imagecounter","image counter is: " + imageCounter);
 			//call next set?
 			//GO INTO SCORE ACTIVITY HERE
+			finishedSet();
 		}
 		else {
 			imageCounter++;
 			imageCounter=imageCounter%(currentSet.getStimuli().size());
 			Log.d("imagecounter","imagecounter is: " + imageCounter);
+			//imageCounter=imageCounter%(currentSet.getStimuli().size());
 			
 			//load next image
 			currentImage = currentSet.getStimuli().get(imageCounter).getName();
@@ -259,9 +298,36 @@ public class MainActivity extends Activity implements ViewFactory {
 		hintView.setText(currentSet.getStimuli().get(imageCounter).getHints()[2]);
 		hintsUsed++;
 	}
+
+
+/*-----------------------------------Background Tasks for Cache--------------------------------*/
+	//scale down images based on display size; helps with OOM errors
+	public static int calculateInSampleSize(
+        BitmapFactory.Options options, int reqWidth, int reqHeight) {
+	    // Raw height and width of image
+	    final int height = options.outHeight;
+	    final int width = options.outWidth;
+	    int inSampleSize = 0;
+	    int newHeight = height;
+	    int newWidth = width;
+	    
+	    while (newHeight > reqHeight || newWidth > reqWidth) {
+	    	newHeight = newHeight/2; //should be power of two 
+	    	newWidth = newWidth/2;
+	    	inSampleSize += 2;	
+	    }
+	    if (inSampleSize == 0) { inSampleSize = 2; }
+	    Log.d("async task","in sample size is:" + (inSampleSize));
+	
+	    return inSampleSize;
+	}
+	
+
+
 /*-----------------------------------------------------------------------------------------------*/
 /*-----------------------------------Background Tasks for S3-------------------------------------*/
 /*-----------------------------------------------------------------------------------------------*/
+
 	class InitCategoriesBackgroundTask extends AsyncTask<String, Integer, Void> {
 		String s3append = "2"; //until we merge our datasets, all of ours end in 2
 		protected Void doInBackground(String... params) {
@@ -292,7 +358,7 @@ public class MainActivity extends Activity implements ViewFactory {
 			return null;
 		}		
 	}
-	
+
 	class LoadHintsBackgroundTask extends AsyncTask<String, Integer, Void> {
 		String s3append = "2"; //until we merge our datasets, all of ours end in 2
 		protected Void doInBackground(String... params) {

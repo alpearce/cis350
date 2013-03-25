@@ -78,7 +78,8 @@
             android:id="@+id/speakButton"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:text="@string/speak" />
+            android:text="@string/speak" 
+            android:drawableLeft = "@drawable/ic_action_microphone"/>
     </LinearLayout>
 
     <TextView
@@ -86,7 +87,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentLeft="true"
+        android:textSize = "30sp"
+        android:layout_marginLeft = "7sp"
         android:text="@string/score" />
 
     <Button
@@ -94,9 +97,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/next" />
-
+        android:layout_alignParentTop = "true"
+        android:drawableLeft = "@drawable/finger" />
+<!-- 
     <Button
         android:id="@+id/nextSetButton"
         android:layout_width="wrap_content"
@@ -106,12 +109,15 @@
         android:onClick="onNextSetButtonClick"
         android:text="@string/nextSet" />
 
+ -->
     <Chronometer
         android:id="@+id/chronometer1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/hintText"
+        android:layout_alignParentLeft="true"
         android:layout_below="@+id/scoretext"
+        android:layout_marginLeft ="7sp"
+        android:textSize="30sp"
         android:text="Chronometer" />
 
 </RelativeLayout>
