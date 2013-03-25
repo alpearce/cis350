@@ -78,6 +78,8 @@ public class MainActivity extends Activity implements ViewFactory {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		openWelcomePage();
+	
 		setContentView(R.layout.activity_main);
 		
 		imSwitcher = (ImageSwitcher) findViewById(R.id.ImageSwitcher1);
@@ -120,6 +122,11 @@ public class MainActivity extends Activity implements ViewFactory {
 			speakBtn.setText("Not compatible");
 		}			
 	}
+	private void openWelcomePage() {
+		Intent welcome = new Intent(this, WelcomeActivity.class);
+		startActivityForResult(welcome, 3);
+	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -178,11 +185,16 @@ public class MainActivity extends Activity implements ViewFactory {
 		//if at the end of the set then go into finishedSet setup
 		if(imageCounter==currentSet.getStimuli().size()-1) {
 			currentUser.finishedSet(currentSet.getName());
+			imageCounter = 0;
+			Log.d("imagecounter","image counter is: " + imageCounter);
+			//call next set?
 			//GO INTO SCORE ACTIVITY HERE
 			finishedSet();
 		}
 		else {
 			imageCounter++;
+			imageCounter=imageCounter%(currentSet.getStimuli().size());
+			Log.d("imagecounter","imagecounter is: " + imageCounter);
 			//imageCounter=imageCounter%(currentSet.getStimuli().size());
 			
 			//load next image
@@ -209,6 +221,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		currentSet = allStimulusSets.get(setCounter);
 		Log.d("nextset","new set is " + currentSet.getName());
 		imageCounter=0;
+		Log.d("imagecounter","image counter is: " + imageCounter);
 		imCache.clearCache();
 		new LoadHintsBackgroundTask().execute();
 		TextView hintView= (TextView)findViewById(R.id.hintText);
@@ -231,6 +244,11 @@ public class MainActivity extends Activity implements ViewFactory {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
+		if (requestCode == 3) {
+			//this is the index of the allStimulusSetsArray
+			int index = data.getExtras().getInt("indexOfSetsArray");
+			currentSet = allStimulusSets.get(index);
+		}
 		if (requestCode == REQUEST_CODE && resultCode == RESULT_OK)
 		{
 			ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
@@ -442,6 +460,7 @@ public class MainActivity extends Activity implements ViewFactory {
 				String name = currentSet.getStimuli().get(0).getName();
 				Drawable drawableBitmap = new BitmapDrawable(getResources(),imCache.getBitmapFromCache(name));
 				imSwitcher.setImageDrawable(drawableBitmap);
+				imageCounter = 0;
 			}
 			Log.d("async task","progress update: loaded " + im);			
 		}	
