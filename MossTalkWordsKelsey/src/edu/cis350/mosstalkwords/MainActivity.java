@@ -78,6 +78,8 @@ public class MainActivity extends Activity implements ViewFactory {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		openWelcomePage();
+	
 		setContentView(R.layout.activity_main);
 		
 		imSwitcher = (ImageSwitcher) findViewById(R.id.ImageSwitcher1);
@@ -119,6 +121,15 @@ public class MainActivity extends Activity implements ViewFactory {
 			speakBtn.setEnabled(false);
 			speakBtn.setText("Not compatible");
 		}			
+	}
+	private void openWelcomePage() {
+		Intent welcome = new Intent(this, WelcomeActivity.class);
+		startActivity(welcome);
+	}
+
+	private void startActivityForResult(Intent welcome, StimulusSet currentSet2) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override

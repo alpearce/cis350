@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome" 
+        android:textSize = "30sp"
+        android:layout_alignParentTop = "true"
+        android:layout_centerHorizontal = "true"
+        />
+      <Button
+          android:id ="@+id/livingeasy"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentLeft = "true"
+          android:onClick="onClickLivingEasy"
+          android:text="Living easy" />
+      <Button
+          android:id ="@+id/livingmedium"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below = "@id/livingeasy"
+          android:onClick="onClickLivingMedium"
+          android:text="living medium" />
+
+      <Button
+          android:id="@+id/livinghard"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below = "@id/livingmedium"
+          android:onClick="onClickLivingHard"
+          android:text="living hard" />
+        <Button
+          android:id="@+id/nonlivingeasy"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below = "@id/livinghard"
+          android:onClick="onClickNonLivingEasy"
+          android:text="nonliving easy" />
+        <Button
+          android:id="@+id/nonlivinghard"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below = "@id/nonlivingeasy"
+          android:onClick="onClickNonLivingHard"
+          android:text="nonliving hard" />
+
+</RelativeLayout>
