@@ -151,11 +151,15 @@ public class MainActivity extends Activity implements ViewFactory {
 		//if at the end of the set then go into finishedSet setup
 		if(imageCounter==stimulusSetSize-1) {
 			currentUser.finishedSet(currentSet.getName());
+			imageCounter = 0;
+			Log.d("imagecounter","image counter is: " + imageCounter);
+			//call next set?
 			//GO INTO SCORE ACTIVITY HERE
 		}
 		else {
 			imageCounter++;
 			imageCounter=imageCounter%(currentSet.getStimuli().size());
+			Log.d("imagecounter","imagecounter is: " + imageCounter);
 			
 			//load next image
 			currentImage = currentSet.getStimuli().get(imageCounter).getName();
@@ -181,6 +185,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		currentSet = allStimulusSets.get(setCounter);
 		Log.d("nextset","new set is " + currentSet.getName());
 		imageCounter=0;
+		Log.d("imagecounter","image counter is: " + imageCounter);
 		imCache.clearCache();
 		new LoadHintsBackgroundTask().execute();
 		TextView hintView= (TextView)findViewById(R.id.hintText);
@@ -387,6 +392,7 @@ public class MainActivity extends Activity implements ViewFactory {
 				String name = currentSet.getStimuli().get(0).getName();
 				Drawable drawableBitmap = new BitmapDrawable(getResources(),imCache.getBitmapFromCache(name));
 				imSwitcher.setImageDrawable(drawableBitmap);
+				imageCounter = 0;
 			}
 			Log.d("async task","progress update: loaded " + im);			
 		}	
