@@ -48,7 +48,8 @@
         android:layout_height="wrap_content"
       	android:text="Your Longest Streak: "
       	android:layout_below="@id/improveCompleteness"
-      	android:paddingBottom="5dp"
+      	android:paddingBottom="10dp"
+      	android:paddingTop="5dp"
         />
    <!--  <Button 
         android:id="@+id/btnMainMenu"
