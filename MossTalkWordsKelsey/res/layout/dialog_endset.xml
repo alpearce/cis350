@@ -3,17 +3,31 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
-    <RatingBar android:id="@+id/scoreBar"
+  <!-- <TextView
+        android:id="@+id/titleBar"
+       android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Congratulations!"
+        android:layout_centerHorizontal="true"
+        android:textSize="50px"
+    /> -->
+    <RatingBar 
+        android:id="@+id/scoreBar"
+        android:numStars="3"
+        android:rating="3"
         style="?android:attr/ratingBarStyleIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         />
     <TextView
         android:id="@+id/Completeness"
          android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Completeness:" 
+        android:text="Completeness: " 
         android:layout_below="@id/scoreBar"
         />
     <TextView
@@ -24,13 +38,29 @@
         android:textStyle="italic"
         android:layout_below="@id/Completeness"
         android:text="*To Improve Completeness, use fewer hints and attempts to answer*"
+        android:textAlignment="center"
+        android:gravity="center_horizontal"
+        android:textSize="10dp"
         />
     <TextView
         android:id="@+id/streak"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-      	android:text="Your Longest Streak:"
+      	android:text="Your Longest Streak: "
       	android:layout_below="@id/improveCompleteness"
+      	android:paddingBottom="5dp"
         />
+   <!--  <Button 
+        android:id="@+id/btnMainMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Main Menu"
+        />
+  <Button 
+         android:id="@+id/btnReplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Replay Set"
+        /> -->
     
 </RelativeLayout>

@@ -168,6 +168,7 @@ public class MainActivity extends Activity implements ViewFactory {
 	{
 		Intent endSet=new Intent(this, EndSetActivity.class);
 		endSet.putExtra("User", currentUser);
+		endSet.putExtra("currentSet", currentSet.getName());
 		startActivity(endSet);
 	}
 	public void nextImage() {
