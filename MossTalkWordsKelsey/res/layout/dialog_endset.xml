@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <RatingBar android:id="@+id/scoreBar"
+        style="?android:attr/ratingBarStyleIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        />
+    <TextView
+        android:id="@+id/Completeness"
+         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Completeness:" 
+        android:layout_below="@id/scoreBar"
+        />
+    <TextView
+        android:id="@+id/improveCompleteness"
+         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textStyle="italic"
+        android:layout_below="@id/Completeness"
+        android:text="*To Improve Completeness, use fewer hints and attempts to answer*"
+        />
+    <TextView
+        android:id="@+id/streak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+      	android:text="Your Longest Streak:"
+      	android:layout_below="@id/improveCompleteness"
+        />
+    
+</RelativeLayout>
