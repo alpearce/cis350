@@ -40,6 +40,7 @@ public class User implements Serializable {
 	public void updateImageEfficiency(String setName, int imageIdx, int hints, int attempts) {
 		stimulusSetEfficiencies.get(setName)[imageIdx][0] = hints;
 		stimulusSetEfficiencies.get(setName)[imageIdx][1] = attempts;
+		System.out.printf("updating efficiency hints: %d attempts %d \n", hints, attempts);
 	}
 	
 	public int getTotalScore() {
