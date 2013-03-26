@@ -25,6 +25,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/btnChangeImage"
+        android:textSize="20sp"
+        android:textColor="#000000"
         android:layout_centerHorizontal="true"
         android:text="" />
 
@@ -79,6 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
+        android:textColor = "#000000"
         android:textSize = "30sp"
         android:layout_marginLeft = "7sp"
         android:text="@string/score" />

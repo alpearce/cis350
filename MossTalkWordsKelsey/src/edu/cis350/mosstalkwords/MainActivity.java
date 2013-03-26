@@ -116,10 +116,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		//loadData();
 		
 		new InitCategoriesBackgroundTask().execute();
-		
-
-
-
+	
 		addListenerForButton();
 
 		PackageManager pm = getPackageManager();
@@ -198,8 +195,6 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			currentUser.finishedSet(currentSet.getName());
 			imageCounter = 0;
 			Log.d("imagecounter","image counter is: " + imageCounter);
-			//call next set?
-			//GO INTO SCORE ACTIVITY HERE
 			finishedSet();
 		}
 		else {
@@ -276,7 +271,6 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			new LoadHintsBackgroundTask().execute();
 			timer.setBase(SystemClock.elapsedRealtime());
 
-			//System.out.println(currentSet.getName());
 		}
 		if(requestCode==4)
 		{
@@ -327,34 +321,25 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 
 	//Handler for sentence hint
 	public void onHint1ButtonClick(View view) {
-		String stimulusName = currentSet.getStimuliNames()[imageCounter];
-		for (Stimulus curr : currentSet.getStimuli()) {
-			if (curr.getName().equalsIgnoreCase(stimulusName)) {
-				speak(curr.getHints()[0]);
-			}
-		}
+		TextView hintView= (TextView)findViewById(R.id.hintText);
+		hintView.setText(currentSet.getStimuli().get(imageCounter).getHints()[0]);
+		speak(currentSet.getStimuli().get(imageCounter).getHints()[0]);
 		hintsUsed++;
 	}
 
 	//handler for similar word hint
 	public void onHint2ButtonClick(View view) {
-		String stimulusName = currentSet.getStimuliNames()[imageCounter];
-		for (Stimulus curr : currentSet.getStimuli()) {
-			if (curr.getName().equalsIgnoreCase(stimulusName)) {
-				speak(curr.getHints()[1]);
-			}
-		}
+		TextView hintView= (TextView)findViewById(R.id.hintText);
+		hintView.setText(currentSet.getStimuli().get(imageCounter).getHints()[1]);
+		speak(currentSet.getStimuli().get(imageCounter).getHints()[1]);
 		hintsUsed++;
 	}
 
 	//handler for giving up and getting answer
 	public void onHint3ButtonClick(View view) {
-		String stimulusName = currentSet.getStimuliNames()[imageCounter];
-		for (Stimulus curr : currentSet.getStimuli()) {
-			if (curr.getName().equalsIgnoreCase(stimulusName)) {
-				speak(curr.getHints()[2]);
-			}
-		}
+		TextView hintView= (TextView)findViewById(R.id.hintText);
+		hintView.setText(currentSet.getStimuli().get(imageCounter).getHints()[2]);
+		speak(currentSet.getStimuli().get(imageCounter).getHints()[2]);
 		hintsUsed++;
 	}
 
