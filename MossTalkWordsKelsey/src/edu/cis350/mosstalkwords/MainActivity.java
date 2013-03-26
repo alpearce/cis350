@@ -80,9 +80,13 @@ public class MainActivity extends Activity implements ViewFactory {
 	protected void onCreate(Bundle savedInstanceState) {
 		System.out.println("on create");
 		super.onCreate(savedInstanceState);
+<<<<<<< HEAD
 		
 		new InitCategoriesBackgroundTask().execute();
 		openWelcomePage();
+=======
+		//openWelcomePage();
+>>>>>>> 016c7d3226f256adc4b99e4627d7ca70a4ba9342
 	
 		setContentView(R.layout.activity_main);
 		
@@ -176,9 +180,11 @@ public class MainActivity extends Activity implements ViewFactory {
 	}
 	public void finishedSet()
 	{
+		imSwitcher.setImageDrawable(null);
 		Intent endSet=new Intent(this, EndSetActivity.class);
 		endSet.putExtra("User", currentUser);
-		startActivity(endSet);
+		endSet.putExtra("currentSet", currentSet.getName());
+		startActivityForResult(endSet,4);
 	}
 	public void nextImage() {
 		currentUser.updateImageEfficiency(currentSet.getName(), imageCounter, hintsUsed, numAttempts);
@@ -187,11 +193,16 @@ public class MainActivity extends Activity implements ViewFactory {
 		//if at the end of the set then go into finishedSet setup
 		if(imageCounter==currentSet.getStimuli().size()-1) {
 			currentUser.finishedSet(currentSet.getName());
+			imageCounter = 0;
+			Log.d("imagecounter","image counter is: " + imageCounter);
+			//call next set?
 			//GO INTO SCORE ACTIVITY HERE
 			finishedSet();
 		}
 		else {
 			imageCounter++;
+			imageCounter=imageCounter%(currentSet.getStimuli().size());
+			Log.d("imagecounter","imagecounter is: " + imageCounter);
 			//imageCounter=imageCounter%(currentSet.getStimuli().size());
 			
 			//load next image
@@ -218,12 +229,24 @@ public class MainActivity extends Activity implements ViewFactory {
 		currentSet = allStimulusSets.get(setCounter);
 		Log.d("nextset","new set is " + currentSet.getName());
 		imageCounter=0;
+		Log.d("imagecounter","image counter is: " + imageCounter);
 		imCache.clearCache();
 		new LoadHintsBackgroundTask().execute();
 		TextView hintView= (TextView)findViewById(R.id.hintText);
 		hintView.setText("");
 	}	
-
+	public void replaySet()
+	{
+		imageCounter=0;
+		resetMetricsImage();
+		currentImage = currentSet.getStimuli().get(imageCounter).getName();
+		Bitmap im = imCache.getBitmapFromCache(currentImage); 
+		if (im == null) { Log.d("nextImage","null bitmap- that's bad/" + currentImage); } 
+		Drawable drawableBitmap = new BitmapDrawable(getResources(),im);
+		imSwitcher.setImageDrawable(drawableBitmap);
+		timer.setBase(SystemClock.elapsedRealtime());
+		//currentImage = currentSet.getStimuli().get(imageCounter).getName();
+	}
 	public void onNextSetButtonClick(View view) {
 		nextSet();			
 	}
@@ -251,6 +274,22 @@ public class MainActivity extends Activity implements ViewFactory {
 			timer.setBase(SystemClock.elapsedRealtime());
 			
 			//System.out.println(currentSet.getName());
+		}
+		if(requestCode==4)
+		{
+			if(data.getBooleanExtra("Replay Set", false))
+			{
+				replaySet();
+			}
+			else if(data.getBooleanExtra("Next Set", false))
+			{
+				nextSet();
+			}
+			else if(data.getBooleanExtra("Main Menu", true))
+			{
+				openWelcomePage();
+			}
+			
 		}
 		if (requestCode == REQUEST_CODE && resultCode == RESULT_OK)
 		{
@@ -463,6 +502,7 @@ public class MainActivity extends Activity implements ViewFactory {
 				String name = currentSet.getStimuli().get(0).getName();
 				Drawable drawableBitmap = new BitmapDrawable(getResources(),imCache.getBitmapFromCache(name));
 				imSwitcher.setImageDrawable(drawableBitmap);
+				imageCounter = 0;
 			}
 			Log.d("async task","progress update: loaded " + im);			
 		}	
