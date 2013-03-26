@@ -1,6 +1,6 @@
 package edu.cis350.mosstalkwords;
 
-import java.io.BufferedInputStream;
+import java.io.BufferedInputStream; 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -25,6 +25,8 @@ import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.ViewSwitcher.ViewFactory;
 import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnInitListener;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 import android.view.View.OnClickListener;
@@ -48,13 +50,16 @@ import android.widget.TextView;
 import android.widget.ImageSwitcher;
 import android.widget.ViewSwitcher;
 
-public class MainActivity extends Activity implements ViewFactory {
+public class MainActivity extends Activity implements ViewFactory, TextToSpeech.OnInitListener{
 
 	private static final int REQUEST_CODE = 1234;
 	final int REQUIRE_HEIGHT = 1280;
 	final int REQUIRE_WIDTH = 800;
 	private int index;
-	
+
+	private TextToSpeech tts;
+
+
 	private ImageCache imCache;
 	Button nextButton;
 	ImageSwitcher imSwitcher;
@@ -65,12 +70,12 @@ public class MainActivity extends Activity implements ViewFactory {
 
 	String currentImage;
 	private int stimulusSetSize=10;
-	
+
 	//game metrics--MOST OF THESE WENT TO THE USER CLASS AFTER REFACTORING
 	int hintsUsed=0;
 	int numAttempts=1;//starts at one because does not increment when answered correctly
 	///end metrics
-	
+
 	int imageCounter=0;
 	int setCounter=0;
 	ArrayList<StimulusSet> allStimulusSets;
@@ -81,40 +86,41 @@ public class MainActivity extends Activity implements ViewFactory {
 		System.out.println("on create");
 		super.onCreate(savedInstanceState);
 
-		
 		new InitCategoriesBackgroundTask().execute();
 		openWelcomePage();
 
-	
+
+		tts = new TextToSpeech(this, (OnInitListener) this);
+
 		setContentView(R.layout.activity_main);
-		
+
 		imSwitcher = (ImageSwitcher) findViewById(R.id.ImageSwitcher1);
 		imSwitcher.setFactory(this);
 		imSwitcher.setInAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
 		imSwitcher.setOutAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
-		
+
 		imCache = new ImageCache();
 		currentUser = new User();
-		
-		
+
+
 		timer = (Chronometer) findViewById(R.id.chronometer1);
 		timer.start();
-		
+
 		TextView txtView = (TextView)findViewById(R.id.chronometer1);
 		TextView scoreView = (TextView)findViewById(R.id.scoretext);
-		
+
 		txtView.setTextColor(Color.RED);
 		Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-BoldCondensed.ttf");
 		txtView.setTypeface(typeface);
 		scoreView.setTypeface(typeface);
 		//loadData();
-		
-		
+
+
 		/*new InitCategoriesBackgroundTask().execute();**********************REMEMBER TO UNCOMMENT THIS***/
-		
+
 		//new ImageBackgroundTask().execute();
 
-	
+
 
 		addListenerForButton();
 
@@ -129,7 +135,7 @@ public class MainActivity extends Activity implements ViewFactory {
 	private void openWelcomePage() {
 		Intent welcome = new Intent(this, WelcomeActivity.class);
 		startActivityForResult(welcome, 3);
-		
+
 	}
 
 
@@ -139,7 +145,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
-	
+
 	//required method for imageswitcher class
 	public View makeView() {
 		ImageView iv = new ImageView(this);
@@ -149,13 +155,13 @@ public class MainActivity extends Activity implements ViewFactory {
 		iv.setBackgroundColor(0xFFFFFFFF); //opaque white background
 		return iv;
 	}
-	
+
 	public void addListenerForButton()
 	{
 		speakBtn = (Button) findViewById(R.id.speakButton);
-		
+
 		imSwitcher=(ImageSwitcher) findViewById(R.id.ImageSwitcher1);
-		
+
 		nextButton = (Button) findViewById(R.id.btnChangeImage);
 
 		nextButton.setBackgroundColor(Color.WHITE);
@@ -202,25 +208,25 @@ public class MainActivity extends Activity implements ViewFactory {
 			imageCounter=imageCounter%(currentSet.getStimuli().size());
 			Log.d("imagecounter","imagecounter is: " + imageCounter);
 			//imageCounter=imageCounter%(currentSet.getStimuli().size());
-			
+
 			//load next image
 			currentImage = currentSet.getStimuli().get(imageCounter).getName();
 			Bitmap im = imCache.getBitmapFromCache(currentImage); 
 			if (im == null) { Log.d("nextImage","null bitmap- that's bad/" + currentImage); } 
 			Drawable drawableBitmap = new BitmapDrawable(getResources(),im);
 			imSwitcher.setImageDrawable(drawableBitmap);
-			
+
 			TextView hintView= (TextView)findViewById(R.id.hintText);
 			hintView.setText("");	
 		}
 		timer.setBase(SystemClock.elapsedRealtime());
 	}
-	
+
 	public void resetMetricsImage() {
 		hintsUsed=0;
 		numAttempts=1;//starts at one because does not increment when answered correctly
 	}
-	
+
 	public void nextSet() {
 		resetMetricsImage();
 		setCounter=(setCounter + 1)%allStimulusSets.size();
@@ -270,7 +276,7 @@ public class MainActivity extends Activity implements ViewFactory {
 			currentSet = allStimulusSets.get(index);
 			new LoadHintsBackgroundTask().execute();
 			timer.setBase(SystemClock.elapsedRealtime());
-			
+
 			//System.out.println(currentSet.getName());
 		}
 		if(requestCode==4)
@@ -287,7 +293,7 @@ public class MainActivity extends Activity implements ViewFactory {
 			{
 				openWelcomePage();
 			}
-			
+
 		}
 		if (requestCode == REQUEST_CODE && resultCode == RESULT_OK)
 		{
@@ -301,7 +307,7 @@ public class MainActivity extends Activity implements ViewFactory {
 					currentUser.updateImageScore(currentSet.getName(), imageCounter, thisImageScore);
 					TextView scoreTextView = (TextView)findViewById(R.id.scoretext);
 					scoreTextView.setText("Score: " + String.valueOf(currentUser.getTotalScore()));
-					
+
 					if(hintsUsed==0) {
 						currentUser.increaseStreak();
 					}
@@ -319,56 +325,68 @@ public class MainActivity extends Activity implements ViewFactory {
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
-	
+
 	//Handler for sentence hint
 	public void onHint1ButtonClick(View view) {
-		TextView hintView= (TextView)findViewById(R.id.hintText);
-		hintView.setText(currentSet.getStimuli().get(imageCounter).getHints()[0]);
+		String stimulusName = currentSet.getStimuliNames()[imageCounter];
+		for (Stimulus curr : currentSet.getStimuli()) {
+			if (curr.getName().equalsIgnoreCase(stimulusName)) {
+				speak(curr.getHints()[0]);
+			}
+		}
 		hintsUsed++;
 	}
 
 	//handler for similar word hint
 	public void onHint2ButtonClick(View view) {
-		TextView hintView= (TextView)findViewById(R.id.hintText);
-		hintView.setText(currentSet.getStimuli().get(imageCounter).getHints()[1]);
+		String stimulusName = currentSet.getStimuliNames()[imageCounter];
+		for (Stimulus curr : currentSet.getStimuli()) {
+			if (curr.getName().equalsIgnoreCase(stimulusName)) {
+				speak(curr.getHints()[1]);
+			}
+		}
 		hintsUsed++;
 	}
 
 	//handler for giving up and getting answer
 	public void onHint3ButtonClick(View view) {
-		TextView hintView= (TextView)findViewById(R.id.hintText);
-		hintView.setText(currentSet.getStimuli().get(imageCounter).getHints()[2]);
+		String stimulusName = currentSet.getStimuliNames()[imageCounter];
+		for (Stimulus curr : currentSet.getStimuli()) {
+			if (curr.getName().equalsIgnoreCase(stimulusName)) {
+				speak(curr.getHints()[2]);
+			}
+		}
 		hintsUsed++;
 	}
 
 
-/*-----------------------------------Background Tasks for Cache--------------------------------*/
+	/*-----------------------------------Background Tasks for Cache--------------------------------*/
 	//scale down images based on display size; helps with OOM errors
 	public static int calculateInSampleSize(
-        BitmapFactory.Options options, int reqWidth, int reqHeight) {
-	    // Raw height and width of image
-	    final int height = options.outHeight;
-	    final int width = options.outWidth;
-	    int inSampleSize = 0;
-	    int newHeight = height;
-	    int newWidth = width;
-	    
-	    while (newHeight > reqHeight || newWidth > reqWidth) {
-	    	newHeight = newHeight/2; //should be power of two 
-	    	newWidth = newWidth/2;
-	    	inSampleSize += 2;	
-	    }
-	    if (inSampleSize == 0) { inSampleSize = 2; }
-	    Log.d("async task","in sample size is:" + (inSampleSize));
-	
-	    return inSampleSize;
+			BitmapFactory.Options options, int reqWidth, int reqHeight) {
+		// Raw height and width of image
+		final int height = options.outHeight;
+		final int width = options.outWidth;
+		int inSampleSize = 0;
+		int newHeight = height;
+		int newWidth = width;
+
+		while (newHeight > reqHeight || newWidth > reqWidth) {
+			newHeight = newHeight/2; //should be power of two 
+			newWidth = newWidth/2;
+			inSampleSize += 2;	
+		}
+		if (inSampleSize == 0) { inSampleSize = 2; }
+		Log.d("async task","in sample size is:" + (inSampleSize));
+
+		return inSampleSize;
 	}
-	
 
 
-/*-----------------------------------------------------------------------------------------------*/
-/*-----------------------------------Background Tasks for S3-------------------------------------*/
-/*-----------------------------------------------------------------------------------------------*/
+
+	/*-----------------------------------------------------------------------------------------------*/
+	/*-----------------------------------Background Tasks for S3-------------------------------------*/
+	/*-----------------------------------------------------------------------------------------------*/
 
 	class InitCategoriesBackgroundTask extends AsyncTask<String, Integer, Void> {
 		String s3append = "2"; //until we merge our datasets, all of ours end in 2
@@ -378,7 +396,7 @@ public class MainActivity extends Activity implements ViewFactory {
 				//load the categories
 				URL aURL = new URL("https://s3.amazonaws.com/mosstalkdata/categories" + s3append + ".txt");				
 				Log.d("url", aURL.toString());
-	
+
 				BufferedReader bread = new BufferedReader(new InputStreamReader(aURL.openStream()));
 				int setIdx = 0;
 				String line;
@@ -444,38 +462,38 @@ public class MainActivity extends Activity implements ViewFactory {
 
 	class ImageBackgroundTask extends AsyncTask<String, Integer, Drawable[]> {
 		public String[] remoteURLS = currentSet.getStimuliNames();
-		
+
 		protected Drawable[] doInBackground(String... params) {		
 			try {
 				for(int i = 0; i < remoteURLS.length; i++) {
 					URL aURL = new URL("https://s3.amazonaws.com/mosstalkdata/" +
-						currentSet.getName() +"/" + remoteURLS[i].toLowerCase() + ".jpg");				
+							currentSet.getName() +"/" + remoteURLS[i].toLowerCase() + ".jpg");				
 					Log.d("url", aURL.toString());
 					URLConnection conn = aURL.openConnection();
 					conn.connect();
 					Log.d("asynctask","got connected");
-					
+
 					BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
-					
+
 					//try to decode bitmap without running out of memory
 					BitmapFactory.Options options = new BitmapFactory.Options();
 					options.inJustDecodeBounds = true;
 					Rect r = new Rect(-1,-1,-1,-1);//me
 					BitmapFactory.decodeStream(bis, r, options); //me
-				    Log.d("asynctask","decoded bounds");
+					Log.d("asynctask","decoded bounds");
 					bis.close();
-				    
-				    // Calculate inSampleSize - need to figure out required dims
-				    options.inSampleSize = ImageCache.calculateInSampleSize(options, REQUIRE_WIDTH, REQUIRE_HEIGHT);
-				    			    					
+
+					// Calculate inSampleSize - need to figure out required dims
+					options.inSampleSize = ImageCache.calculateInSampleSize(options, REQUIRE_WIDTH, REQUIRE_HEIGHT);
+
 					// Decode bitmap with inSampleSize set
-				    options.inJustDecodeBounds = false;
-				    conn = aURL.openConnection(); //reopen connection
+					options.inJustDecodeBounds = false;
+					conn = aURL.openConnection(); //reopen connection
 					conn.connect();
 					Log.d("asynctask","got connected second time");
 					bis = new BufferedInputStream(conn.getInputStream());
-				    Bitmap bitmap = BitmapFactory.decodeStream(bis, r, options); 					   
-				    			    
+					Bitmap bitmap = BitmapFactory.decodeStream(bis, r, options); 					   
+
 					imCache.addBitmapToCache( remoteURLS[i] , bitmap);
 					Log.d("async task","added bitmap to cache: " + remoteURLS[i] );
 					if (i==0) { 
@@ -493,7 +511,7 @@ public class MainActivity extends Activity implements ViewFactory {
 			} finally {  }
 			return null;
 		}
-				
+
 		protected void onProgressUpdate(Integer...progress) {
 			int im = progress[0];			
 			if (progress[0] == 0) {
@@ -504,8 +522,20 @@ public class MainActivity extends Activity implements ViewFactory {
 			}
 			Log.d("async task","progress update: loaded " + im);			
 		}	
+
 		protected void onPostExecute(String Result) {			
 		}
+
+
+
 	}
 	
+	public void speak(String words2say) {
+		tts.speak(words2say, TextToSpeech.QUEUE_FLUSH, null);
+	}
+
+	public void onInit(int status) {
+		speak("Welcome to MossTalk Words!");
+	}
+
 }
