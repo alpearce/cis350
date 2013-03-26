@@ -53,6 +53,7 @@ public class MainActivity extends Activity implements ViewFactory {
 	private static final int REQUEST_CODE = 1234;
 	final int REQUIRE_HEIGHT = 1280;
 	final int REQUIRE_WIDTH = 800;
+	private int index;
 	
 	private ImageCache imCache;
 	Button nextButton;
@@ -77,7 +78,10 @@ public class MainActivity extends Activity implements ViewFactory {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		System.out.println("on create");
 		super.onCreate(savedInstanceState);
+		
+		new InitCategoriesBackgroundTask().execute();
 		openWelcomePage();
 	
 		setContentView(R.layout.activity_main);
@@ -93,7 +97,6 @@ public class MainActivity extends Activity implements ViewFactory {
 		
 		timer = (Chronometer) findViewById(R.id.chronometer1);
 		timer.start();
-
 		
 		TextView txtView = (TextView)findViewById(R.id.chronometer1);
 		TextView scoreView = (TextView)findViewById(R.id.scoretext);
@@ -109,8 +112,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		
 		//new ImageBackgroundTask().execute();
 
-				
-		new InitCategoriesBackgroundTask().execute();
+	
 
 		addListenerForButton();
 
@@ -125,6 +127,7 @@ public class MainActivity extends Activity implements ViewFactory {
 	private void openWelcomePage() {
 		Intent welcome = new Intent(this, WelcomeActivity.class);
 		startActivityForResult(welcome, 3);
+		
 	}
 
 
@@ -239,8 +242,15 @@ public class MainActivity extends Activity implements ViewFactory {
 	{
 		if (requestCode == 3) {
 			//this is the index of the allStimulusSetsArray
-			int index = data.getExtras().getInt("indexOfSetsArray");
+			index = data.getExtras().getInt("indexOfSetsArray");
+			System.out.println(index);
+			System.out.println(allStimulusSets.get(index).getName());
+			//new InitCategoriesBackgroundTask().execute();
 			currentSet = allStimulusSets.get(index);
+			new LoadHintsBackgroundTask().execute();
+			timer.setBase(SystemClock.elapsedRealtime());
+			
+			//System.out.println(currentSet.getName());
 		}
 		if (requestCode == REQUEST_CODE && resultCode == RESULT_OK)
 		{
@@ -340,8 +350,8 @@ public class MainActivity extends Activity implements ViewFactory {
 					Log.d("initcat","stimulusSets[" +setIdx+ "] = " + line);
 					setIdx++;
 				}
-				currentSet = allStimulusSets.get(0);//set current set to first set
-				new LoadHintsBackgroundTask().execute();
+				//currentSet = allStimulusSets.get(0);//set current set to first set
+				//new LoadHintsBackgroundTask().execute();
 			} catch (MalformedURLException e) {
 				// TODO we should make a crash/error screen
 				e.printStackTrace();
