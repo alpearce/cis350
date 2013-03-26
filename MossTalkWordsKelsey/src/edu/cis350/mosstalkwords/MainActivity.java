@@ -73,7 +73,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 
 	//game metrics--MOST OF THESE WENT TO THE USER CLASS AFTER REFACTORING
 	int hintsUsed=0;
-	int numAttempts=1;//starts at one because does not increment when answered correctly
+	int numAttempts=0;//starts at one because does not increment when answered correctly
 	///end metrics
 
 	int imageCounter=0;
@@ -171,7 +171,8 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			public void onClick(View arg0) {
 				currentUser.updateImageScore(currentSet.getName(), imageCounter, 0);
 				currentUser.streakEnded(currentSet);
-
+				hintsUsed=3;
+				numAttempts=3;
 				nextImage();
 			}
 		});
@@ -224,7 +225,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 
 	public void resetMetricsImage() {
 		hintsUsed=0;
-		numAttempts=1;//starts at one because does not increment when answered correctly
+		numAttempts=0;//starts at one because does not increment when answered correctly
 	}
 
 	public void nextSet() {
