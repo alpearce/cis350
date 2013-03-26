@@ -17,19 +17,8 @@ public class WelcomeActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 		setContentView(R.layout.welcome_page);
-		Button b = (Button)findViewById(R.id.livingeasy);
-		
-		b.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				finish();
-				
-			}
-		});
 		
 	}
-
-		
 	
 	public void onClickLivingEasy(View view) {
 		Intent i = getIntent();

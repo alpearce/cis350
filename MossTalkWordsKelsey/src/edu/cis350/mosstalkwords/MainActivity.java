@@ -80,13 +80,11 @@ public class MainActivity extends Activity implements ViewFactory {
 	protected void onCreate(Bundle savedInstanceState) {
 		System.out.println("on create");
 		super.onCreate(savedInstanceState);
-<<<<<<< HEAD
+
 		
 		new InitCategoriesBackgroundTask().execute();
 		openWelcomePage();
-=======
-		//openWelcomePage();
->>>>>>> 016c7d3226f256adc4b99e4627d7ca70a4ba9342
+
 	
 		setContentView(R.layout.activity_main);
 		
