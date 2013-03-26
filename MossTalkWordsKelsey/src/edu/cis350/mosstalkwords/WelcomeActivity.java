@@ -25,7 +25,7 @@ public class WelcomeActivity extends Activity {
 		setContentView(R.layout.welcome_page);
 		TextView welcomeView = (TextView)findViewById(R.id.welcomeView);
 		//txtView.setTextColor(Color.);
-		Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-BoldCondensed.ttf");
+		Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Bold.ttf");
 		welcomeView.setTypeface(typeface);
 		//Button b1 = (Button)findViewById(R.id.livingeasy);
 		//b1.setAlpha((float) 0.8);
