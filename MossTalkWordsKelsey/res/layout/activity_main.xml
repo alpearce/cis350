@@ -99,6 +99,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop = "true"
         android:drawableLeft = "@drawable/finger" />
+    	
 <!-- 
     <Button
         android:id="@+id/nextSetButton"
