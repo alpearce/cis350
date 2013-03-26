@@ -50,11 +50,30 @@ public class EndSetActivity extends Activity {
 			AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 			builder.setTitle("          Congratulations!")//hackish extra spaces to center the title since not an option
 				.setView(layout)
-				.setPositiveButton(R.string.restart, new DialogInterface.OnClickListener()
+				.setNeutralButton(R.string.restart, new DialogInterface.OnClickListener()
 				{
 					public void onClick(DialogInterface dialog, int id)
 					{
 						//restart set
+						Intent i=getIntent();
+						i.putExtra("Main Menu", false);
+						i.putExtra("Replay Set", true);
+						i.putExtra("Next Set", false);
+						setResult(RESULT_OK, i);
+						finish();
+					}
+				})
+				.setPositiveButton(R.string.nextSet, new DialogInterface.OnClickListener()
+				{
+					public void onClick(DialogInterface dialog, int id)
+					{
+						//restart set
+						Intent i=getIntent();
+						i.putExtra("Main Menu", false);
+						i.putExtra("Replay Set", false);
+						i.putExtra("Next Set", true);
+						setResult(RESULT_OK, i);
+						finish();
 					}
 				})
 				.setNegativeButton(R.string.menu, new DialogInterface.OnClickListener()
@@ -62,6 +81,12 @@ public class EndSetActivity extends Activity {
 					public void onClick(DialogInterface dialog, int id)
 					{
 						//go to main menu
+						Intent i=getIntent();
+						i.putExtra("Main Menu", true);
+						i.putExtra("Replay Set", false);
+						i.putExtra("Next Set", false);
+						setResult(RESULT_OK, i);
+						finish();
 					}
 				});
 					

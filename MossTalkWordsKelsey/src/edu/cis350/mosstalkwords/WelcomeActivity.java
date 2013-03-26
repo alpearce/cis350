@@ -1,11 +1,9 @@
 package edu.cis350.mosstalkwords;
 
-<<<<<<< HEAD
-=======
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
->>>>>>> 488055a70361f41d76224e9c39e906b32e8ca3fa
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,7 +17,6 @@ public class WelcomeActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 		setContentView(R.layout.welcome_page);
-<<<<<<< HEAD
 		Button b = (Button)findViewById(R.id.livingeasy);
 		
 		b.setOnClickListener(new OnClickListener() {
@@ -31,9 +28,9 @@ public class WelcomeActivity extends Activity {
 		});
 		
 	}
-=======
+
 		
-	}
+	
 	public void onClickLivingEasy(View view) {
 		Intent i = getIntent();
 		i.putExtra("indexOfSetsArray", 0);
@@ -46,6 +43,5 @@ public class WelcomeActivity extends Activity {
 	public void onClickLivingHard(View view) {
 		 
 	}
->>>>>>> 488055a70361f41d76224e9c39e906b32e8ca3fa
 
 }

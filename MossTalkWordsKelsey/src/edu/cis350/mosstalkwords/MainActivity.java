@@ -78,7 +78,7 @@ public class MainActivity extends Activity implements ViewFactory {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		openWelcomePage();
+		//openWelcomePage();
 	
 		setContentView(R.layout.activity_main);
 		
@@ -173,10 +173,11 @@ public class MainActivity extends Activity implements ViewFactory {
 	}
 	public void finishedSet()
 	{
+		imSwitcher.setImageDrawable(null);
 		Intent endSet=new Intent(this, EndSetActivity.class);
 		endSet.putExtra("User", currentUser);
 		endSet.putExtra("currentSet", currentSet.getName());
-		startActivity(endSet);
+		startActivityForResult(endSet,4);
 	}
 	public void nextImage() {
 		currentUser.updateImageEfficiency(currentSet.getName(), imageCounter, hintsUsed, numAttempts);
@@ -227,7 +228,18 @@ public class MainActivity extends Activity implements ViewFactory {
 		TextView hintView= (TextView)findViewById(R.id.hintText);
 		hintView.setText("");
 	}	
-
+	public void replaySet()
+	{
+		imageCounter=0;
+		resetMetricsImage();
+		currentImage = currentSet.getStimuli().get(imageCounter).getName();
+		Bitmap im = imCache.getBitmapFromCache(currentImage); 
+		if (im == null) { Log.d("nextImage","null bitmap- that's bad/" + currentImage); } 
+		Drawable drawableBitmap = new BitmapDrawable(getResources(),im);
+		imSwitcher.setImageDrawable(drawableBitmap);
+		timer.setBase(SystemClock.elapsedRealtime());
+		//currentImage = currentSet.getStimuli().get(imageCounter).getName();
+	}
 	public void onNextSetButtonClick(View view) {
 		nextSet();			
 	}
@@ -248,6 +260,22 @@ public class MainActivity extends Activity implements ViewFactory {
 			//this is the index of the allStimulusSetsArray
 			int index = data.getExtras().getInt("indexOfSetsArray");
 			currentSet = allStimulusSets.get(index);
+		}
+		if(requestCode==4)
+		{
+			if(data.getBooleanExtra("Replay Set", false))
+			{
+				replaySet();
+			}
+			else if(data.getBooleanExtra("Next Set", false))
+			{
+				nextSet();
+			}
+			else if(data.getBooleanExtra("Main Menu", true))
+			{
+				openWelcomePage();
+			}
+			
 		}
 		if (requestCode == REQUEST_CODE && resultCode == RESULT_OK)
 		{
