@@ -78,7 +78,10 @@ public class User implements Serializable {
 	}
 	
 	
-	
+	public int getStarScore(String stimulusSetName)
+	{
+		return starsForSets.get(stimulusSetName);
+	}
 	public void calculateStarScore(String stimulusSetName)
 	{
 		int temp[]=stimulusSetScores.get(stimulusSetName);
@@ -98,7 +101,14 @@ public class User implements Serializable {
 			starsForSets.put(stimulusSetName, Integer.valueOf(1));
 		}
 	}
-	
+	public int getAverageEfficiencyPercent(String stimulusSetName)
+	{
+		return percentEfficiencyForSets.get(stimulusSetName);
+	}
+	public int getLongestStreak(String stimulusSetName)
+	{
+		return longestStreakForSets.get(stimulusSetName);
+	}
 	public void calculateAverageEfficiencyPercent(String stimulusSetName)
 	{
 		int temp[][]=stimulusSetEfficiencies.get(stimulusSetName);

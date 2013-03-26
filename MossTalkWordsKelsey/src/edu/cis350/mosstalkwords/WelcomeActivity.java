@@ -1,5 +1,6 @@
 package edu.cis350.mosstalkwords;
 
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -29,6 +30,7 @@ public class WelcomeActivity extends Activity {
 		//Button b1 = (Button)findViewById(R.id.livingeasy);
 		//b1.setAlpha((float) 0.8);
 	}
+	
 	public void onClickLivingEasy(View view) {
 		Intent i = getIntent();
 		i.putExtra("indexOfSetsArray", 0);
@@ -36,10 +38,28 @@ public class WelcomeActivity extends Activity {
 		finish();
 	}
 	public void onClickLivingMedium(View view) {
-		
+		Intent i = getIntent();
+		i.putExtra("indexOfSetsArray", 1);
+		setResult(RESULT_OK, i);
+		finish();
 	}
 	public void onClickLivingHard(View view) {
-		 
+		Intent i = getIntent();
+		i.putExtra("indexOfSetsArray", 2);
+		setResult(RESULT_OK, i);
+		finish();
+	}
+	public void onClickNonLivingEasy(View view) {
+		Intent i = getIntent();
+		i.putExtra("indexOfSetsArray", 3);
+		setResult(RESULT_OK, i);
+		finish();
+	}
+	public void onClickNonLivingHard(View view) {
+		Intent i = getIntent();
+		i.putExtra("indexOfSetsArray", 4);
+		setResult(RESULT_OK, i);
+		finish();
 	}
 
 }

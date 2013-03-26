@@ -1,11 +1,11 @@
 package edu.cis350.mosstalkwords;
 
-import java.io.Serializable;
+
 import java.util.ArrayList;
 
 /*This class takes in a name that represents the name of the stimulus set in string form. A stimulus set is just a collection of images, grouped based on difficulty or category
  * eventually. There are setter and getter methods.*/
-public class StimulusSet implements Serializable {
+public class StimulusSet {
 	String setName;
 	ArrayList<Stimulus> stimuli;
 	
