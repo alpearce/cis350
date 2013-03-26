@@ -1,0 +1,10 @@
+computer
+textbook
+football
+microwave
+refrigerator
+basketball
+pocket
+zipper
+soccerball
+gloves

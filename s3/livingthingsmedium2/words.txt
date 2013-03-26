@@ -1,0 +1,10 @@
+lizard
+monkey
+squirrel
+toucan
+pinecone
+flower
+carrot
+tomato
+rooster
+apple

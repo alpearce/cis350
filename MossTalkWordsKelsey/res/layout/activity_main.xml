@@ -6,16 +6,7 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
-    <!--
-           <ImageView
-         android:id="@+id/imageView1"
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:layout_centerInParent="true"
-         android:scaleType="center"
-         android:src="@drawable/applesmall" />
-    -->
-
+  
     <ImageSwitcher
         android:id="@+id/ImageSwitcher1"
         android:layout_width="match_parent"
@@ -92,13 +83,6 @@
         android:layout_marginLeft = "7sp"
         android:text="@string/score" />
 
-    <Button
-        android:id="@+id/btnChangeImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop = "true"
-        android:drawableLeft = "@drawable/finger" />
 <!-- 
     <Button
         android:id="@+id/nextSetButton"
@@ -119,5 +103,13 @@
         android:layout_marginLeft ="7sp"
         android:textSize="30sp"
         android:text="Chronometer" />
+
+    <Button
+        android:id="@+id/btnChangeImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:drawableLeft="@drawable/finger" />
 
 </RelativeLayout>

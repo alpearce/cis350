@@ -28,7 +28,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
         <activity android:name="EndSetActivity"></activity>
+        <activity android:name="WelcomeActivity"></activity>
+    
     </application>
 
 </manifest>

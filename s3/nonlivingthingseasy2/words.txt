@@ -1,0 +1,10 @@
+chair
+table
+lamp
+bed
+spoon
+house
+shirt
+shoe
+hat
+money

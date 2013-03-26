@@ -104,12 +104,7 @@ public class MainActivity extends Activity implements ViewFactory {
 		scoreView.setTypeface(typeface);
 		//loadData();
 		
-		
-		/*new InitCategoriesBackgroundTask().execute();**********************REMEMBER TO UNCOMMENT THIS***/
-		
-		//new ImageBackgroundTask().execute();
-
-				
+					
 		new InitCategoriesBackgroundTask().execute();
 
 		addListenerForButton();

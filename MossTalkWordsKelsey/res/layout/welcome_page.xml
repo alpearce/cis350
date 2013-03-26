@@ -2,50 +2,82 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
-      <TextView
+    android:orientation="vertical"
+    android:background="@drawable/white" >
+    
+
+    <Button
+        android:id="@+id/livinghard"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/nonlivinghard"
+        android:layout_below="@+id/livingmedium"
+        android:onClick="onClickLivingHard"
+        android:text="Living things | Hard" />
+
+    <TextView
+        android:id="@+id/welcomeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome" 
-        android:textSize = "30sp"
-        android:layout_alignParentTop = "true"
-        android:layout_centerHorizontal = "true"
-        />
-      <Button
-          android:id ="@+id/livingeasy"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignParentLeft = "true"
-          android:onClick="onClickLivingEasy"
-          android:text="Living easy" />
-      <Button
-          android:id ="@+id/livingmedium"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_below = "@id/livingeasy"
-          android:onClick="onClickLivingMedium"
-          android:text="living medium" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Welcome!"
+        android:textColor="#9933CC"
+        android:textSize="50sp" 
+        android:shadowColor="#999999"
+        android:shadowDx="3"
+        android:shadowDy="3"
+        android:shadowRadius="0.01" />
 
-      <Button
-          android:id="@+id/livinghard"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_below = "@id/livingmedium"
-          android:onClick="onClickLivingHard"
-          android:text="living hard" />
-        <Button
-          android:id="@+id/nonlivingeasy"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_below = "@id/livinghard"
-          android:onClick="onClickNonLivingEasy"
-          android:text="nonliving easy" />
-        <Button
-          android:id="@+id/nonlivinghard"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_below = "@id/nonlivingeasy"
-          android:onClick="onClickNonLivingHard"
-          android:text="nonliving hard" />
+    <Button
+        android:id="@+id/nonlivingeasy"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/livingeasy"
+        android:layout_below="@+id/livingeasy"
+        android:onClick="onClickNonLivingEasy"
+        android:text="Non-living things | Easy" />
+
+    <Button
+        android:id="@+id/livingmedium"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/nonlivingeasy"
+        android:layout_below="@+id/nonlivingeasy"
+        android:layout_centerInParent="true"
+        android:onClick="onClickLivingMedium"
+        android:text="Living things | Medium" />
+
+    <Button
+        android:id="@+id/nonlivinghard"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/livingmedium"
+        android:layout_below="@+id/livinghard"
+        android:onClick="onClickNonLivingHard"
+        android:text="Non-living things | Hard" />
+
+    <Button
+        android:id="@+id/livingeasy"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="21dp"
+        android:onClick="onClickLivingEasy"
+        android:text="Living things | Easy" 
+        />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/welcomeView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:text="Choose a word set:"
+        android:textSize="20sp" 
+        android:textStyle="italic" />
 
 </RelativeLayout>

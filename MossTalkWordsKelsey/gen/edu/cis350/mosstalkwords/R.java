@@ -26,8 +26,10 @@ public final class R {
         public static final int ic_action_call=0x7f020002;
         public static final int ic_action_microphone=0x7f020003;
         public static final int ic_launcher=0x7f020004;
-        public static final int onestar=0x7f020005;
-        public static final int score=0x7f020006;
+        public static final int newspaper=0x7f020005;
+        public static final int onestar=0x7f020006;
+        public static final int score=0x7f020007;
+        public static final int white=0x7f020008;
     }
     public static final class id {
         public static final int Completeness=0x7f09000b;
@@ -40,16 +42,18 @@ public final class R {
         public static final int hintText=0x7f090003;
         public static final int improveCompleteness=0x7f09000c;
         public static final int linearLayout1=0x7f090001;
-        public static final int livingeasy=0x7f09000e;
-        public static final int livinghard=0x7f090010;
-        public static final int livingmedium=0x7f09000f;
-        public static final int menu_settings=0x7f090013;
-        public static final int nonlivingeasy=0x7f090011;
-        public static final int nonlivinghard=0x7f090012;
+        public static final int livingeasy=0x7f090013;
+        public static final int livinghard=0x7f09000e;
+        public static final int livingmedium=0x7f090010;
+        public static final int menu_settings=0x7f090015;
+        public static final int nonlivingeasy=0x7f090012;
+        public static final int nonlivinghard=0x7f09000f;
         public static final int scoreBar=0x7f09000a;
         public static final int scoretext=0x7f090008;
         public static final int speakButton=0x7f090007;
         public static final int streak=0x7f09000d;
+        public static final int textView2=0x7f090014;
+        public static final int welcomeView=0x7f090011;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
