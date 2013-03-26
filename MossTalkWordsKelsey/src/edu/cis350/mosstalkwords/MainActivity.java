@@ -90,7 +90,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		openWelcomePage();
 
 
-		tts = new TextToSpeech(this, (OnInitListener) this);
+		tts = new TextToSpeech(this, this);
 
 		setContentView(R.layout.activity_main);
 
