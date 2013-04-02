@@ -23,12 +23,20 @@
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         />
+     <TextView
+        android:id="@+id/Message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="" 
+        android:layout_below="@id/scoreBar"
+        />
+    
     <TextView
         android:id="@+id/Completeness"
          android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Completeness: " 
-        android:layout_below="@id/scoreBar"
+        android:layout_below="@id/Message"
         />
     <TextView
         android:id="@+id/improveCompleteness"

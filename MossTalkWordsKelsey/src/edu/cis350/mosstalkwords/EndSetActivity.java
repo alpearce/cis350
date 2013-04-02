@@ -40,6 +40,18 @@ public class EndSetActivity extends Activity {
 	    score.setNumStars(starScore);
 	    score.setRating(starScore);
 	    
+	    TextView message=(TextView) layout.findViewById(R.id.Message);
+	    String msg;
+	    switch (starScore) {
+	    	case 1: msg = "Lone stars are only a good thing on the Texas flag. Try harder next time!"; break;
+	    	case 2: msg = "Two stars are better than one, but less good than three."; break;
+	    	case 3: msg = "Three stars is absolutely average. Step up your game!"; break;
+	    	case 4: msg = "Four stars. Good job, but don't get cocky."; break;
+	    	case 5: msg = "Five stars. If the picture was you, the word would be \"awesome\""; break;
+	    	default: msg = "";
+	    }
+	    message.setText(msg);
+	    
 	    TextView completeness=(TextView) layout.findViewById(R.id.Completeness);
 	    String efficiencyPercent=new Integer(currentUser.getAverageEfficiencyPercent(currentSet)).toString();
 	    completeness.setText(completeness.getText()+efficiencyPercent+"%");

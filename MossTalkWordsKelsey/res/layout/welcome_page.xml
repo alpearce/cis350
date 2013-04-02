@@ -45,21 +45,21 @@
     <Button
         android:id="@+id/livingeasy"
         style="@style/ButtonText"
-        android:background="@drawable/btn_blue_matte"
+        android:background="@drawable/button_blue"
         android:onClick="onClickLivingEasy"
         android:text="Living things | Easy" />
 
     <Button
         android:id="@+id/nonlivingeasy"
         style="@style/ButtonText"
-        android:background="@drawable/btn_blue_matte"
+        android:background="@drawable/button_blue"
         android:onClick="onClickNonLivingEasy"
         android:text="Non-living things | Easy" />
 
     <Button
         android:id="@+id/livingmedium"
         style="@style/ButtonText"
-        android:background="@drawable/btn_orange_matte"
+        android:background="@drawable/button_orange"
        android:onClick="onClickLivingMedium"
         android:text="Living things | Medium" />
 
@@ -67,14 +67,14 @@
         android:id="@+id/nonlivinghard"
         style="@style/ButtonText"
         android:layout_marginBottom="37dp"
-        android:background="@drawable/btn_red_matte"
+        android:background="@drawable/button_red"
         android:onClick="onClickNonLivingHard"
         android:text="Non-living things | Hard" />
 
     <Button
         android:id="@+id/livinghard"
         style="@style/ButtonText"
-        android:background="@drawable/btn_red_matte"
+        android:background="@drawable/button_red"
         android:onClick="onClickLivingHard"
         android:text="Living things | Hard" />
     
