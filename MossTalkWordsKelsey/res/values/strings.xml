@@ -15,6 +15,26 @@
  	<string name="menu">Main Menu</string>
  	<string name="congrats">Congratulations!</string>
 
+ 	<string name="one_star">Lone stars are only a good thing on the Texas flag. Try harder next time!</string>
+ 	<string name="two_star">Two stars are better than one, but less good than three.</string>
+ 	<string name="three_star">Three stars is mediocrity. Step up your game!</string>
+ 	<string name="four_star">Four stars. Good job, but don\'t get cocky.</string>
+ 	<string name="five_star">Five stars. If the picture was you, the word would be "awesome."</string>
+ 	
+ 	<style name="ButtonText">
+        <item name="android:layout_width">400dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">2</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingRight">15dp</item>
+    </style>		
 	
 
     

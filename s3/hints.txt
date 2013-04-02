@@ -1,0 +1,388 @@
+
+Living Things: hard
+elephant
+1. lint
+2. irrelevant 
+3. squint
+
+asparagus
+1.perilous
+2.horrendous
+3. disparage us
+
+avocado
+1. colorado
+2. bravado
+3. deserado
+
+broccoli
+1. hockley
+2. stockley
+3. lockely
+
+cauliflower
+1.thundershower
+2.superpower
+3.devour
+
+giraffe
+1. carafe
+2.telegraph
+3. behalf
+
+octopus
+1.platypus
+2.sourpuss
+3. wuss
+
+pineapple
+1. Snapple
+2. Dapple
+3. Chapel
+
+pumpkin
+1. bumpkin
+2. frump kin
+3. chump grin
+
+strawberry
+1. honorary
+2. saw ferry
+3. nondairy
+
+
+MEDIUM LIVING THINGS
+lizard
+1. gizard
+2. wizard
+3. blizzard
+
+pinecone
+1. whine prone
+2. swine clone
+3. crime zone
+
+
+monkey
+1. funky
+2. chunky
+3. junky
+
+
+tomato
+1. plato
+2. potato
+3. vibrato
+
+flower
+1. power
+2. tower
+3. shower
+
+carrot
+1. garrot
+2. parrot 
+3. bear it
+
+rooster
+1. booster
+2. seduced her
+3. produced purr
+
+squirrel
+1. pearl
+2. girl
+3. epidural
+
+apple
+1. chapel
+2. dapple
+3. grapple
+
+toucan
+1. you can
+2. blue man
+3. new van 
+
+
+Nonliving Things - easy
+Chair
+1. hair 
+2. prayer
+3. billionaire 
+ 
+Table
+1. fable
+2. label
+3. unstable
+
+Lamp
+1. vamp
+2. cramp
+3. stamp
+
+Bed
+1. head 
+2. lead
+3. fed
+
+Spoon
+1. moon
+2. loon
+3. tune
+
+House
+1. mouse
+2. blouse
+3. spouse
+
+Shirt
+1. blurt
+2. hurt
+3. flirt
+
+Shoe
+
+Canoe
+Stew
+Shampoo
+
+Hat
+
+Rat
+Bat
+Flat
+
+Money
+
+Bunny
+Honey
+Sunny
+
+Non-living things hard
+computer
+1. pewter
+2.tutor
+3.scooter
+
+textbook
+1.next cook
+2.took
+3. next look
+
+microwave
+1. misbehave
+2. engrave
+3. I don’t bathe
+
+refrigerator
+1.illustrator
+2.crater
+3. incinerator
+
+basketball
+1. forestall
+2. overhaul
+3.waterfall
+
+football
+1. footfall
+2. soot wall
+3. put mall
+
+soccerball
+1. locker wall 
+2. cannonball
+3. cholesterol 
+
+pocket
+1. sprocket
+2. rocket
+3. docket
+
+zipper
+1. chipper
+2. flipper
+3. stripper
+
+gloves
+1. loves
+2. doves
+3. shoves
+apple
+This is a red fruit that grows on trees.
+chapel
+apple
+------------------------------------------------------------------------------------------------
+frog
+This is a slimy animal that says "Ribbit." Their legs are served at snobby parties.
+Smog, jog, flog
+	
+bird
+This is a flying, feathered animal that poops on cars in parking lots.
+turd, curd, absurd
+
+cat
+This is a lazy, furry pet. Sometimes they purr, sometimes they try to scratch your face off. 
+bat, fat, democrat
+
+corn
+This is a yellow vegetable that can be eaten off the cob. It's also a way to describe a bad joke. 
+born, lovelorn, shorn
+
+cow
+This is a farm animal that produces milk. If I called your momma this, you'd be mad.
+how, chow, meow
+
+dog
+This is a pet that barks. When husbands mess up, wives put them in the "___ house."
+fog, anolog, monologue
+
+rice
+This food comes in many varieties, such as basmati.
+mice, precise, advice
+
+bear
+This animal hibernates during the winter
+	bearhint2">stair, billionaire, declare
+	bearhint3">bear
+	treehint1">This is a large plant that children climb and that provides shade
+	treehint2">free,spree,goatee
+	treehint3">tree
+
+
+
+
+
+
+	carrothint1">This is an orange vegetable grown from the ground
+	carrothint2">tarot
+	carrothint3">carrot
+	elephanthint1">This is a large animal that can be found in africa. 
+	elephanthint2">lint
+	elephanthint3">elephant
+	flowerhint1">This is a plant that grows from the ground and has petals.
+	flowerhint2">power
+	flowerhint3">flower
+	tomatohint1">This is a red vegetable that is used to make ketchup.
+	tomatohint2">plato
+	tomatohint3">tomato
+	asparagushint1">This is a green vegetable with a stalk
+	asparagushint2">horrendous
+	asparagushint3">asparagus
+	avocadohint1">This is a green vegetable is used to make guacomole.
+	avocadohint2">desperado
+	avocadohint3">avocado
+	broccolihint1">This is a green vegetable that looks like a tree.
+	broccolihint2">hawkley
+	broccolihint3">broccoli
+	cauliflowerhint1">This is a white vegetable that looks like broccoli
+	cauliflowerhint2">shower
+	cauliflowerhint3">cauliflower
+	giraffehint1">This is an animal found in africa with a very long neck.
+	giraffehint2">staff
+	giraffehint3">giraffe
+	octopushint1"> This is a sea animal with 8 tentacles
+	octopushint2">marvelous
+	octopushint3">octpus
+	pineapplehint1"> This is a fruit with a thick green shell and yellow insides. It is grown in tropical climates
+	pineapplehint2">dapple
+	pineapplehint3">pineapple
+	pineconehint1">This is a large seed that fall off of pine treest
+	pineconehint2">tone
+	pineconehint3">pinecone
+	pumpkinhint1">This is a vegetable that is carved during Halloween
+	pumpkinhint2">drunken
+	pumpkinhint3">pumpkin
+	roosterhint1">This is the male version of a chicken. 
+	roosterhint2">booster
+	roosterhint3">rooster
+	chairhint1">This is a piece of furniture that you sit on
+	chairhint2">hair
+	chairhint3">chair
+	tablehint1">This is a piece of furniture to put things on. 
+	tablehint2">fable
+	tablehint3">table
+	lamphint1">This is used to light up a room. 
+	lamphint2">cramp
+	lamphint3">lamp
+	bedhint1">This is a piece of furniture that you sleep on. 
+	bedhint2">head
+	bedhint3">bed
+	phonehint1">This is used to call people. 
+	phonehint2">bone
+	phonehint3">phone
+	househint1">This is a type of building that people live in. 
+	househint2">mouse
+	househint3">house
+	shirthint1">This is a piece of clothing that is worn on the upper body.
+	shirthint2">hurt
+	shirthint3">shirt
+	shoehint1">This is worn on your feet to walk with.
+	shoehint2">new
+	shoehint3">shoe
+	hathint1"> This is worn on your head
+	hathint2">chat
+	hathint3">hat
+	moneyhint1">This is currency used to pay for things.
+	moneyhint2">runny
+	moneyhint3">money
+	computerhint1">This is technology with brands such as Mac or PC
+	computerhint2">scooter
+	computerhint3">computer
+	textbookhint1">This is a book used to study school subjects.
+	textbookhint2">look
+	textbookhint3">textbook
+	televisionhint1">This used to watch movies and shows.
+	televisionhint2">precision
+	televisionhint3">television
+	refrigeratorhint1">This is used to keep food cold. 
+	refrigeratorhint2">crater
+	refrigeratorhint3">refrigerator
+	basketballhint1">This is a ball that is thrown into hoops in sports.
+	basketballhint2">tall
+	basketballhint3">basketball
+	footballhint1">This is a ball thrown during the Super Bowl.
+	footballhint2">law
+	footballhint3">football
+	soccerballhint1">This is kicked around and is popular in latin america.
+	soccerballhint2">mall
+	soccerballhint3">soccerball
+	pockethint1">This is sewn on your pants to store your belongings.
+	pockethint2">locket
+	pockethint3">pocket
+	zipperhint1">Many jackets have these instead of buttons to close it.
+	zipperhint2">flipper
+	zipperhint3">zipper
+	gloveshint1">This keeps your hands warm during the winter.
+	gloveshint2">doves
+	gloveshint3">gloves
+	beanhint1">This is a magical fruit that makes you toot.
+	beanhint2">Teen, caffeine, obscene
+	beanhint3">Bean
+	strawberryhint1">This is red fruit often made into jam
+	strawberryhint2">honorary, saw ferry, nondairy
+	strawberryhint3">strawberry	
+	lizardhint1">Some of these reptile can change the color of their scales
+	lizardhint2">gizard, wizard, blizzard
+	lizardhint3">lizard
+	monkeyhint1">These animals like bananas
+	monkeyhint2">funky, chunky, junky
+	monkeyhint3">monkey
+	squirrelhint1">This animal has a big bushy tail and likes acorns
+	squirrelhint2">pearl, girl, epidural
+	toucanhint1">This bird has a large colorful beak
+	toucanhint2">you can, blue man, new van
+	
+
+
+	speak">Speak
+
+	
+
+    
+
+</resources>
+
+
+

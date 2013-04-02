@@ -1,0 +1,5 @@
+livingthingseasy2
+livingthingsmedium2
+livingthingshard2
+nonlivingthingseasy2
+nonlivingthingshard2

@@ -1,0 +1,10 @@
+frog
+bird
+cat
+corn
+cow
+dog
+rice
+bear
+tree
+bean
