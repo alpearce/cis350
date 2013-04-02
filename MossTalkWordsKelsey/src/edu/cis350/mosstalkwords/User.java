@@ -3,6 +3,8 @@ package edu.cis350.mosstalkwords;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import android.util.Log;
+
 public class User implements Serializable {
 	//score, speed, efficiency, streaks
 	//int longestStreak=0;
@@ -113,20 +115,22 @@ public class User implements Serializable {
 	public void calculateAverageEfficiencyPercent(String stimulusSetName)
 	{
 		int temp[][]=stimulusSetEfficiencies.get(stimulusSetName);
-		int maxHintsUsed=temp[0].length*3;
-		int maxNumberOfAttempts=temp[1].length*maxAttemptsAllowed;
+		int maxHintsUsed=temp.length*3;
+		int maxNumberOfAttempts=temp.length*maxAttemptsAllowed;
+		System.out.printf("max hints used:%d max number of attempts: %d", maxHintsUsed, maxNumberOfAttempts);
+		Log.d("efficiency avg calc","max hints used: "+ String.valueOf(maxHintsUsed)+" max number of attempts: "+ String.valueOf(maxNumberOfAttempts));
 		int userHintsUsed=0;
 		int userNumberOfAttempts=0;
-		for(int i: temp[0])
+		for(int i[]: temp)
 		{
-			userHintsUsed+=i;
-		}
-		for(int i: temp[1])
-		{
-			userNumberOfAttempts+=i;
+			userHintsUsed+=i[0];
+			userNumberOfAttempts+=i[1];
+		
 		}
 		int hintsEfficiencyComponent=(50-userHintsUsed*50/maxHintsUsed);
+		Log.d("hints efficiency comp.","hints Efficiency Component: "+ String.valueOf(hintsEfficiencyComponent));
 		int attemptsEfficiencyComponent=(50-userNumberOfAttempts*50/maxNumberOfAttempts);
+		Log.d("attempts efficiency comp.","attempts Efficiency Component: "+ String.valueOf(attemptsEfficiencyComponent));
 		int percentEfficiency=hintsEfficiencyComponent+attemptsEfficiencyComponent;
 		percentEfficiencyForSets.put(stimulusSetName, Integer.valueOf(percentEfficiency));
 		
