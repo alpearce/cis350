@@ -79,5 +79,63 @@
         android:text="Living things | Hard" />
     
     </LinearLayout>
-
+     <LinearLayout 
+          android:id="@+id/scorelayout"
+          android:layout_width="wrap_content"
+  		  android:layout_height="wrap_content"
+  		  android:layout_centerVertical="true"
+  		  android:layout_centerHorizontal="true"
+  		  android:layout_toRightOf="@id/buttonlayout"
+  		  android:orientation="vertical" >
+     <RatingBar 
+        android:id="@+id/scoreBar1"
+        android:numStars="3"
+        android:rating="0"
+        style="?android:attr/ratingBarStyleIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="9.5dp"
+        android:paddingBottom="9.5dp"
+        />
+     <RatingBar 
+        android:id="@+id/scoreBar2"
+        android:numStars="3"
+        android:rating="0"
+        style="?android:attr/ratingBarStyleIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="9.5dp"
+        android:paddingBottom="9.5dp"
+        />
+     <RatingBar 
+        android:id="@+id/scoreBar3"
+        android:numStars="3"
+        android:rating="0"
+        style="?android:attr/ratingBarStyleIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="9.5dp"
+        android:paddingBottom="9.5dp"
+        />
+     <RatingBar 
+        android:id="@+id/scoreBar4"
+        android:numStars="3"
+        android:rating="0"
+        style="?android:attr/ratingBarStyleIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="9.5dp"
+        android:paddingBottom="9.5dp"
+        />
+     <RatingBar 
+        android:id="@+id/scoreBar5"
+        android:numStars="3"
+        android:rating="0"
+        style="?android:attr/ratingBarStyleIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="9.5dp"
+        android:paddingBottom="9.5dp"
+        />
+		</LinearLayout>
 </RelativeLayout>
