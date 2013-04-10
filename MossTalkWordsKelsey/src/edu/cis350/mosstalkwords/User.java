@@ -85,10 +85,6 @@ public class User implements Serializable {
 	{
 		return starsForSets.get(stimulusSetName);
 	}
-	public boolean containsStarScore(String stimulusSetName)
-	{
-		return starsForSets.containsKey(stimulusSetName);
-	}
 	public void calculateStarScore(String stimulusSetName)
 	{
 		int temp[]=stimulusSetScores.get(stimulusSetName);
