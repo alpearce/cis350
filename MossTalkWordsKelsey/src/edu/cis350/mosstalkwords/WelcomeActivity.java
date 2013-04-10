@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -28,50 +27,6 @@ public class WelcomeActivity extends Activity {
 		//txtView.setTextColor(Color.);
 		Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Bold.ttf");
 		welcomeView.setTypeface(typeface);
-		
-		Intent i=getIntent();
-		User currentUser=(User) i.getSerializableExtra("User");
-		
-		String currStimSetName="livingthingseasy2";
-		
-		RatingBar score=(RatingBar) findViewById(R.id.scoreBar1);
-		int starScore=0;
-		if(currentUser.containsStarScore(currStimSetName))
-			starScore=currentUser.getStarScore(currStimSetName);
-	    score.setNumStars(starScore);
-	    score.setRating(starScore);
-	    
-	    currStimSetName="nonlivingthingseasy2";
-		score=(RatingBar) findViewById(R.id.scoreBar2);
-		starScore=0;
-		if(currentUser.containsStarScore(currStimSetName))
-			starScore=currentUser.getStarScore(currStimSetName);
-	    score.setNumStars(starScore);
-	    score.setRating(starScore);
-	    
-	    currStimSetName="livingthingsmedium2";
-		score=(RatingBar) findViewById(R.id.scoreBar3);
-		starScore=0;
-		if(currentUser.containsStarScore(currStimSetName))
-			starScore=currentUser.getStarScore(currStimSetName);
-	    score.setNumStars(starScore);
-	    score.setRating(starScore);
-	    
-	    currStimSetName="nonlivingthingshard2";
-		score=(RatingBar) findViewById(R.id.scoreBar4);
-		starScore=0;
-		if(currentUser.containsStarScore(currStimSetName))
-			starScore=currentUser.getStarScore(currStimSetName);
-	    score.setNumStars(starScore);
-	    score.setRating(starScore);
-	    
-	    currStimSetName="livingthingshard2";
-		score=(RatingBar) findViewById(R.id.scoreBar5);
-		starScore=0;
-		if(currentUser.containsStarScore(currStimSetName))
-			starScore=currentUser.getStarScore(currStimSetName);
-	    score.setNumStars(starScore);
-	    score.setRating(starScore);
 		//Button b1 = (Button)findViewById(R.id.livingeasy);
 		//b1.setAlpha((float) 0.8);
 	}

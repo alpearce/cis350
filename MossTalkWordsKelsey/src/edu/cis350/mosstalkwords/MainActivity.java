@@ -88,8 +88,6 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		super.onCreate(savedInstanceState);
 
 		new InitCategoriesBackgroundTask().execute();
-		currentUser = new User();/*must be initialized before welcome page for initial start up so that
-		rating bars can be populated with scores the same way everytime, even if the sets haven't been played*/
 		openWelcomePage();
 
 
@@ -103,7 +101,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		imSwitcher.setOutAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
 
 		imCache = new ImageCache();
-		
+		currentUser = new User();
 
 		new InitCategoriesBackgroundTask().execute();
 			
@@ -131,7 +129,6 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 	}
 	private void openWelcomePage() {
 		Intent welcome = new Intent(this, WelcomeActivity.class);
-		welcome.putExtra("User", currentUser);
 		startActivityForResult(welcome, 3);
 
 	}
