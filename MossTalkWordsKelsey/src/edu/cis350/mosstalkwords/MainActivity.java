@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.ViewSwitcher.ViewFactory;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
@@ -58,7 +59,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 	private int index;
 
 	private TextToSpeech tts;
-
+	private ProgressBar pbar;
 
 	private ImageCache imCache;
 	Button nextButton;
@@ -102,21 +103,20 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		imCache = new ImageCache();
 		currentUser = new User();
 
-
+		new InitCategoriesBackgroundTask().execute();
+			
+		pbar = (ProgressBar) findViewById(R.id.progressBar1);
+		
 		timer = (Chronometer) findViewById(R.id.chronometer1);
-		timer.start();
-
 		TextView txtView = (TextView)findViewById(R.id.chronometer1);
 		TextView scoreView = (TextView)findViewById(R.id.scoretext);
-
 		txtView.setTextColor(Color.RED);
 		Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-BoldCondensed.ttf");
 		txtView.setTypeface(typeface);
 		scoreView.setTypeface(typeface);
-		//loadData();
+		timer.start();
 		
-		new InitCategoriesBackgroundTask().execute();
-	
+		
 		addListenerForButton();
 
 		PackageManager pm = getPackageManager();
@@ -189,7 +189,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 	public void nextImage() {
 		currentUser.updateImageEfficiency(currentSet.getName(), imageCounter, hintsUsed, numAttempts);
 		resetMetricsImage();
-		System.out.println(imageCounter);
+		pbar.setProgress(imageCounter + 1);
 		//if at the end of the set then go into finishedSet setup
 		if(imageCounter==currentSet.getStimuli().size()-1) {
 			currentUser.finishedSet(currentSet.getName());
@@ -206,7 +206,11 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			//load next image
 			currentImage = currentSet.getStimuli().get(imageCounter).getName();
 			Bitmap im = imCache.getBitmapFromCache(currentImage); 
-			if (im == null) { Log.d("nextImage","null bitmap- that's bad/" + currentImage); } 
+			if (im == null) {
+				Log.d("nextImage","null bitmap- that's bad/" + currentImage); 
+				//im = fetchImageFromS3(currentImage);//this should block until loaded
+				//Log.d("nextImage","reloaded null image");
+			} 
 			Drawable drawableBitmap = new BitmapDrawable(getResources(),im);
 			imSwitcher.setImageDrawable(drawableBitmap);
 
@@ -344,7 +348,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 	}
 
 
-	/*-----------------------------------Background Tasks for Cache--------------------------------*/
+	/*-----------------------------------Helpers for Cache-------------------------------------------*/
 	//scale down images based on display size; helps with OOM errors
 	public static int calculateInSampleSize(
 			BitmapFactory.Options options, int reqWidth, int reqHeight) {
@@ -364,6 +368,49 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		Log.d("async task","in sample size is:" + (inSampleSize));
 
 		return inSampleSize;
+	}
+	
+	
+	public Bitmap fetchImageFromS3(String name) { //STOP TRYING TO MAKE FETCH HAPPEN, GRETCHEN.
+		try {
+			URL aURL = new URL("https://s3.amazonaws.com/mosstalkdata/" +
+					currentSet.getName() +"/" + name.toLowerCase() + ".jpg");				
+			Log.d("url", aURL.toString());
+			URLConnection conn = aURL.openConnection();
+			conn.connect();
+			Log.d("fetch","got connected");
+	
+			BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
+	
+			//decode bitmap bounds first to avoid running out of memory
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inJustDecodeBounds = true;
+			Rect r = new Rect(-1,-1,-1,-1);
+			BitmapFactory.decodeStream(bis, r, options);
+			Log.d("fetch","decoded bounds");
+			bis.close();
+	
+			// Calculate inSampleSize - need to figure out required dims
+			options.inSampleSize = ImageCache.calculateInSampleSize(options, REQUIRE_WIDTH, REQUIRE_HEIGHT);
+	
+			// Decode bitmap with inSampleSize set
+			options.inJustDecodeBounds = false;
+			conn = aURL.openConnection(); //reopen connection
+			conn.connect();
+			Log.d("fetch","got connected second time");
+			bis = new BufferedInputStream(conn.getInputStream());
+			Bitmap bitmap = BitmapFactory.decodeStream(bis, r, options); 
+			return bitmap;
+		} catch (MalformedURLException e) {
+			// TODO we should make a crash/error screen
+			e.printStackTrace();
+			Log.e("exception","malformedURL");
+			return null;
+		} catch (IOException e) {
+			e.printStackTrace();
+			Log.e("exception","IOexception");
+			return null;
+		} 
 	}
 
 
@@ -431,6 +478,8 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 				}
 				currentSet.setStimuli(tmpSet);
 				currentUser.initSet(setName, tmpSet.size());
+				pbar.setProgress(0);
+				pbar.setMax(tmpSet.size());
 				new ImageBackgroundTask().execute();
 			} catch (MalformedURLException e) {
 				// TODO we should make a crash/error screen
@@ -448,8 +497,10 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		public String[] remoteURLS = currentSet.getStimuliNames();
 
 		protected Drawable[] doInBackground(String... params) {		
-			try {
+			//try {
 				for(int i = 0; i < remoteURLS.length; i++) {
+					Bitmap bitmap = fetchImageFromS3(remoteURLS[i].toLowerCase());
+					/*
 					URL aURL = new URL("https://s3.amazonaws.com/mosstalkdata/" +
 							currentSet.getName() +"/" + remoteURLS[i].toLowerCase() + ".jpg");				
 					Log.d("url", aURL.toString());
@@ -476,7 +527,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 					conn.connect();
 					Log.d("asynctask","got connected second time");
 					bis = new BufferedInputStream(conn.getInputStream());
-					Bitmap bitmap = BitmapFactory.decodeStream(bis, r, options); 					   
+					Bitmap bitmap = BitmapFactory.decodeStream(bis, r, options); */					   
 
 					imCache.addBitmapToCache( remoteURLS[i] , bitmap);
 					Log.d("async task","added bitmap to cache: " + remoteURLS[i] );
@@ -485,14 +536,14 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 					}
 					publishProgress(i);
 				}
-			} catch (MalformedURLException e) {
+			/*} catch (MalformedURLException e) {
 				// TODO we should make a crash/error screen
 				e.printStackTrace();
 				Log.e("exception","malformedURL");
 			} catch (IOException e) {
 				e.printStackTrace();
 				Log.e("exception","IOexception");
-			} finally {  }
+			} finally {  }*/
 			return null;
 		}
 
@@ -509,8 +560,6 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 
 		protected void onPostExecute(String Result) {			
 		}
-
-
 
 	}
 	
