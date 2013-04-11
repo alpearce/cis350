@@ -49,22 +49,22 @@
                 android:id="@+id/hint2button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onHint2ButtonClick"
-                android:text="@string/hint2" />
+                android:onClick="onRhymeHintButtonClick"
+                android:text="@string/rhyme" />
 
             <Button
                 android:id="@+id/hint1button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onHint1ButtonClick"
-                android:text="@string/hint1" />
+                android:onClick="onSentenceHintButtonClick"
+                android:text="@string/sentence" />
 
             <Button
                 android:id="@+id/hint3button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onHint3ButtonClick"
-                android:text="@string/hint3" />
+                android:onClick="onAnswerHintButtonClick"
+                android:text="@string/answer" />
         </LinearLayout>
 
         <Button

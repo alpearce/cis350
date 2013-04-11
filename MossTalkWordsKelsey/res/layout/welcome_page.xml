@@ -38,104 +38,104 @@
           android:layout_width="wrap_content"
   		  android:layout_height="wrap_content"
   		  android:layout_centerVertical="true"
-  		  android:layout_centerHorizontal="true"
+  		  android:layout_alignParentLeft="true"
   		  android:orientation="vertical" >
 
         
-    <Button
-        android:id="@+id/livingeasy"
-        style="@style/ButtonText"
-        android:background="@drawable/button_blue"
-        android:onClick="onClickLivingEasy"
-        android:text="Living things | Easy" />
-
-    <Button
-        android:id="@+id/nonlivingeasy"
-        style="@style/ButtonText"
-        android:background="@drawable/button_blue"
-        android:onClick="onClickNonLivingEasy"
-        android:text="Non-living things | Easy" />
-
-    <Button
-        android:id="@+id/livingmedium"
-        style="@style/ButtonText"
-        android:background="@drawable/button_orange"
-       android:onClick="onClickLivingMedium"
-        android:text="Living things | Medium" />
-
-    <Button
-        android:id="@+id/nonlivinghard"
-        style="@style/ButtonText"
-        android:layout_marginBottom="37dp"
-        android:background="@drawable/button_red"
-        android:onClick="onClickNonLivingHard"
-        android:text="Non-living things | Hard" />
-
-    <Button
-        android:id="@+id/livinghard"
-        style="@style/ButtonText"
-        android:background="@drawable/button_red"
-        android:onClick="onClickLivingHard"
-        android:text="Living things | Hard" />
-    
+		    <Button
+		        android:id="@+id/livingeasy"
+		        style="@style/ButtonText"
+		        android:background="@drawable/button_blue"
+		        android:onClick="onClickLivingEasy"
+		        android:text="Living things | Easy" />
+		
+		    <Button
+		        android:id="@+id/nonlivingeasy"
+		        style="@style/ButtonText"
+		        android:background="@drawable/button_blue"
+		        android:onClick="onClickNonLivingEasy"
+		        android:text="Non-living things | Easy" />
+		
+		    <Button
+		        android:id="@+id/livingmedium"
+		        style="@style/ButtonText"
+		        android:background="@drawable/button_orange"
+		       android:onClick="onClickLivingMedium"
+		        android:text="Living things | Medium" />
+		
+		    <Button
+		        android:id="@+id/nonlivinghard"
+		        style="@style/ButtonText"
+		        android:layout_marginBottom="37dp"
+		        android:background="@drawable/button_red"
+		        android:onClick="onClickNonLivingHard"
+		        android:text="Non-living things | Hard" />
+		
+		    <Button
+		        android:id="@+id/livinghard"
+		        style="@style/ButtonText"
+		        android:background="@drawable/button_red"
+		        android:onClick="onClickLivingHard"
+		        android:text="Living things | Hard" />
+		    
     </LinearLayout>
      <LinearLayout 
-          android:id="@+id/scorelayout"
-          android:layout_width="wrap_content"
-  		  android:layout_height="wrap_content"
-  		  android:layout_centerVertical="true"
-  		  android:layout_centerHorizontal="true"
-  		  android:layout_toRightOf="@id/buttonlayout"
-  		  android:orientation="vertical" >
-     <RatingBar 
-        android:id="@+id/scoreBar1"
-        android:numStars="3"
-        android:rating="0"
-        style="?android:attr/ratingBarStyleIndicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="9.5dp"
-        android:paddingBottom="9.5dp"
-        />
-     <RatingBar 
-        android:id="@+id/scoreBar2"
-        android:numStars="3"
-        android:rating="0"
-        style="?android:attr/ratingBarStyleIndicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="9.5dp"
-        android:paddingBottom="9.5dp"
-        />
-     <RatingBar 
-        android:id="@+id/scoreBar3"
-        android:numStars="3"
-        android:rating="0"
-        style="?android:attr/ratingBarStyleIndicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="9.5dp"
-        android:paddingBottom="9.5dp"
-        />
-     <RatingBar 
-        android:id="@+id/scoreBar4"
-        android:numStars="3"
-        android:rating="0"
-        style="?android:attr/ratingBarStyleIndicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="9.5dp"
-        android:paddingBottom="9.5dp"
-        />
-     <RatingBar 
-        android:id="@+id/scoreBar5"
-        android:numStars="3"
-        android:rating="0"
-        style="?android:attr/ratingBarStyleIndicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="9.5dp"
-        android:paddingBottom="9.5dp"
-        />
+	          android:id="@+id/scorelayout"
+	          android:layout_width="wrap_content"
+	  		  android:layout_height="wrap_content"
+	  		  android:layout_centerVertical="true"
+	  		  android:layout_alignParentRight="true"
+	  		  android:layout_toRightOf="@id/buttonlayout"
+	  		  android:orientation="vertical" >
+	     <RatingBar 
+	        android:id="@+id/scoreBar1"
+	        android:numStars="5"
+	        android:rating="0"
+	        style="?android:attr/ratingBarStyleIndicator"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:paddingTop="9.5dp"
+	        android:paddingBottom="9.5dp"
+	        />
+	     <RatingBar 
+	        android:id="@+id/scoreBar2"
+	        android:numStars="5"
+	        android:rating="0"
+	        style="?android:attr/ratingBarStyleIndicator"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:paddingTop="9.5dp"
+	        android:paddingBottom="9.5dp"
+	        />
+	     <RatingBar 
+	        android:id="@+id/scoreBar3"
+	        android:numStars="5"
+	        android:rating="0"
+	        style="?android:attr/ratingBarStyleIndicator"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:paddingTop="9.5dp"
+	        android:paddingBottom="9.5dp"
+	        />
+	     <RatingBar 
+	        android:id="@+id/scoreBar4"
+	        android:numStars="5"
+	        android:rating="0"
+	        style="?android:attr/ratingBarStyleIndicator"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:paddingTop="9.5dp"
+	        android:paddingBottom="9.5dp"
+	        />
+	     <RatingBar 
+	        android:id="@+id/scoreBar5"
+	        android:numStars="5"
+	        android:rating="0"
+	        style="?android:attr/ratingBarStyleIndicator"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:paddingTop="9.5dp"
+	        android:paddingBottom="9.5dp"
+	        />
 		</LinearLayout>
 </RelativeLayout>

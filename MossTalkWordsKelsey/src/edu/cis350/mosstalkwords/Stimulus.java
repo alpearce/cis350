@@ -1,5 +1,7 @@
 package edu.cis350.mosstalkwords;
 
+import java.util.ArrayList;
+
 import android.graphics.drawable.Drawable;
 
 /*This class takes in a string for the name of the "stimulus" which is just the image and the associated hints and difficulty. For that purpose, it takes in an int difficulty
@@ -8,15 +10,18 @@ import android.graphics.drawable.Drawable;
  * methods for each input.*/
 public class Stimulus {
 	public static final int NUMHINTS = 3;
+	public static final int NUMRHYMES = 3;
 	String name;
-	String hints [];
+	String[] rhymes; //have to do this so that we can do them individually
+	String sentence;
 	int difficulty;
 	int image;
 	Drawable image_drawable; //for use with new S3 stuff
-	public Stimulus(String stimulusName, int stimulusDifficulty, String stimulusHints[])
+	public Stimulus(String stimulusName, int stimulusDifficulty, String[] rhymes, String sentence)
 	{
 		name=stimulusName;
-		hints=stimulusHints;
+		this.rhymes = rhymes;
+		this.sentence = sentence;
 		difficulty= stimulusDifficulty;
 	}
 	public void setImage(int imageIDName)
@@ -27,9 +32,10 @@ public class Stimulus {
 	{
 		name=stimulusName;
 	}
-	public void setHints(String stimulusHints[])
+	public void setHints(String[] rhymes, String sentence)
 	{
-		hints=stimulusHints;
+		this.rhymes = rhymes;
+		this.sentence = sentence;
 	}
 	public void setDifficulty(int stimulusDifficulty)
 	{
@@ -53,10 +59,18 @@ public class Stimulus {
 	{
 		return name;
 	}
-	public String [] getHints()
+	/*public ArrayList<String> hints[] getHints()
 	{
 		return hints;
+	} */
+	public String[] getRhymes() {
+		return rhymes;
 	}
+
+	public String getSentence() {
+		return sentence;
+	}
+	
 	public int getDifficulty()
 	{
 		return difficulty;

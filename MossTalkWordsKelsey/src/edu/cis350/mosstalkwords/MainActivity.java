@@ -71,6 +71,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 
 	String currentImage;
 	private int stimulusSetSize=10;
+	private int rhymePtr;
 
 	//game metrics--MOST OF THESE WENT TO THE USER CLASS AFTER REFACTORING
 	int hintsUsed=0;
@@ -103,6 +104,8 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		imSwitcher.setOutAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
 
 		imCache = new ImageCache();
+		
+		rhymePtr = 0;
 		
 
 		new InitCategoriesBackgroundTask().execute();
@@ -327,26 +330,34 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 	}
 
 	//Handler for sentence hint
-	public void onHint1ButtonClick(View view) {
+	public void onSentenceHintButtonClick(View view) {
 		TextView hintView= (TextView)findViewById(R.id.hintText);
-		hintView.setText(currentSet.getStimuli().get(imageCounter).getHints()[0]);
-		speak(currentSet.getStimuli().get(imageCounter).getHints()[0]);
+		String hint = currentSet.getStimuli().get(imageCounter).getSentence();
+		hintView.setText(hint);
+		speak(hint);
 		hintsUsed++;
 	}
 
 	//handler for similar word hint
-	public void onHint2ButtonClick(View view) {
+	public void onRhymeHintButtonClick(View view) {
 		TextView hintView= (TextView)findViewById(R.id.hintText);
-		hintView.setText(currentSet.getStimuli().get(imageCounter).getHints()[1]);
-		speak(currentSet.getStimuli().get(imageCounter).getHints()[1]);
+		String[] rhymes = currentSet.getStimuli().get(imageCounter).getRhymes();
+		Log.d("rhyme hints","rhymes:" + rhymes.toString());
+		Log.d("rhyme hints","rhyme ptr: " + rhymePtr);
+		String hint = rhymes[rhymePtr];
+		hintView.setText(hint);
+		speak(hint);
 		hintsUsed++;
+		rhymePtr = (++rhymePtr)%rhymes.length;
+		Log.d("rhyme hints after","rhyme ptr: " + rhymePtr);
 	}
 
 	//handler for giving up and getting answer
-	public void onHint3ButtonClick(View view) {
+	public void onAnswerHintButtonClick(View view) {
 		TextView hintView= (TextView)findViewById(R.id.hintText);
-		hintView.setText(currentSet.getStimuli().get(imageCounter).getHints()[2]);
-		speak(currentSet.getStimuli().get(imageCounter).getHints()[2]);
+		String hint = currentSet.getStimuli().get(imageCounter).getName();
+		hintView.setText(hint);
+		speak(hint);
 		hintsUsed++;
 	}
 
@@ -435,7 +446,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 				int setIdx = 0;
 				String line;
 				while((line = bread.readLine()) != null) {
-					allStimulusSets.add(new StimulusSet(line));
+					allStimulusSets.add(new StimulusSet(line.trim()));
 					Log.d("initcat","stimulusSets[" +setIdx+ "] = " + line);
 					setIdx++;
 				}
@@ -467,16 +478,15 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 				//lines invariant: name = hint3. hint1, hint2, empty line
 				String line;
 				while((line = bread.readLine()) != null) {	//load the 
-					String[] hints = new String[Stimulus.NUMHINTS];
-					String name = line;
+					String name = line.trim();
 					Log.d("initset","read name = " + name);
-					hints[0] = bread.readLine();//should be sentence
-					Log.d("initset","read sentence = " + hints[0]);
-					hints[1] = bread.readLine();//should be rhymes
-					Log.d("initset","read rhymes = " + hints[1]);
+					String sentence = bread.readLine().trim();//should be sentence
+					Log.d("initset","read sentence = " + sentence);
+					
+					String[] rhymes = bread.readLine().toLowerCase().trim().split(",",-1);//should be rhymes
+					Log.d("initset","read rhymes = " + rhymes);
 					bread.readLine();//skip blank line
-					hints[2] = name;
-					Stimulus tmp = new Stimulus(name, 1, hints);//everything is difficulty 1 right now. deal.
+					Stimulus tmp = new Stimulus(name, 1, rhymes, sentence);//everything is difficulty 1 right now. deal.
 					tmpSet.add(tmp);
 				}
 				currentSet.setStimuli(tmpSet);
