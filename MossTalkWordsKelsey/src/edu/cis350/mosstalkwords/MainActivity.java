@@ -300,6 +300,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 			//goes through all the possible strings from voice and determines if there is a match
 			//right now score is just incremented by 100
+			if (matches.isEmpty()) { Log.d("voice rec","NO MATCHES");}
 			for (String s: matches) {
 				if (s.toLowerCase().contains(currentImage.toLowerCase())) {
 					//subtract 100 for each hint used, but if 3 are used make the score 100 anyway
@@ -500,10 +501,10 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		public String[] remoteURLS = currentSet.getStimuliNames();
 
 		protected Drawable[] doInBackground(String... params) {		
-			//try {
+			try {
 				for(int i = 0; i < remoteURLS.length; i++) {
-					Bitmap bitmap = fetchImageFromS3(remoteURLS[i].toLowerCase());
-					/*
+					//Bitmap bitmap = fetchImageFromS3(remoteURLS[i].toLowerCase());
+					
 					URL aURL = new URL("https://s3.amazonaws.com/mosstalkdata/" +
 							currentSet.getName() +"/" + remoteURLS[i].toLowerCase() + ".jpg");				
 					Log.d("url", aURL.toString());
@@ -530,7 +531,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 					conn.connect();
 					Log.d("asynctask","got connected second time");
 					bis = new BufferedInputStream(conn.getInputStream());
-					Bitmap bitmap = BitmapFactory.decodeStream(bis, r, options); */					   
+					Bitmap bitmap = BitmapFactory.decodeStream(bis, r, options); 			   
 
 					imCache.addBitmapToCache( remoteURLS[i] , bitmap);
 					Log.d("async task","added bitmap to cache: " + remoteURLS[i] );
@@ -539,14 +540,14 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 					}
 					publishProgress(i);
 				}
-			/*} catch (MalformedURLException e) {
+			} catch (MalformedURLException e) {
 				// TODO we should make a crash/error screen
 				e.printStackTrace();
 				Log.e("exception","malformedURL");
 			} catch (IOException e) {
 				e.printStackTrace();
 				Log.e("exception","IOexception");
-			} finally {  }*/
+			} finally {  }
 			return null;
 		}
 
