@@ -209,10 +209,9 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			//load next image
 			currentImage = currentSet.getStimuli().get(imageCounter).getName();
 			Bitmap im = imCache.getBitmapFromCache(currentImage); 
-			if (im == null) {
-				Log.d("nextImage","null bitmap- that's bad/" + currentImage); 
-				//im = fetchImageFromS3(currentImage);//this should block until loaded
-				//Log.d("nextImage","reloaded null image");
+			while (im == null) { //block main thread until it's loaded. could end badly.
+				Log.d("nextImage","BUSY LOOP null bitmap- that's bad/" + currentImage); 
+				im = imCache.getBitmapFromCache(currentImage);
 			} 
 			Drawable drawableBitmap = new BitmapDrawable(getResources(),im);
 			imSwitcher.setImageDrawable(drawableBitmap);
