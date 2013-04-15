@@ -27,17 +27,10 @@ public class NameAndEmailActivity extends Activity
 	    final View layout = inflater.inflate(R.layout.dialog_enter_name_and_email, null); 
 	    
 	    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-	    if(currentUser.name==null)
-	    {
 	    	builder.setView(layout);
 	    	builder.setTitle("Welcome New User!");
-	    }
-	    else
-		{
-			builder.setTitle("Hi "+currentUser.name+"!");
-			System.out.println(currentUser.name);
-			builder.setMessage("Would you like to email yourself the score report for this set?");
-		}
+	    
+	    
 			builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
 			{
 				public void onClick(DialogInterface dialog, int id)

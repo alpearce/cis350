@@ -69,7 +69,35 @@ public class User implements Serializable {
 	public boolean hasPlayedSet(String setName) {
 		return this.stimulusSetScores.containsKey(setName);
 	}
+	public String generateSetReport(StimulusSet currentSet)
+	{
+		String fullReport="";
+		fullReport+=("User: "+name+"\n");
+		fullReport+=("CurrentSet: "+currentSet.getName()+"\n");
+		String efficiencyPercent=Integer.valueOf(getAverageEfficiencyPercent(currentSet.getName())).toString();
+		fullReport+=("Completeness: "+efficiencyPercent+"%\n");
+		String longestStreak=Integer.valueOf(getLongestStreak(currentSet.getName())).toString();
+		fullReport+=("Longest Streak: "+longestStreak+"\n");
+		fullReport+=("\nImage By Image Statistics:\n");
+		int index=0;
+		for(Stimulus image:currentSet.stimuli)
+		{
+			fullReport+=generateImageStatistics(currentSet,image,index);
+			index++;
+		}
 		
+		return fullReport;
+	}
+	public String generateImageStatistics(StimulusSet currentSet, Stimulus currentImage, int index)
+	{
+		String imageReport="";
+		imageReport+=currentImage.name+":\n";
+		imageReport+="Score: "+Integer.valueOf(stimulusSetScores.get(currentSet.getName())[index]).toString();
+		imageReport+="Number Of Hints Used: "+Integer.valueOf((stimulusSetEfficiencies.get(currentSet.getName()))[index][0]).toString()+"\n";
+		imageReport+="Number of Attempts: "+Integer.valueOf((stimulusSetEfficiencies.get(currentSet.getName()))[index][1])+"\n";
+		imageReport+="\n";
+		return imageReport;
+	}
 	public void streakEnded(StimulusSet currentSet)
 	{
 		//if a streak already exists, and this streak is larger, update the streak

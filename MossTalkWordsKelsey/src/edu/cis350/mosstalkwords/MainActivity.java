@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -203,27 +205,59 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			}
 		});
 	}
-	public String createReport() throws IOException
+	public File createReport() throws IOException
 	{
 		//PrintWriter reportOut=new PrintWriter(currentSet.getName()+"Report.txt");
-		BufferedOutputStream reportOut = new BufferedOutputStream(new FileOutputStream(currentSet.getName()+"Report.txt"));
-			reportOut.write(("User: "+currentUser.name).getBytes());
-		
+		//BufferedOutputStream reportOut = new BufferedOutputStream(new FileOutputStream(currentSet.getName()+"Report.txt"));
+			//reportOut.write(("User: "+currentUser.name).getBytes());
+		//General set stats
+		File reportFile=new File(currentSet.getName()+"Report.txt");
+			OutputStreamWriter reportOut = new OutputStreamWriter(openFileOutput(currentSet.getName()+"Report.txt", this.MODE_PRIVATE));
+			String reportString=currentUser.generateSetReport(currentSet);
+			FileWriter report=new FileWriter(reportFile);
+			report.write(reportString);
+			//reportOut.write(reportString);
+			//reportOut.close();
+			report.close();
 		//reportOut.println("User: "+currentUser.name);
-		reportOut.close();
-		return(currentSet.getName() + "Report.txt");
+		//reportOut.close();
+		return(reportFile);
 	}
-	public void finishedSet()
+	public void sendReportViaEmail(File fileName)
 	{
+		Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+		emailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, 
+		                     new String[]{currentUser.email});
+		String subject="Wordle "+currentSet.getName() +" Report";
+		emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
+		String body= "Your report is attached below. Good Work!";
+		emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, body);
+
+		//String rawFolderPath = "android.resource://" + getPackageName() 
+		//                       + "/" + R.raw.shortcuts;
+
+		// Here my file name is shortcuts.pdf which i have stored in /res/raw folder
+		//Uri emailUri = Uri.parse(rawFolderPath );
+		emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(fileName));
+		//emailIntent.setType("application/pdf");
+		startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+	}
+	public void createAndSendReport()
+	{
+		
+		File fileMade=new File("");
 		try {
-			String fileMade=createReport();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fileMade = createReport();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		sendReportViaEmail(fileMade);
+	}
+	public void finishedSet()
+	{
 		imSwitcher.setImageDrawable(null);
 		Intent endSet=new Intent(this, EndSetActivity.class);
 		endSet.putExtra("User", currentUser);
@@ -337,9 +371,9 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			
 			currentUser.name=data.getExtras().getString("Username");
 			currentUser.email=data.getExtras().getString("Email");
-			//sendEmail();
-			}
+			createAndSendReport();
 			returnFromSet();
+			}
 			
 		}
 		if (requestCode == 3) {
@@ -357,7 +391,13 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		{
 			if(data.getBooleanExtra("Send", false))
 			{
-				enterNameAndEmail();
+				if(currentUser.name==null)
+					enterNameAndEmail();
+				else
+				{
+					createAndSendReport();
+					returnFromSet();
+				}
 			}
 			else if(data.getBooleanExtra("No", false))
 			{
