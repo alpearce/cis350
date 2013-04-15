@@ -212,8 +212,9 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		//BufferedOutputStream reportOut = new BufferedOutputStream(new FileOutputStream(currentSet.getName()+"Report.txt"));
 			//reportOut.write(("User: "+currentUser.name).getBytes());
 		//General set stats
-		File path =Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
-		File reportFile=new File(path, currentSet.getName()+"Report.txt");
+		File path =Environment.getExternalStorageDirectory();
+		File dir=new File(path.getAbsolutePath()+"/textfiles");
+		File reportFile=new File(dir,(currentSet.getName()+"Report.txt"));
 			//OutputStreamWriter reportOut = new OutputStreamWriter(openFileOutput(currentSet.getName()+"Report.txt", this.MODE_PRIVATE));
 			String reportString=currentUser.generateSetReport(currentSet);
 			FileWriter report=new FileWriter(reportFile);
