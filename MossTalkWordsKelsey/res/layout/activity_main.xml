@@ -75,24 +75,31 @@
             android:drawableLeft = "@drawable/ic_action_microphone"/>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/scoretext"
+    <ViewFlipper 
+        android:id = "@+id/ViewFlipper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textColor = "#000000"
-        android:textSize = "30sp"
-        android:layout_marginLeft = "7sp"
-        android:text="@string/score" />
+	    android:layout_centerHorizontal="true">
 
+	   	 <TextView
+	        android:id="@+id/scoretext"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentTop="true"
+	        android:layout_centerHorizontal="true"
+	        android:textColor = "#000000"
+	        android:textSize = "30sp"
+	        android:layout_marginLeft = "7sp"
+	        android:text="@string/score" />
+    </ViewFlipper>
 
     <ProgressBar
         android:id="@+id/progressBar1"
         style="@android:style/Widget.ProgressBar.Horizontal"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/scoretext"
+        android:layout_below="@+id/ViewFlipper"
         android:layout_centerHorizontal="true" />
             
 

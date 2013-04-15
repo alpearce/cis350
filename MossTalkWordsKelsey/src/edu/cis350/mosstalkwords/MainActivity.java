@@ -32,6 +32,7 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.ViewFlipper;
 import android.widget.ViewSwitcher.ViewFactory;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
@@ -41,6 +42,7 @@ import android.util.Log;
 import android.view.View.OnClickListener;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.view.ViewPropertyAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
@@ -74,6 +76,8 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 	ImageSwitcher imSwitcher;
 	User currentUser;
 	Button speakBtn;
+
+
 
 	Chronometer timer;
 
@@ -275,6 +279,8 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		currentUser.updateImageEfficiency(currentSet.getName(), imageCounter, hintsUsed, numAttempts);
 		resetMetricsImage();
 		pbar.setProgress(imageCounter + 1);
+
+		//animate.scaleXBy(1/10);
 		//if at the end of the set then go into finishedSet setup
 		if(imageCounter==currentSet.getStimuli().size()-1) {
 			currentUser.endedSet(currentSet.getName());
@@ -337,6 +343,9 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		//currentImage = currentSet.getStimuli().get(imageCounter).getName();
 	}
 	public void onNextSetButtonClick(View view) {
+//		ViewFlipper score = (ViewFlipper)findViewById(R.id.ViewFlipper);
+//		ViewPropertyAnimator animate = score.animate();
+//		animate.cancel();
 		nextSet();			
 	}
 
@@ -427,8 +436,13 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 					//subtract 100 for each hint used, but if 3+ are used make the score 100 anyway
 					int thisImageScore = (300-100*hintsUsed == 0 ? 100:300-100*hintsUsed);
 					currentUser.updateImageScore(currentSet.getName(), imageCounter, thisImageScore);
-					TextView scoreTextView = (TextView)findViewById(R.id.scoretext);
-					scoreTextView.setText("Score: " + String.valueOf(currentUser.getTotalScore()));
+					ViewFlipper scoreTextView = (ViewFlipper)findViewById(R.id.ViewFlipper);
+					TextView scoreView = (TextView)scoreTextView.findViewById(R.id.scoretext);
+	
+					scoreView.setText("Score: " + String.valueOf(currentUser.getTotalScore()));
+					ViewPropertyAnimator animate = scoreTextView.animate();
+					animate.rotationBy(360);
+					
 
 					if(hintsUsed==0) {
 						currentUser.increaseStreak();

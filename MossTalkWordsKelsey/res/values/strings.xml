@@ -9,6 +9,8 @@
     <string name="answer">Answer</string>
     <string name="next">Next</string>
     <string name="score">Score = 0</string>
+    <string name ="oldscore">Score = 0</string>
+    <string name = "addedscore">+0</string>
 	<string name="nextSet"> Next Set</string>
  	<string name="speak">Speak</string>
  	<string name="restart">Replay Set</string>

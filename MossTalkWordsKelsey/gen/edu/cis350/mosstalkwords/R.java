@@ -46,42 +46,43 @@ public final class R {
         public static final int white=0x7f020016;
     }
     public static final class id {
-        public static final int Completeness=0x7f09000d;
+        public static final int Completeness=0x7f09000e;
         public static final int ImageSwitcher1=0x7f090000;
-        public static final int Message=0x7f09000c;
+        public static final int Message=0x7f09000d;
+        public static final int ViewFlipper=0x7f090008;
         public static final int btnChangeImage=0x7f090002;
-        public static final int chronometer1=0x7f09000a;
-        public static final int email=0x7f090011;
+        public static final int chronometer1=0x7f09000b;
+        public static final int email=0x7f090012;
         public static final int hint1button=0x7f090005;
         public static final int hint2button=0x7f090004;
         public static final int hint3button=0x7f090006;
         public static final int hintText=0x7f090003;
-        public static final int improveCompleteness=0x7f09000e;
+        public static final int improveCompleteness=0x7f09000f;
         public static final int linearLayout1=0x7f090001;
-        public static final int livingeasy=0x7f090015;
-        public static final int livinghard=0x7f09001e;
-        public static final int livingmedium=0x7f09001b;
-        public static final int menu_settings=0x7f090023;
-        public static final int nonlivingeasy=0x7f090018;
-        public static final int nonlivinghard=0x7f090021;
-        public static final int progressBar1=0x7f090009;
-        public static final int scoreBar=0x7f09000b;
-        public static final int scoreBar1=0x7f090016;
-        public static final int scoreBar2=0x7f090019;
-        public static final int scoreBar3=0x7f09001c;
-        public static final int scoreBar4=0x7f09001f;
-        public static final int scoreBar5=0x7f090022;
-        public static final int scoretext=0x7f090008;
+        public static final int livingeasy=0x7f090016;
+        public static final int livinghard=0x7f09001f;
+        public static final int livingmedium=0x7f09001c;
+        public static final int menu_settings=0x7f090024;
+        public static final int nonlivingeasy=0x7f090019;
+        public static final int nonlivinghard=0x7f090022;
+        public static final int progressBar1=0x7f09000a;
+        public static final int scoreBar=0x7f09000c;
+        public static final int scoreBar1=0x7f090017;
+        public static final int scoreBar2=0x7f09001a;
+        public static final int scoreBar3=0x7f09001d;
+        public static final int scoreBar4=0x7f090020;
+        public static final int scoreBar5=0x7f090023;
+        public static final int scoretext=0x7f090009;
         public static final int speakButton=0x7f090007;
-        public static final int streak=0x7f09000f;
-        public static final int textView2=0x7f090013;
-        public static final int thumblivingeasy=0x7f090014;
-        public static final int thumblivinghard=0x7f09001d;
-        public static final int thumblivingmed=0x7f09001a;
-        public static final int thumbnoneasy=0x7f090017;
-        public static final int thumbnonhard=0x7f090020;
-        public static final int username=0x7f090010;
-        public static final int welcomeView=0x7f090012;
+        public static final int streak=0x7f090010;
+        public static final int textView2=0x7f090014;
+        public static final int thumblivingeasy=0x7f090015;
+        public static final int thumblivinghard=0x7f09001e;
+        public static final int thumblivingmed=0x7f09001b;
+        public static final int thumbnoneasy=0x7f090018;
+        public static final int thumbnonhard=0x7f090021;
+        public static final int username=0x7f090011;
+        public static final int welcomeView=0x7f090013;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -99,28 +100,30 @@ public final class R {
         public static final int ding=0x7f040002;
     }
     public static final class string {
-        public static final int UserName=0x7f060014;
+        public static final int UserName=0x7f060016;
+        public static final int addedscore=0x7f060009;
         public static final int answer=0x7f060005;
         public static final int app_name=0x7f060000;
-        public static final int cancel=0x7f060013;
-        public static final int congrats=0x7f06000c;
-        public static final int email=0x7f060015;
-        public static final int four_star=0x7f060010;
+        public static final int cancel=0x7f060015;
+        public static final int congrats=0x7f06000e;
+        public static final int email=0x7f060017;
+        public static final int four_star=0x7f060012;
         public static final int hello_world=0x7f060001;
-        public static final int menu=0x7f06000b;
+        public static final int menu=0x7f06000d;
         public static final int menu_settings=0x7f060002;
         public static final int next=0x7f060006;
-        public static final int nextSet=0x7f060008;
-        public static final int no=0x7f060012;
-        public static final int one_star=0x7f06000d;
-        public static final int restart=0x7f06000a;
+        public static final int nextSet=0x7f06000a;
+        public static final int no=0x7f060014;
+        public static final int oldscore=0x7f060008;
+        public static final int one_star=0x7f06000f;
+        public static final int restart=0x7f06000c;
         public static final int rhyme=0x7f060004;
         public static final int score=0x7f060007;
-        public static final int send=0x7f060011;
+        public static final int send=0x7f060013;
         public static final int sentence=0x7f060003;
-        public static final int speak=0x7f060009;
-        public static final int three_star=0x7f06000f;
-        public static final int two_star=0x7f06000e;
+        public static final int speak=0x7f06000b;
+        public static final int three_star=0x7f060011;
+        public static final int two_star=0x7f060010;
     }
     public static final class style {
         /** 
