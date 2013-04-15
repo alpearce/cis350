@@ -244,8 +244,9 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		// Here my file name is shortcuts.pdf which i have stored in /res/raw folder
 		//Uri emailUri = Uri.parse(rawFolderPath );
 		emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(fileName));
-		emailIntent.setType("message/rfc822");
-		startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+		emailIntent.setType("vnd.android.cursor.dir/vnd.google.note");
+		startActivityForResult(Intent.createChooser(emailIntent, "Send mail..."),5);
+		
 	}
 	public void createAndSendReport()
 	{
@@ -259,6 +260,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		}
 		
 		sendReportViaEmail(fileMade);
+		
 	}
 	public void finishedSet()
 	{
@@ -376,7 +378,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			currentUser.name=data.getExtras().getString("Username");
 			currentUser.email=data.getExtras().getString("Email");
 			createAndSendReport();
-			returnFromSet();
+	
 			}
 			
 		}
@@ -400,7 +402,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 				else
 				{
 					createAndSendReport();
-					returnFromSet();
+					
 				}
 			}
 			else if(data.getBooleanExtra("No", false))
@@ -409,6 +411,10 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			}
 			/**/
 
+		}
+		if(requestCode==5)//returned from email intent
+		{
+			returnFromSet();
 		}
 		if (requestCode == REQUEST_CODE && resultCode == RESULT_OK)
 		{
