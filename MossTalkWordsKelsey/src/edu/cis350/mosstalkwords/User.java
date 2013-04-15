@@ -3,6 +3,7 @@ package edu.cis350.mosstalkwords;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import android.content.Intent;
 import android.util.Log;
 
 public class User implements Serializable {
@@ -16,6 +17,8 @@ public class User implements Serializable {
 	public HashMap<String, Integer> longestStreakForSets;
 	public HashMap<String, int [][]> stimulusSetEfficiencies;
 	public HashMap<String, Integer> percentEfficiencyForSets;
+	public String name;
+	public String email;
 	
 	public User() {
 		totalScore = 0;
@@ -24,7 +27,10 @@ public class User implements Serializable {
 		stimulusSetScores = new HashMap<String, int[]>();
 		longestStreakForSets = new HashMap<String, Integer>();
 		stimulusSetEfficiencies = new HashMap<String, int[][]>();
-		percentEfficiencyForSets = new HashMap<String,Integer>();				
+		percentEfficiencyForSets = new HashMap<String,Integer>();	
+		name = null;
+		email=null;
+		
 	}
 	
 	public void initSet(String setName, int setSize) {
@@ -53,7 +59,7 @@ public class User implements Serializable {
 		currentStreak++;
 	}
 	
-	public void finishedSet(String setName) {
+	public void endedSet(String setName) {
 		this.calculateStarScore(setName);
 		this.calculateAverageEfficiencyPercent(setName);//calculate the percentage for this set
 		//nextSet();

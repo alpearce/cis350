@@ -1,13 +1,18 @@
 package edu.cis350.mosstalkwords;
 
 import java.io.BufferedInputStream; 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -91,6 +96,8 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		new InitCategoriesBackgroundTask().execute();
 		currentUser = new User();/*must be initialized before welcome page for initial start up so that
 		rating bars can be populated with scores the same way everytime, even if the sets haven't been played*/
+		
+		
 		openWelcomePage();
 
 
@@ -132,13 +139,25 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			speakBtn.setText("Not compatible");
 		}			
 	}
+	public void enterNameAndEmail()
+	{
+		Intent userEntry = new Intent(this, NameAndEmailActivity.class);
+		userEntry.putExtra("User", currentUser);
+		startActivityForResult(userEntry,2);
+	}
 	private void openWelcomePage() {
 		Intent welcome = new Intent(this, WelcomeActivity.class);
 		welcome.putExtra("User", currentUser);
 		startActivityForResult(welcome, 3);
 
 	}
-
+	private void returnFromSet()
+	{
+		Intent returnOptions = new Intent(this, EndSetReturnActivity.class);
+		returnOptions.putExtra("User", currentUser);
+		startActivityForResult(returnOptions,1);
+	}
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -184,13 +203,33 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			}
 		});
 	}
+	public String createReport() throws IOException
+	{
+		//PrintWriter reportOut=new PrintWriter(currentSet.getName()+"Report.txt");
+		BufferedOutputStream reportOut = new BufferedOutputStream(new FileOutputStream(currentSet.getName()+"Report.txt"));
+			reportOut.write(("User: "+currentUser.name).getBytes());
+		
+		//reportOut.println("User: "+currentUser.name);
+		reportOut.close();
+		return(currentSet.getName() + "Report.txt");
+	}
 	public void finishedSet()
 	{
+		try {
+			String fileMade=createReport();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		imSwitcher.setImageDrawable(null);
 		Intent endSet=new Intent(this, EndSetActivity.class);
 		endSet.putExtra("User", currentUser);
 		endSet.putExtra("currentSet", currentSet.getName());
 		startActivityForResult(endSet,4);
+		
 	}
 	public void nextImage() {
 		currentUser.updateImageEfficiency(currentSet.getName(), imageCounter, hintsUsed, numAttempts);
@@ -198,7 +237,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		pbar.setProgress(imageCounter + 1);
 		//if at the end of the set then go into finishedSet setup
 		if(imageCounter==currentSet.getStimuli().size()-1) {
-			currentUser.finishedSet(currentSet.getName());
+			currentUser.endedSet(currentSet.getName());
 			imageCounter = 0;
 			Log.d("imagecounter","image counter is: " + imageCounter);
 			finishedSet();
@@ -242,6 +281,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		TextView hintView= (TextView)findViewById(R.id.hintText);
 		hintView.setText("");
 	}	
+	
 	public void replaySet()
 	{
 		imageCounter=0;
@@ -270,18 +310,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
-		if (requestCode == 3) {
-			//this is the index of the allStimulusSetsArray
-			index = data.getExtras().getInt("indexOfSetsArray");
-			System.out.println(index);
-			System.out.println(allStimulusSets.get(index).getName());
-			//new InitCategoriesBackgroundTask().execute();
-			currentSet = allStimulusSets.get(index);
-			new LoadHintsBackgroundTask().execute();
-			timer.setBase(SystemClock.elapsedRealtime());
-
-		}
-		if(requestCode==4)
+		if(requestCode==1)//if returning from Play Again? choice
 		{
 			if(data.getBooleanExtra("Replay Set", false))
 			{
@@ -295,6 +324,44 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			{
 				openWelcomePage();
 			}
+		}
+		if(requestCode==2)//if returning from Send report enter email and Username?
+		{
+			if(data.getBooleanExtra("Cancel",true))
+			{
+			}
+			else
+			{
+			
+			currentUser.name=data.getExtras().getString("Username");
+			currentUser.email=data.getExtras().getString("Email");
+			//sendEmail();
+			}
+			returnFromSet();
+			
+		}
+		if (requestCode == 3) {
+			//this is the index of the allStimulusSetsArray
+			index = data.getExtras().getInt("indexOfSetsArray");
+			System.out.println(index);
+			System.out.println(allStimulusSets.get(index).getName());
+			//new InitCategoriesBackgroundTask().execute();
+			currentSet = allStimulusSets.get(index);
+			new LoadHintsBackgroundTask().execute();
+			timer.setBase(SystemClock.elapsedRealtime());
+
+		}
+		if(requestCode==4)
+		{
+			if(data.getBooleanExtra("Send", false))
+			{
+				enterNameAndEmail();
+			}
+			else if(data.getBooleanExtra("No", false))
+			{
+				returnFromSet();
+			}
+			/**/
 
 		}
 		if (requestCode == REQUEST_CODE && resultCode == RESULT_OK)

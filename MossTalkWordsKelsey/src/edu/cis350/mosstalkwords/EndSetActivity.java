@@ -60,9 +60,33 @@ public class EndSetActivity extends Activity {
 	    String longestStreak=new Integer(currentUser.getLongestStreak(currentSet)).toString();
 	    streak.setText(streak.getText()+longestStreak);
 			AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-			builder.setTitle("          Congratulations!")//hackish extra spaces to center the title since not an option
+			builder.setTitle("Congratulations!")//hackish extra spaces to center the title since not an option
 				.setView(layout)
-				.setNeutralButton(R.string.restart, new DialogInterface.OnClickListener()
+				.setPositiveButton(R.string.send, new DialogInterface.OnClickListener()
+				{
+					public void onClick(DialogInterface dialog, int id)
+					{
+						//restart set
+						Intent i=getIntent();
+						i.putExtra("Send", true);
+						i.putExtra("No", false);
+						setResult(RESULT_OK, i);
+						finish();
+					}
+				})
+				.setNegativeButton(R.string.no, new DialogInterface.OnClickListener()
+				{
+					public void onClick(DialogInterface dialog, int id)
+					{
+						//go to main menu
+						Intent i=getIntent();
+						i.putExtra("Send", false);
+						i.putExtra("No", true);
+						setResult(RESULT_OK, i);
+						finish();
+					}
+				})
+				/*.setNeutralButton(R.string.restart, new DialogInterface.OnClickListener()
 				{
 					public void onClick(DialogInterface dialog, int id)
 					{
@@ -100,7 +124,7 @@ public class EndSetActivity extends Activity {
 						setResult(RESULT_OK, i);
 						finish();
 					}
-				});
+				})*/;
 					
 			
 				AlertDialog alert= builder.create();//create the AlertDialog object and return it

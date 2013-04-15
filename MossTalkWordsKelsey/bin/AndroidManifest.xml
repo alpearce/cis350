@@ -31,6 +31,8 @@
         
         <activity android:name="EndSetActivity"></activity>
         <activity android:name="WelcomeActivity"></activity>
+        <activity android:name="NameAndEmailActivity"></activity>
+        <activity android:name="EndSetReturnActivity"></activity>
     
     </application>
 
