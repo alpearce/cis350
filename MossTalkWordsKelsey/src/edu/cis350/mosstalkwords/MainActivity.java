@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -211,8 +212,9 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		//BufferedOutputStream reportOut = new BufferedOutputStream(new FileOutputStream(currentSet.getName()+"Report.txt"));
 			//reportOut.write(("User: "+currentUser.name).getBytes());
 		//General set stats
-		File reportFile=new File(currentSet.getName()+"Report.txt");
-			OutputStreamWriter reportOut = new OutputStreamWriter(openFileOutput(currentSet.getName()+"Report.txt", this.MODE_PRIVATE));
+		File path =Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+		File reportFile=new File(path, currentSet.getName()+"Report.txt");
+			//OutputStreamWriter reportOut = new OutputStreamWriter(openFileOutput(currentSet.getName()+"Report.txt", this.MODE_PRIVATE));
 			String reportString=currentUser.generateSetReport(currentSet);
 			FileWriter report=new FileWriter(reportFile);
 			report.write(reportString);
