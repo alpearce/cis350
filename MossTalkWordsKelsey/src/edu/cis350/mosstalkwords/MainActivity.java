@@ -232,6 +232,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 
 	public void nextSet() {
 		resetMetricsImage();
+		pbar.setProgress(0);
 		setCounter=(setCounter + 1)%allStimulusSets.size();
 		currentSet = allStimulusSets.get(setCounter);
 		Log.d("nextset","new set is " + currentSet.getName());
@@ -245,6 +246,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 	public void replaySet()
 	{
 		imageCounter=0;
+		pbar.setProgress(0);
 		resetMetricsImage();
 		currentImage = currentSet.getStimuli().get(imageCounter).getName();
 		Bitmap im = imCache.getBitmapFromCache(currentImage); 
@@ -305,7 +307,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			if (matches.isEmpty()) { Log.d("voice rec","NO MATCHES");}
 			for (String s: matches) {
 				if (s.toLowerCase().contains(currentImage.toLowerCase())) {
-					//subtract 100 for each hint used, but if 3 are used make the score 100 anyway
+					//subtract 100 for each hint used, but if 3+ are used make the score 100 anyway
 					int thisImageScore = (300-100*hintsUsed == 0 ? 100:300-100*hintsUsed);
 					currentUser.updateImageScore(currentSet.getName(), imageCounter, thisImageScore);
 					TextView scoreTextView = (TextView)findViewById(R.id.scoretext);

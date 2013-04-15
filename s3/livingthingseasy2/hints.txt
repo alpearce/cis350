@@ -33,3 +33,7 @@ stair, billionaire, declare
 tree
 Hippies are known to hug these large plants, which also provide homes for birds and squirrels. 
 free, spree, goatee
+
+bean
+This is a magical fruit that makes you toot.
+mean, green, obscene

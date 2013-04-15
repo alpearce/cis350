@@ -8,6 +8,7 @@ import android.util.Log;
 public class User implements Serializable {
 	//score, speed, efficiency, streaks
 	//int longestStreak=0;
+	public static final int NUMSTARS = 3; 
 	private int totalScore=0;
 	private int currentStreak;
 	int maxAttemptsAllowed=3;//number of attempts considered for efficiency calculations, anything over this is considered 0 efficiency
@@ -93,18 +94,18 @@ public class User implements Serializable {
 	{
 		int temp[]=stimulusSetScores.get(stimulusSetName);
 		int totalScore= temp.length*300;
+		int interval = totalScore/NUMSTARS;
 		int setScore=0;
 		for(int i: temp)
 		{
 			setScore+=i;
 		}
-		if(setScore*100/totalScore>70) {
+		if(setScore*100/totalScore>2*interval) {
 			starsForSets.put(stimulusSetName, Integer.valueOf(3));
 		}
-		else if(setScore*100/totalScore>55) {
+		else if(setScore*100/totalScore>1*interval) {
 			starsForSets.put(stimulusSetName, Integer.valueOf(2));
-		}
-		else {
+		} else {
 			starsForSets.put(stimulusSetName, Integer.valueOf(1));
 		}
 	}
