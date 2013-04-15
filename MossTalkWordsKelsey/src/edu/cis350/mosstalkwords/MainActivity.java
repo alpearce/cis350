@@ -214,6 +214,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		//General set stats
 		File path =Environment.getExternalStorageDirectory();
 		File dir=new File(path.getAbsolutePath()+"/textfiles");
+		dir.mkdirs();
 		File reportFile=new File(dir,(currentSet.getName()+"Report.txt"));
 			//OutputStreamWriter reportOut = new OutputStreamWriter(openFileOutput(currentSet.getName()+"Report.txt", this.MODE_PRIVATE));
 			String reportString=currentUser.generateSetReport(currentSet);
@@ -243,7 +244,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		// Here my file name is shortcuts.pdf which i have stored in /res/raw folder
 		//Uri emailUri = Uri.parse(rawFolderPath );
 		emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(fileName));
-		//emailIntent.setType("application/pdf");
+		emailIntent.setType("message/rfc822");
 		startActivity(Intent.createChooser(emailIntent, "Send mail..."));
 	}
 	public void createAndSendReport()

@@ -78,7 +78,7 @@ public class User implements Serializable {
 		fullReport+=("Completeness: "+efficiencyPercent+"%\n");
 		String longestStreak=Integer.valueOf(getLongestStreak(currentSet.getName())).toString();
 		fullReport+=("Longest Streak: "+longestStreak+"\n");
-		fullReport+=("\nImage By Image Statistics:\n");
+		fullReport+=("\nImage By Image Statistics:\n\n");
 		int index=0;
 		for(Stimulus image:currentSet.stimuli)
 		{
@@ -92,7 +92,7 @@ public class User implements Serializable {
 	{
 		String imageReport="";
 		imageReport+=currentImage.name+":\n";
-		imageReport+="Score: "+Integer.valueOf(stimulusSetScores.get(currentSet.getName())[index]).toString();
+		imageReport+="Score: "+Integer.valueOf(stimulusSetScores.get(currentSet.getName())[index]).toString()+"\n";
 		imageReport+="Number Of Hints Used: "+Integer.valueOf((stimulusSetEfficiencies.get(currentSet.getName()))[index][0]).toString()+"\n";
 		imageReport+="Number of Attempts: "+Integer.valueOf((stimulusSetEfficiencies.get(currentSet.getName()))[index][1])+"\n";
 		imageReport+="\n";
