@@ -343,9 +343,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		//currentImage = currentSet.getStimuli().get(imageCounter).getName();
 	}
 	public void onNextSetButtonClick(View view) {
-//		ViewFlipper score = (ViewFlipper)findViewById(R.id.ViewFlipper);
-//		ViewPropertyAnimator animate = score.animate();
-//		animate.cancel();
+
 		nextSet();			
 	}
 
