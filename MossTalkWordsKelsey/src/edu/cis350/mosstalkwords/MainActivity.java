@@ -39,12 +39,16 @@ import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.support.v4.util.LruCache;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View.OnClickListener;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewPropertyAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -77,6 +81,10 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 	User currentUser;
 	Button speakBtn;
 
+	Button popup;
+
+
+	final Context context = this;
 
 
 	Chronometer timer;
@@ -98,13 +106,14 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		System.out.println("on create");
+
 		super.onCreate(savedInstanceState);
 
 		new InitCategoriesBackgroundTask().execute();
 		currentUser = new User();/*must be initialized before welcome page for initial start up so that
 		rating bars can be populated with scores the same way everytime, even if the sets haven't been played*/
-		
-		
+
+
 		openWelcomePage();
 
 
@@ -118,14 +127,14 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		imSwitcher.setOutAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
 
 		imCache = new ImageCache();
-		
+
 		rhymePtr = 0;
-		
+
 
 		new InitCategoriesBackgroundTask().execute();
-			
+
 		pbar = (ProgressBar) findViewById(R.id.progressBar1);
-		
+
 		timer = (Chronometer) findViewById(R.id.chronometer1);
 		TextView txtView = (TextView)findViewById(R.id.chronometer1);
 		TextView scoreView = (TextView)findViewById(R.id.scoretext);
@@ -134,8 +143,8 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		txtView.setTypeface(typeface);
 		scoreView.setTypeface(typeface);
 		timer.start();
-		
-		
+
+
 		addListenerForButton();
 
 		PackageManager pm = getPackageManager();
@@ -145,6 +154,8 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			speakBtn.setEnabled(false);
 			speakBtn.setText("Not compatible");
 		}			
+
+
 	}
 	public void enterNameAndEmail()
 	{
@@ -164,7 +175,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		returnOptions.putExtra("User", currentUser);
 		startActivityForResult(returnOptions,1);
 	}
-	
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -214,19 +225,19 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 	{
 		//PrintWriter reportOut=new PrintWriter(currentSet.getName()+"Report.txt");
 		//BufferedOutputStream reportOut = new BufferedOutputStream(new FileOutputStream(currentSet.getName()+"Report.txt"));
-			//reportOut.write(("User: "+currentUser.name).getBytes());
+		//reportOut.write(("User: "+currentUser.name).getBytes());
 		//General set stats
 		File path =Environment.getExternalStorageDirectory();
 		File dir=new File(path.getAbsolutePath()+"/textfiles");
 		dir.mkdirs();
 		File reportFile=new File(dir,(currentSet.getName()+"Report.txt"));
-			//OutputStreamWriter reportOut = new OutputStreamWriter(openFileOutput(currentSet.getName()+"Report.txt", this.MODE_PRIVATE));
-			String reportString=currentUser.generateSetReport(currentSet);
-			FileWriter report=new FileWriter(reportFile);
-			report.write(reportString);
-			//reportOut.write(reportString);
-			//reportOut.close();
-			report.close();
+		//OutputStreamWriter reportOut = new OutputStreamWriter(openFileOutput(currentSet.getName()+"Report.txt", this.MODE_PRIVATE));
+		String reportString=currentUser.generateSetReport(currentSet);
+		FileWriter report=new FileWriter(reportFile);
+		report.write(reportString);
+		//reportOut.write(reportString);
+		//reportOut.close();
+		report.close();
 		//reportOut.println("User: "+currentUser.name);
 		//reportOut.close();
 		return(reportFile);
@@ -236,7 +247,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
 		emailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, 
-		                     new String[]{currentUser.email});
+				new String[]{currentUser.email});
 		String subject="Wordle "+currentSet.getName() +" Report";
 		emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
 		String body= "Your report is attached below. Good Work!";
@@ -250,11 +261,11 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(fileName));
 		emailIntent.setType("vnd.android.cursor.dir/vnd.google.note");
 		startActivityForResult(Intent.createChooser(emailIntent, "Send mail..."),5);
-		
+
 	}
 	public void createAndSendReport()
 	{
-		
+
 		File fileMade=new File("");
 		try {
 			fileMade = createReport();
@@ -262,9 +273,9 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		sendReportViaEmail(fileMade);
-		
+
 	}
 	public void finishedSet()
 	{
@@ -273,7 +284,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		endSet.putExtra("User", currentUser);
 		endSet.putExtra("currentSet", currentSet.getName());
 		startActivityForResult(endSet,4);
-		
+
 	}
 	public void nextImage() {
 		currentUser.updateImageEfficiency(currentSet.getName(), imageCounter, hintsUsed, numAttempts);
@@ -328,7 +339,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		TextView hintView= (TextView)findViewById(R.id.hintText);
 		hintView.setText("");
 	}	
-	
+
 	public void replaySet()
 	{
 		imageCounter=0;
@@ -381,13 +392,13 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			}
 			else
 			{
-			
-			currentUser.name=data.getExtras().getString("Username");
-			currentUser.email=data.getExtras().getString("Email");
-			createAndSendReport();
-	
+
+				currentUser.name=data.getExtras().getString("Username");
+				currentUser.email=data.getExtras().getString("Email");
+				createAndSendReport();
+
 			}
-			
+
 		}
 		if (requestCode == 3) {
 			//this is the index of the allStimulusSetsArray
@@ -409,7 +420,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 				else
 				{
 					createAndSendReport();
-					
+
 				}
 			}
 			else if(data.getBooleanExtra("No", false))
@@ -429,6 +440,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			//goes through all the possible strings from voice and determines if there is a match
 			//right now score is just incremented by 100
 			if (matches.isEmpty()) { Log.d("voice rec","NO MATCHES");}
+			boolean matchFound = false;
 			for (String s: matches) {
 				if (s.toLowerCase().contains(currentImage.toLowerCase())) {
 					//subtract 100 for each hint used, but if 3+ are used make the score 100 anyway
@@ -436,11 +448,11 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 					currentUser.updateImageScore(currentSet.getName(), imageCounter, thisImageScore);
 					ViewFlipper scoreTextView = (ViewFlipper)findViewById(R.id.ViewFlipper);
 					TextView scoreView = (TextView)scoreTextView.findViewById(R.id.scoretext);
-	
+
 					scoreView.setText("Score: " + String.valueOf(currentUser.getTotalScore()));
 					ViewPropertyAnimator animate = scoreTextView.animate();
 					animate.rotationBy(360);
-					
+
 
 					if(hintsUsed==0) {
 						currentUser.increaseStreak();
@@ -451,10 +463,30 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 					MediaPlayer mp=MediaPlayer.create(MainActivity.this,R.raw.ding);
 					mp.start(); //this could be its own class too
 					nextImage();
+					matchFound = true;
 				}
 				else {
 					numAttempts++;//if got it wrong the number of attempts increments
 				}
+			}
+
+			if (!matchFound) {
+				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+						context);
+				alertDialogBuilder.setMessage("Incorrect. \nYou said: " + matches.get(0));
+				alertDialogBuilder.setCancelable(false);
+				alertDialogBuilder.setNegativeButton("Continue",new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,int id) {
+
+						dialog.cancel();
+					}
+				});
+				AlertDialog alertDialog = alertDialogBuilder.create();
+				alertDialog.show();
+
+				TextView messageText = (TextView)alertDialog.findViewById(android.R.id.message);
+				messageText.setGravity(Gravity.CENTER);
+
 			}
 		}
 		super.onActivityResult(requestCode, resultCode, data);
@@ -514,8 +546,8 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 
 		return inSampleSize;
 	}
-	
-	
+
+
 	public Bitmap fetchImageFromS3(String name) { //STOP TRYING TO MAKE FETCH HAPPEN, GRETCHEN.
 		try {
 			URL aURL = new URL("https://s3.amazonaws.com/mosstalkdata/" +
@@ -524,9 +556,9 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			URLConnection conn = aURL.openConnection();
 			conn.connect();
 			Log.d("fetch","got connected");
-	
+
 			BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
-	
+
 			//decode bitmap bounds first to avoid running out of memory
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inJustDecodeBounds = true;
@@ -534,10 +566,10 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			BitmapFactory.decodeStream(bis, r, options);
 			Log.d("fetch","decoded bounds");
 			bis.close();
-	
+
 			// Calculate inSampleSize - need to figure out required dims
 			options.inSampleSize = ImageCache.calculateInSampleSize(options, REQUIRE_WIDTH, REQUIRE_HEIGHT);
-	
+
 			// Decode bitmap with inSampleSize set
 			options.inJustDecodeBounds = false;
 			conn = aURL.openConnection(); //reopen connection
@@ -613,7 +645,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 					Log.d("initset","read name = " + name);
 					String sentence = bread.readLine().trim();//should be sentence
 					Log.d("initset","read sentence = " + sentence);
-					
+
 					String[] rhymes = bread.readLine().toLowerCase().trim().split(",",-1);//should be rhymes
 					Log.d("initset","read rhymes = " + rhymes);
 					bread.readLine();//skip blank line
@@ -644,7 +676,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			try {
 				for(int i = 0; i < remoteURLS.length; i++) {
 					//Bitmap bitmap = fetchImageFromS3(remoteURLS[i].toLowerCase());
-					
+
 					URL aURL = new URL("https://s3.amazonaws.com/mosstalkdata/" +
 							currentSet.getName() +"/" + remoteURLS[i].toLowerCase() + ".jpg");				
 					Log.d("url", aURL.toString());
@@ -706,7 +738,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		}
 
 	}
-	
+
 	public void speak(String words2say) {
 		tts.speak(words2say, TextToSpeech.QUEUE_FLUSH, null);
 	}

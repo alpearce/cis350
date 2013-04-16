@@ -5,7 +5,6 @@
     android:background="#ffffff"
     android:orientation="vertical"
     tools:context=".MainActivity" >
-
   
     <ImageSwitcher
         android:id="@+id/ImageSwitcher1"
@@ -37,6 +36,8 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:orientation="vertical" >
+        
+        
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -65,6 +66,7 @@
                 android:layout_height="wrap_content"
                 android:onClick="onAnswerHintButtonClick"
                 android:text="@string/answer" />
+
         </LinearLayout>
 
         <Button
