@@ -389,6 +389,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		{
 			if(data.getBooleanExtra("Cancel",true))
 			{
+				returnFromSet();
 			}
 			else
 			{
