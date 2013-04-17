@@ -19,3 +19,7 @@ local.properties
 
 *.orig
 .DS_Store
+
+MossTalkWordsKelsey/gen/edu/cis350/mosstalkwords/R.java
+
+*.class

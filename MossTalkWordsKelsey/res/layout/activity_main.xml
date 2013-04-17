@@ -45,27 +45,26 @@
             android:layout_weight="0.41"
             android:orientation="horizontal" >
 
-       
             <Button
                 android:id="@+id/hint2button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRhymeHintButtonClick"
-                android:text="@string/rhyme" />
+                android:layout_width="57dp"
+                android:layout_height="45dp"
+                android:background="@drawable/earclipart"
+                android:onClick="onRhymeHintButtonClick" />
 
             <Button
                 android:id="@+id/hint1button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onSentenceHintButtonClick"
-                android:text="@string/sentence" />
+                android:layout_width="52dp"
+                android:layout_height="51dp"
+                android:background="@drawable/abcblocks"
+                android:onClick="onSentenceHintButtonClick" />
 
             <Button
                 android:id="@+id/hint3button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onAnswerHintButtonClick"
-                android:text="@string/answer" />
+                android:layout_width="54dp"
+                android:layout_height="58dp"
+                android:background="@drawable/exclamationicon"
+                android:onClick="onAnswerHintButtonClick" />
 
         </LinearLayout>
 
