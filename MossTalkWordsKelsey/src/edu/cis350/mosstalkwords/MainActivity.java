@@ -155,7 +155,6 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			speakBtn.setText("Not compatible");
 		}			
 
-
 	}
 	public void enterNameAndEmail()
 	{
@@ -360,6 +359,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 
 	private void startVoiceRecognitionActivity()
 	{
+		currentImage = currentSet.getStimuli().get(imageCounter).getName();
 		Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 		intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
 				RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -474,12 +474,20 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			if (!matchFound) {
 				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 						context);
-				String prompt = "Incorrect. \nYou said: " + matches.get(0);
+				int size = matches.size();
+				String prompt = "Incorrect. You said:";
+				String incorrectResponses = ""; 
+				if (size > 3){size = 3;}
+				for (int i = 0; i < size; i++) {
+					incorrectResponses = incorrectResponses + "\n" + matches.get(i);
+				}
+
+				prompt = prompt + incorrectResponses;
 				alertDialogBuilder.setMessage(prompt);
 				alertDialogBuilder.setCancelable(false);
-				alertDialogBuilder.setNegativeButton("Continue",new DialogInterface.OnClickListener() {
+				alertDialogBuilder.setNegativeButton("Ok",new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog,int id) {
-
+						tts.stop();
 						dialog.cancel();
 					}
 				});
@@ -488,7 +496,9 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 
 				TextView messageText = (TextView)alertDialog.findViewById(android.R.id.message);
 				messageText.setGravity(Gravity.CENTER);
-				speak(prompt);
+				prompt = prompt.replaceFirst("\\n", "");
+				prompt = prompt.replaceAll("\\n", ",oar, "); //oar = or for tts apparently...
+				speak(prompt, (float) 0.8);
 			}
 		}
 		super.onActivityResult(requestCode, resultCode, data);
@@ -499,7 +509,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		TextView hintView= (TextView)findViewById(R.id.hintText);
 		String hint = currentSet.getStimuli().get(imageCounter).getSentence();
 		hintView.setText(hint);
-		speak(hint);
+		speak(hint, 1);
 		hintsUsed++;
 	}
 
@@ -511,7 +521,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		Log.d("rhyme hints","rhyme ptr: " + rhymePtr);
 		String hint = rhymes[rhymePtr];
 		hintView.setText(hint);
-		speak(hint);
+		speak(hint, 1);
 		hintsUsed++;
 		rhymePtr = (++rhymePtr)%rhymes.length;
 		Log.d("rhyme hints after","rhyme ptr: " + rhymePtr);
@@ -522,7 +532,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		TextView hintView= (TextView)findViewById(R.id.hintText);
 		String hint = currentSet.getStimuli().get(imageCounter).getName();
 		hintView.setText(hint);
-		speak(hint);
+		speak(hint, 1);
 		hintsUsed++;
 	}
 
@@ -627,6 +637,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			} finally {  }
 			return null;
 		}		
+		
 	}
 
 	class LoadHintsBackgroundTask extends AsyncTask<String, Integer, Void> {
@@ -741,12 +752,13 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 
 	}
 
-	public void speak(String words2say) {
+	public void speak(String words2say, float rate) {
+		tts.setSpeechRate(rate);
 		tts.speak(words2say, TextToSpeech.QUEUE_FLUSH, null);
 	}
 
 	public void onInit(int status) {
-		speak("Welcome to MossTalk Words!");
+		speak("Welcome to MossTalk Words!", 1);
 	}
 
 }
