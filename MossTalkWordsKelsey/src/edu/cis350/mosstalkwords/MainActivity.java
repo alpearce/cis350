@@ -474,7 +474,8 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			if (!matchFound) {
 				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 						context);
-				alertDialogBuilder.setMessage("Incorrect. \nYou said: " + matches.get(0));
+				String prompt = "Incorrect. \nYou said: " + matches.get(0);
+				alertDialogBuilder.setMessage(prompt);
 				alertDialogBuilder.setCancelable(false);
 				alertDialogBuilder.setNegativeButton("Continue",new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog,int id) {
@@ -487,7 +488,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 
 				TextView messageText = (TextView)alertDialog.findViewById(android.R.id.message);
 				messageText.setGravity(Gravity.CENTER);
-
+				speak(prompt);
 			}
 		}
 		super.onActivityResult(requestCode, resultCode, data);
