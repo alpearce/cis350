@@ -38,10 +38,13 @@ public class WelcomeActivity extends Activity {
 		RatingBar score=(RatingBar) findViewById(R.id.scoreBar1);
 		int starScore=0;
 		if(currentUser.containsStarScore(currStimSetName))
+		{
 			starScore=currentUser.getStarScore(currStimSetName);
+			System.out.println("contains star score");
+		}
 	    score.setNumStars(starScore);
 	    score.setRating(starScore);
-	    
+	    System.out.println("star score: " +starScore);
 	    currStimSetName="nonlivingthingseasy2";
 		score=(RatingBar) findViewById(R.id.scoreBar2);
 		starScore=0;

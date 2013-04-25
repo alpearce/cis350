@@ -18,6 +18,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList; 
+import java.util.HashMap;
 import java.util.List;
 
 import android.media.MediaPlayer;
@@ -50,6 +51,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
@@ -70,6 +72,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 	private static final int REQUEST_CODE = 1234;
 	final int REQUIRE_HEIGHT = 1280;
 	final int REQUIRE_WIDTH = 800;
+	private final String PREFERENCE_NAME="UserPreferences";
 	private int index;
 
 	private TextToSpeech tts;
@@ -113,8 +116,9 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		currentUser = new User();/*must be initialized before welcome page for initial start up so that
 		rating bars can be populated with scores the same way everytime, even if the sets haven't been played*/
 
-
-		openWelcomePage();
+		retrievePreferences();//get the current user and their data if already exists
+		
+		//openWelcomePage();
 
 
 		tts = new TextToSpeech(this, this);
@@ -155,6 +159,46 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			speakBtn.setText("Not compatible");
 		}			
 
+	}
+	public void createSharedPreferences()
+	{
+		SharedPreferences userSettings=getSharedPreferences(PREFERENCE_NAME, MODE_PRIVATE);
+		 SharedPreferences.Editor editor = userSettings.edit();
+		 editor.putString("name", currentUser.name);
+		 editor.putString("email", currentUser.email);
+		 editor.putInt("totalScore", currentUser.getTotalScore());
+		 for(String set:currentUser.starsForSets.keySet())
+		 {
+			 editor.putString(set, Integer.toString(currentUser.starsForSets.get(set)));
+		 }
+		 editor.commit();
+		 
+	}
+	public void retrievePreferences()
+	{
+		//SharedPreferences emportPref = getSharedPreferences("dawaaData",MODE_PRIVATE);
+		SharedPreferences prefs=getSharedPreferences(PREFERENCE_NAME,MODE_PRIVATE);
+		if(prefs.contains("name"))//if prefs stored
+		{
+			currentUser.name=prefs.getString("name", null);
+			currentUser.email=prefs.getString("email",null);
+			currentUser.setTotalScore(prefs.getInt("totalScore", 0));
+			HashMap<String, Integer> stars=new HashMap<String, Integer>();
+			while(allStimulusSets==null||allStimulusSets.isEmpty())
+			{
+				
+			}
+			for(StimulusSet set:allStimulusSets)
+			{
+				stars.put(set.getName(),Integer.valueOf(prefs.getString(set.getName(), "0")));
+			}
+			currentUser.starsForSets.putAll(stars);
+			for(String s: currentUser.starsForSets.keySet())
+			{
+				System.out.println(s+": "+currentUser.starsForSets.get(s));
+			}
+		}
+		openWelcomePage();
 	}
 	public void enterNameAndEmail()
 	{
@@ -397,6 +441,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 				currentUser.name=data.getExtras().getString("Username");
 				currentUser.email=data.getExtras().getString("Email");
 				createAndSendReport();
+				createSharedPreferences();
 
 			}
 
@@ -428,7 +473,8 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			{
 				returnFromSet();
 			}
-			/**/
+			if(currentUser.name!=null)
+				createSharedPreferences();
 
 		}
 		if(requestCode==5)//returned from email intent
@@ -625,6 +671,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 					Log.d("initcat","stimulusSets[" +setIdx+ "] = " + line);
 					setIdx++;
 				}
+				
 				//currentSet = allStimulusSets.get(0);//set current set to first set
 				//new LoadHintsBackgroundTask().execute();
 			} catch (MalformedURLException e) {

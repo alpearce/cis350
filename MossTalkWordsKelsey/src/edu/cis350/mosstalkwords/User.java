@@ -2,6 +2,7 @@ package edu.cis350.mosstalkwords;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import android.content.Intent;
 import android.util.Log;
@@ -55,11 +56,17 @@ public class User implements Serializable {
 	public int getTotalScore() {
 		return this.totalScore;
 	}
-	
+	public String getTotalScoreString()
+	{
+		return Integer.toString(totalScore);
+	}
 	public void increaseStreak() {
 		currentStreak++;
 	}
-	
+	public void setTotalScore(int totscore)
+	{
+		totalScore=totscore;
+	}
 	public void endedSet(String setName) {
 		this.calculateStarScore(setName);
 		this.calculateAverageEfficiencyPercent(setName);//calculate the percentage for this set
@@ -68,6 +75,15 @@ public class User implements Serializable {
 	
 	public boolean hasPlayedSet(String setName) {
 		return this.stimulusSetScores.containsKey(setName);
+	}
+	public HashSet<String> getSetScoresInMapOfStrings()
+	{
+		HashSet<String> scoreStrings=new HashSet<String>();
+		for(int i:starsForSets.values())
+		{
+			scoreStrings.add(Integer.toString(i));
+		}
+		return scoreStrings;
 	}
 	public String generateSetReport(StimulusSet currentSet)
 	{
