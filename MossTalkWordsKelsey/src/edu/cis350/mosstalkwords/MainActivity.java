@@ -500,7 +500,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 					ViewPropertyAnimator animate = scoreTextView.animate();
 					animate.rotationBy(360);
 
-
+					speak("Great Job", 1);
 					if(hintsUsed==0) {
 						currentUser.increaseStreak();
 					}
@@ -805,7 +805,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 	}
 
 	public void onInit(int status) {
-		speak("Welcome to MossTalk Words!", 1);
+		speak("Welcome to Wordle!", 1);
 	}
 
 }
