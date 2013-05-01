@@ -59,6 +59,19 @@ public class EndSetActivity extends Activity {
 	    TextView streak=(TextView) layout.findViewById(R.id.streak);
 	    String longestStreak=new Integer(currentUser.getLongestStreak(currentSet)).toString();
 	    streak.setText(streak.getText()+longestStreak);
+	    
+	    TextView bestScore=(TextView) layout.findViewById(R.id.bestScore);
+	    String bScore=Integer.valueOf(currentUser.bestScoresForSets.get(currentSet)).toString();
+	    bestScore.setText(bestScore.getText()+bScore+" stars");
+	    
+	    TextView bestCompleteness=(TextView) layout.findViewById(R.id.bestCompleteness);
+	    String bestEfficiencyPercent=Integer.valueOf(currentUser.bestCompletenessForSets.get(currentSet)).toString();
+	    bestCompleteness.setText(bestCompleteness.getText()+bestEfficiencyPercent+"%");
+	    
+	    TextView bestStreak=(TextView) layout.findViewById(R.id.bestStreak);
+	    String bestLongestStreak=Integer.valueOf(currentUser.bestStreaksForSets.get(currentSet)).toString();
+	    bestStreak.setText(bestStreak.getText()+bestLongestStreak);
+	    
 			AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 			builder.setTitle("Congratulations!")//hackish extra spaces to center the title since not an option
 				.setView(layout)

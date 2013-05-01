@@ -60,12 +60,42 @@
       	android:paddingBottom="10dp"
       	android:paddingTop="5dp"
         />
+    <TextView
+        android:id="@+id/best"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="\nYour Best Results For This Set: " 
+        android:layout_below="@id/streak"
+        />
+    <TextView
+        android:id="@+id/bestScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Best Score: " 
+        android:layout_below="@id/best"
+        />
+     <TextView
+        android:id="@+id/bestCompleteness"
+         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Best Completeness: " 
+        android:layout_below="@id/bestScore"
+        />
+    <TextView
+        android:id="@+id/bestStreak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+      	android:text="Your Longest Streak Ever: "
+      	android:layout_below="@id/bestCompleteness"
+      	android:paddingBottom="10dp"
+      	android:paddingTop="5dp"
+        />
      <TextView
         android:id="@+id/sendReport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
       	android:text="\nSend a detailed report of this set via Email? "
-      	android:layout_below="@id/streak"
+      	android:layout_below="@id/bestStreak"
       	android:paddingBottom="10dp"
       	android:paddingTop="5dp"
         />

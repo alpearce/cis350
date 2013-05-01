@@ -19,6 +19,9 @@ public class User implements Serializable {
 	public HashMap<String, Integer> longestStreakForSets;
 	public HashMap<String, int [][]> stimulusSetEfficiencies;
 	public HashMap<String, Integer> percentEfficiencyForSets;
+	public HashMap<String, Integer> bestStreaksForSets;
+	public HashMap<String, Integer> bestCompletenessForSets;//can't make BestReport object or serializable passing into intent breaks
+	public HashMap<String, Integer> bestScoresForSets;
 	public String name;
 	public String email;
 	
@@ -30,6 +33,9 @@ public class User implements Serializable {
 		longestStreakForSets = new HashMap<String, Integer>();
 		stimulusSetEfficiencies = new HashMap<String, int[][]>();
 		percentEfficiencyForSets = new HashMap<String,Integer>();	
+		bestStreaksForSets=new HashMap<String, Integer>();
+		bestCompletenessForSets=new HashMap<String, Integer>();
+		bestScoresForSets=new HashMap<String, Integer>();
 		name = null;
 		email=null;
 		
@@ -70,6 +76,8 @@ public class User implements Serializable {
 	public void endedSet(String setName) {
 		this.calculateStarScore(setName);
 		this.calculateAverageEfficiencyPercent(setName);//calculate the percentage for this set
+		this.streakEnded(setName);
+		updateBestReport(getLongestStreak(setName),getAverageEfficiencyPercent(setName),getStarScore(setName),setName);
 		//nextSet();
 	}
 	
@@ -114,18 +122,18 @@ public class User implements Serializable {
 		imageReport+="\n";
 		return imageReport;
 	}
-	public void streakEnded(StimulusSet currentSet)
+	public void streakEnded(String currentSet)
 	{
 		//if a streak already exists, and this streak is larger, update the streak
-		if(this.longestStreakForSets.containsKey(currentSet.setName)&&
-				currentStreak>this.longestStreakForSets.get(currentSet.setName))
+		if(this.longestStreakForSets.containsKey(currentSet)&&
+				currentStreak>this.longestStreakForSets.get(currentSet))
 		{	
-			this.longestStreakForSets.remove(currentSet.setName);
-			this.longestStreakForSets.put(currentSet.setName, currentStreak);
+			this.longestStreakForSets.remove(currentSet);
+			this.longestStreakForSets.put(currentSet, currentStreak);
 		}
 		//if there is no streak, make this the longest streak
-		else if(!this.longestStreakForSets.containsKey(currentSet.setName)) {
-			this.longestStreakForSets.put(currentSet.setName, currentStreak);
+		else if(!this.longestStreakForSets.containsKey(currentSet)) {
+			this.longestStreakForSets.put(currentSet, currentStreak);
 		}
 		//reset streak counter
 		currentStreak=0;
@@ -150,13 +158,31 @@ public class User implements Serializable {
 		{
 			setScore+=i;
 		}
-		if(setScore*100/totalScore>2*interval) {
+		if(setScore>2*interval) {
 			starsForSets.put(stimulusSetName, Integer.valueOf(3));
 		}
-		else if(setScore*100/totalScore>1*interval) {
+		else if(setScore>1*interval) {
 			starsForSets.put(stimulusSetName, Integer.valueOf(2));
 		} else {
 			starsForSets.put(stimulusSetName, Integer.valueOf(1));
+		}
+	}
+	public void updateBestReport(int streak, int complete, int score, String setName)
+	{
+		if(bestScoresForSets.containsKey(setName))
+		{
+			if(bestScoresForSets.get(setName)<score)
+				bestScoresForSets.put(setName,score);
+			if(bestStreaksForSets.get(setName)<streak)
+				bestStreaksForSets.put(setName,streak);
+			if(bestCompletenessForSets.get(setName)<complete)
+				bestCompletenessForSets.put(setName, complete);
+		}
+		else
+		{
+			bestScoresForSets.put(setName,score);
+			bestStreaksForSets.put(setName,streak);
+			bestCompletenessForSets.put(setName, complete);
 		}
 	}
 	public int getAverageEfficiencyPercent(String stimulusSetName)
@@ -166,6 +192,10 @@ public class User implements Serializable {
 	public int getLongestStreak(String stimulusSetName)
 	{
 		return longestStreakForSets.get(stimulusSetName);
+	}
+	public void resetLongestStreak(String stimulusSetName)
+	{
+		longestStreakForSets.put(stimulusSetName, 0);
 	}
 	public void calculateAverageEfficiencyPercent(String stimulusSetName)
 	{
@@ -179,9 +209,14 @@ public class User implements Serializable {
 		for(int i[]: temp)
 		{
 			userHintsUsed+=i[0];
-			userNumberOfAttempts+=i[1];
+			Log.d("attempts image", "attempts used: "+String.valueOf(i[1]));
+			if(i[1]>3)
+				userNumberOfAttempts+=3;
+			else
+				userNumberOfAttempts+=(i[1]);
 		
 		}
+		
 		int hintsEfficiencyComponent=(50-userHintsUsed*50/maxHintsUsed);
 		Log.d("hints efficiency comp.","hints Efficiency Component: "+ String.valueOf(hintsEfficiencyComponent));
 		int attemptsEfficiencyComponent=(50-userNumberOfAttempts*50/maxNumberOfAttempts);

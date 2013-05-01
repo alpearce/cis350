@@ -251,7 +251,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			//next button: user didn't get the word so score = 0 and streak ends; switch images
 			public void onClick(View arg0) {
 				currentUser.updateImageScore(currentSet.getName(), imageCounter, 0);
-				currentUser.streakEnded(currentSet);
+				currentUser.streakEnded(currentSet.setName);
 				hintsUsed=3;
 				numAttempts=3;
 				nextImage();
@@ -331,9 +331,11 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 	}
 	public void nextImage() {
 		currentUser.updateImageEfficiency(currentSet.getName(), imageCounter, hintsUsed, numAttempts);
+		Log.d("attempts image", "attempts used: "+String.valueOf(numAttempts));
+	
 		resetMetricsImage();
 		pbar.setProgress(imageCounter + 1);
-
+		
 		//animate.scaleXBy(1/10);
 		//if at the end of the set then go into finishedSet setup
 		if(imageCounter==currentSet.getStimuli().size()-1) {
@@ -370,10 +372,10 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 	}
 
 	public void nextSet() {
-		resetMetricsImage();
-		pbar.setProgress(0);
+		
 		setCounter=(setCounter + 1)%allStimulusSets.size();
 		currentSet = allStimulusSets.get(setCounter);
+		playSet();
 		Log.d("nextset","new set is " + currentSet.getName());
 		imageCounter=0;
 		Log.d("imagecounter","image counter is: " + imageCounter);
@@ -382,12 +384,16 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 		TextView hintView= (TextView)findViewById(R.id.hintText);
 		hintView.setText("");
 	}	
-
+	public void playSet()
+	{
+		resetMetricsImage();
+		pbar.setProgress(0);
+		currentUser.resetLongestStreak(currentSet.setName);
+	}
 	public void replaySet()
 	{
 		imageCounter=0;
-		pbar.setProgress(0);
-		resetMetricsImage();
+		playSet();
 		currentImage = currentSet.getStimuli().get(imageCounter).getName();
 		Bitmap im = imCache.getBitmapFromCache(currentImage); 
 		if (im == null) { Log.d("nextImage","null bitmap- that's bad/" + currentImage); } 
@@ -491,7 +497,7 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 			for (String s: matches) {
 				if (s.toLowerCase().contains(currentImage.toLowerCase())) {
 					//subtract 100 for each hint used, but if 3+ are used make the score 100 anyway
-					int thisImageScore = (300-100*hintsUsed == 0 ? 100:300-100*hintsUsed);
+					int thisImageScore = (300-100*hintsUsed <= 0 ? 100:300-100*hintsUsed);
 					currentUser.updateImageScore(currentSet.getName(), imageCounter, thisImageScore);
 					ViewFlipper scoreTextView = (ViewFlipper)findViewById(R.id.ViewFlipper);
 					TextView scoreView = (TextView)scoreTextView.findViewById(R.id.scoretext);
@@ -505,19 +511,17 @@ public class MainActivity extends Activity implements ViewFactory, TextToSpeech.
 						currentUser.increaseStreak();
 					}
 					else {
-						currentUser.streakEnded(currentSet);
+						currentUser.streakEnded(currentSet.setName);
 					}
 					MediaPlayer mp=MediaPlayer.create(MainActivity.this,R.raw.ding);
 					mp.start(); //this could be its own class too
 					nextImage();
 					matchFound = true;
 				}
-				else {
-					numAttempts++;//if got it wrong the number of attempts increments
-				}
 			}
 
 			if (!matchFound) {
+				numAttempts++;
 				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 						context);
 				int size = matches.size();
