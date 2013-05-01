@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -37,10 +38,10 @@ public class WelcomeActivity extends Activity {
 		
 		RatingBar score=(RatingBar) findViewById(R.id.scoreBar1);
 		int starScore=0;
-		if(currentUser.containsStarScore(currStimSetName))
+		if(currentUser.containsBestStarScore(currStimSetName))
 		{
-			starScore=currentUser.getStarScore(currStimSetName);
-			System.out.println("contains star score");
+			starScore=currentUser.bestScoresForSets.get(currStimSetName);
+			Log.d("welcome stars","contains star score"+starScore);
 		}
 	    score.setNumStars(starScore);
 	    score.setRating(starScore);
@@ -48,32 +49,32 @@ public class WelcomeActivity extends Activity {
 	    currStimSetName="nonlivingthingseasy2";
 		score=(RatingBar) findViewById(R.id.scoreBar2);
 		starScore=0;
-		if(currentUser.containsStarScore(currStimSetName))
-			starScore=currentUser.getStarScore(currStimSetName);
+		if(currentUser.containsBestStarScore(currStimSetName))
+			starScore=currentUser.bestScoresForSets.get(currStimSetName);
 	    score.setNumStars(starScore);
 	    score.setRating(starScore);
 	    
 	    currStimSetName="livingthingsmedium2";
 		score=(RatingBar) findViewById(R.id.scoreBar3);
 		starScore=0;
-		if(currentUser.containsStarScore(currStimSetName))
-			starScore=currentUser.getStarScore(currStimSetName);
+		if(currentUser.containsBestStarScore(currStimSetName))
+			starScore=currentUser.bestScoresForSets.get(currStimSetName);
 	    score.setNumStars(starScore);
 	    score.setRating(starScore);
 	    
 	    currStimSetName="nonlivingthingshard2";
 		score=(RatingBar) findViewById(R.id.scoreBar4);
 		starScore=0;
-		if(currentUser.containsStarScore(currStimSetName))
-			starScore=currentUser.getStarScore(currStimSetName);
+		if(currentUser.containsBestStarScore(currStimSetName))
+			starScore=currentUser.bestScoresForSets.get(currStimSetName);
 	    score.setNumStars(starScore);
 	    score.setRating(starScore);
 	    
 	    currStimSetName="livingthingshard2";
 		score=(RatingBar) findViewById(R.id.scoreBar5);
 		starScore=0;
-		if(currentUser.containsStarScore(currStimSetName))
-			starScore=currentUser.getStarScore(currStimSetName);
+		if(currentUser.containsBestStarScore(currStimSetName))
+			starScore=currentUser.bestScoresForSets.get(currStimSetName);
 	    score.setNumStars(starScore);
 	    score.setRating(starScore);
 		//Button b1 = (Button)findViewById(R.id.livingeasy);

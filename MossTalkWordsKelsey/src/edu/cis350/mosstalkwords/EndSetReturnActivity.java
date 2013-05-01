@@ -25,8 +25,10 @@ Context mContext = this; //this.getApplicationContext();
 	    //final View layout = inflater.inflate(R.layout.dialog_enter_name_and_email, null); 
 	    
 	    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+	    builder.setCancelable(false);
 		builder.setTitle("Play Again?")//hackish extra spaces to center the title since not an option
 			//.setView(layout)
+		
 			.setNeutralButton(R.string.restart, new DialogInterface.OnClickListener()
 				{
 					public void onClick(DialogInterface dialog, int id)

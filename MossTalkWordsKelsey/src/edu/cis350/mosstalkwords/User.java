@@ -144,9 +144,9 @@ public class User implements Serializable {
 	{
 		return starsForSets.get(stimulusSetName);
 	}
-	public boolean containsStarScore(String stimulusSetName)
+	public boolean containsBestStarScore(String stimulusSetName)
 	{
-		return starsForSets.containsKey(stimulusSetName);
+		return bestScoresForSets.containsKey(stimulusSetName);
 	}
 	public void calculateStarScore(String stimulusSetName)
 	{

@@ -73,6 +73,7 @@ public class EndSetActivity extends Activity {
 	    bestStreak.setText(bestStreak.getText()+bestLongestStreak);
 	    
 			AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+			builder.setCancelable(false);
 			builder.setTitle("Congratulations!")//hackish extra spaces to center the title since not an option
 				.setView(layout)
 				.setPositiveButton(R.string.send, new DialogInterface.OnClickListener()

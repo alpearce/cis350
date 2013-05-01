@@ -28,6 +28,7 @@ public class NameAndEmailActivity extends Activity
 	    
 	    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 	    	builder.setView(layout);
+	    	builder.setCancelable(false);
 	    	builder.setTitle("Welcome New User!");
 	    
 	    
