@@ -43,13 +43,16 @@ public final class R {
         public static final int ic_action_call=0x7f020013;
         public static final int ic_action_microphone=0x7f020014;
         public static final int ic_launcher=0x7f020015;
-        public static final int onestar=0x7f020016;
-        public static final int pineapple=0x7f020017;
-        public static final int score=0x7f020018;
-        public static final int sentance=0x7f020019;
-        public static final int soccerball=0x7f02001a;
-        public static final int tree=0x7f02001b;
-        public static final int white=0x7f02001c;
+        public static final int logo=0x7f020016;
+        public static final int logo1001=0x7f020017;
+        public static final int onestar=0x7f020018;
+        public static final int pineapple=0x7f020019;
+        public static final int score=0x7f02001a;
+        public static final int sentance=0x7f02001b;
+        public static final int soccerball=0x7f02001c;
+        public static final int tree=0x7f02001d;
+        public static final int white=0x7f02001e;
+        public static final int wordleicon1=0x7f02001f;
     }
     public static final class id {
         public static final int Completeness=0x7f09000e;
@@ -74,6 +77,7 @@ public final class R {
         public static final int livingeasy=0x7f09001d;
         public static final int livinghard=0x7f090026;
         public static final int livingmedium=0x7f090023;
+        public static final int logo=0x7f09001a;
         public static final int menu_settings=0x7f09002b;
         public static final int nonlivingeasy=0x7f090020;
         public static final int nonlivinghard=0x7f090029;
@@ -95,7 +99,6 @@ public final class R {
         public static final int thumbnoneasy=0x7f09001f;
         public static final int thumbnonhard=0x7f090028;
         public static final int username=0x7f090018;
-        public static final int welcomeView=0x7f09001a;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;

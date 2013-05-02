@@ -26,11 +26,6 @@ public class WelcomeActivity extends Activity {
 	    super.onCreate(savedInstanceState);
 		setContentView(R.layout.welcome_page);
 		
-		TextView welcomeView = (TextView)findViewById(R.id.welcomeView);
-		//txtView.setTextColor(Color.);
-		Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Bold.ttf");
-		welcomeView.setTypeface(typeface);
-		
 		Intent i=getIntent();
 		User currentUser=(User) i.getSerializableExtra("User");
 		
