@@ -58,7 +58,7 @@
                 android:drawableLeft="@drawable/sentance"
                 android:gravity="left|center_vertical"
                 android:onClick="onRhymeHintButtonClick"
-                android:text="Sentance" />
+                android:text="Sentence" />
 
             <Button
                 android:id="@+id/hint3button"
