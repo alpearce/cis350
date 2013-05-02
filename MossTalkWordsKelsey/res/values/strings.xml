@@ -18,8 +18,8 @@
  	<string name="congrats">Congratulations!</string>
 
  	<string name="one_star">Lone stars are only a good thing on the Texas flag. Try harder next time!</string>
- 	<string name="two_star">Two stars are better than one, but less good than three.</string>
- 	<string name="three_star">Three stars. That\'s decent, but don\'t get cocky.</string>
+ 	<string name="two_star">Two stars are better than one, but not as good as three.</string>
+ 	<string name="three_star">Three stars. If the picture was you, the word would be "awesome."</string>
  	<string name="four_star">Four stars. If the picture was you, the word would be "awesome."</string>
  	
  	<string name="send">Send</string>

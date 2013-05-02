@@ -43,9 +43,9 @@ public class EndSetActivity extends Activity {
 	    TextView message=(TextView) layout.findViewById(R.id.Message);
 	    String msg;
 	    switch (starScore) {
-	    	case 1: msg = "Lone stars are only a good thing on the Texas flag. Try harder next time!"; break;
-	    	case 2: msg = "Two stars are better than one, but less good than three."; break;
-	    	case 3: msg = "Three stars is absolutely average. Step up your game!"; break;
+	    	case 1: msg = getString(R.string.one_star); break;
+	    	case 2: msg = getString(R.string.two_star); break;
+	    	case 3: msg = getString(R.string.three_star); break;
 	    	case 4: msg = "Four stars. Good job, but don't get cocky."; break;
 	    	case 5: msg = "Five stars. If the picture was you, the word would be \"awesome\""; break;
 	    	default: msg = "";
@@ -61,9 +61,12 @@ public class EndSetActivity extends Activity {
 	    streak.setText(streak.getText()+longestStreak);
 	    
 	    RatingBar bestScore=(RatingBar) layout.findViewById(R.id.bestScoreBar);
-	    int bestStarScore=currentUser.bestScoresForSets.get(currentSet);
-	    score.setNumStars(bestStarScore);
-	    score.setRating(bestStarScore);
+	    int bestStarScore=0;
+	    if(currentUser.bestScoresForSets.containsKey(currentSet))
+	    	bestStarScore=currentUser.bestScoresForSets.get(currentSet);
+	    if(bestStarScore>0)
+	    	bestScore.setNumStars(bestStarScore);
+	    bestScore.setRating(bestStarScore);
 	    
 	    TextView bestCompleteness=(TextView) layout.findViewById(R.id.bestCompleteness);
 	    String bestEfficiencyPercent=Integer.valueOf(currentUser.bestCompletenessForSets.get(currentSet)).toString();
