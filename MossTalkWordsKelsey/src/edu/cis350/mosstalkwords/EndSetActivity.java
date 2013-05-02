@@ -60,9 +60,10 @@ public class EndSetActivity extends Activity {
 	    String longestStreak=new Integer(currentUser.getLongestStreak(currentSet)).toString();
 	    streak.setText(streak.getText()+longestStreak);
 	    
-	    TextView bestScore=(TextView) layout.findViewById(R.id.bestScore);
-	    String bScore=Integer.valueOf(currentUser.bestScoresForSets.get(currentSet)).toString();
-	    bestScore.setText(bestScore.getText()+bScore+" stars");
+	    RatingBar bestScore=(RatingBar) layout.findViewById(R.id.bestScoreBar);
+	    int bestStarScore=currentUser.bestScoresForSets.get(currentSet);
+	    score.setNumStars(bestStarScore);
+	    score.setRating(bestStarScore);
 	    
 	    TextView bestCompleteness=(TextView) layout.findViewById(R.id.bestCompleteness);
 	    String bestEfficiencyPercent=Integer.valueOf(currentUser.bestCompletenessForSets.get(currentSet)).toString();

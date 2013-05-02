@@ -29,7 +29,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="" 
+         android:textSize="30px"
+         android:textStyle="italic"
+         android:textAlignment="center"
+         android:gravity="center_horizontal"
+         android:layout_centerHorizontal="true"
         android:layout_below="@id/scoreBar"
+        android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="10dp"
         />
     
     <TextView
@@ -37,7 +45,23 @@
          android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Completeness: " 
+        android:textSize="30px"
         android:layout_below="@id/Message"
+        android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+        />
+    
+    <TextView
+        android:id="@+id/streak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+      	android:text="Your Longest Streak: "
+      	android:layout_below="@id/Completeness"
+      	android:paddingBottom="10dp"
+      	android:textSize="30px"
+      	android:paddingTop="5dp"
+      	android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
         />
     <TextView
         android:id="@+id/improveCompleteness"
@@ -45,41 +69,58 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:textStyle="italic"
-        android:layout_below="@id/Completeness"
+        android:layout_below="@id/streak"
         android:text="*To Improve Completeness, use fewer hints and attempts to answer*"
         android:textAlignment="center"
         android:gravity="center_horizontal"
-        android:textSize="10dp"
+        android:textSize="15dp"
         />
-    <TextView
-        android:id="@+id/streak"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-      	android:text="Your Longest Streak: "
-      	android:layout_below="@id/improveCompleteness"
-      	android:paddingBottom="10dp"
-      	android:paddingTop="5dp"
-        />
+    <View
+     android:id="@+id/divider"
+    android:layout_width="fill_parent"
+    android:layout_marginLeft="50dp"
+    android:layout_marginRight="50dp"
+    android:layout_marginTop="15dp"
+    android:layout_marginBottom="15dp"
+    android:layout_centerHorizontal="true"
+    android:layout_height="2dp"
+    android:layout_below="@id/improveCompleteness"
+    android:background="@android:color/holo_blue_light"/>
     <TextView
         android:id="@+id/best"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="\nYour Best Results For This Set: " 
-        android:layout_below="@id/streak"
+        android:textAlignment="center"
+        android:text="Your Best Results For This Set: " 
+        android:textSize="30px"
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/divider"
+        android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
         />
-    <TextView
-        android:id="@+id/bestScore"
+    <RatingBar 
+        android:id="@+id/bestScoreBar"
+        android:numStars="3"
+        android:rating="3"
+        style="?android:attr/ratingBarStyleIndicator"
+        android:layout_below="@id/best"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Best Score: " 
-        android:layout_below="@id/best"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         />
      <TextView
         android:id="@+id/bestCompleteness"
          android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Best Completeness: " 
-        android:layout_below="@id/bestScore"
+        android:textSize="25px"
+        android:layout_below="@id/bestScoreBar"
+        android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
         />
     <TextView
         android:id="@+id/bestStreak"
@@ -87,17 +128,32 @@
         android:layout_height="wrap_content"
       	android:text="Your Longest Streak Ever: "
       	android:layout_below="@id/bestCompleteness"
+      	android:textSize="25px"
       	android:paddingBottom="10dp"
       	android:paddingTop="5dp"
+      	android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
         />
+    <View
+     android:id="@+id/divider2"
+    android:layout_width="fill_parent"
+    android:layout_marginTop="15dp"
+    android:layout_marginBottom="15dp"
+    android:layout_centerHorizontal="true"
+    android:layout_height="2dp"
+    android:layout_below="@id/bestStreak"
+    android:background="@android:color/holo_blue_light"/>
      <TextView
         android:id="@+id/sendReport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-      	android:text="\nSend a detailed report of this set via Email? "
-      	android:layout_below="@id/bestStreak"
-      	android:paddingBottom="10dp"
+      	android:text="Send a detailed report of this set via Email? "
+      	android:layout_below="@id/divider2"
+      	android:textSize="30px"
+      	android:paddingBottom="15dp"
       	android:paddingTop="5dp"
+      	android:gravity="center_horizontal"
+      	android:layout_centerHorizontal="true"
         />
    <!--  <Button 
         android:id="@+id/btnMainMenu"
