@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/sentance"
                 android:gravity="left|center_vertical"
-                android:onClick="onRhymeHintButtonClick"
+                android:onClick="onSentenceHintButtonClick"
                 android:text="Sentence" />
 
             <Button
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/answer"
                 android:gravity="left|center_vertical"
-                android:onClick="onRhymeHintButtonClick"
+                android:onClick="onAnswerHintButtonClick"
                 android:text="Answer" />
         </LinearLayout>
 
