@@ -47,23 +47,23 @@
 
             <Button
                 android:id="@+id/hint2button"
-                android:layout_width="57dp"
+                android:layout_width="83dp"
                 android:layout_height="45dp"
-                android:background="@drawable/earclipart"
+                android:background="@drawable/ear"
                 android:onClick="onRhymeHintButtonClick" />
 
             <Button
                 android:id="@+id/hint1button"
-                android:layout_width="52dp"
+                android:layout_width="102dp"
                 android:layout_height="51dp"
-                android:background="@drawable/abcblocks"
+                android:background="@drawable/sentance"
                 android:onClick="onSentenceHintButtonClick" />
 
             <Button
                 android:id="@+id/hint3button"
-                android:layout_width="54dp"
+                android:layout_width="111dp"
                 android:layout_height="58dp"
-                android:background="@drawable/exclamationicon"
+                android:background="@drawable/answer"
                 android:onClick="onAnswerHintButtonClick" />
 
         </LinearLayout>
