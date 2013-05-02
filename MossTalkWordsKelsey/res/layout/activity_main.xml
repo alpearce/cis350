@@ -5,7 +5,7 @@
     android:background="#ffffff"
     android:orientation="vertical"
     tools:context=".MainActivity" >
-  
+
     <ImageSwitcher
         android:id="@+id/ImageSwitcher1"
         android:layout_width="match_parent"
@@ -16,7 +16,6 @@
         android:layout_below="@+id/btnChangeImage"
         android:background="@android:color/white"
         android:paddingTop="10dp" >
-
     </ImageSwitcher>
 
     <TextView
@@ -24,10 +23,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/btnChangeImage"
-        android:textSize="20sp"
-        android:textColor="#000000"
         android:layout_centerHorizontal="true"
-        android:text="" />
+        android:text=""
+        android:textColor="#000000"
+        android:textSize="20sp" />
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -36,8 +35,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:orientation="vertical" >
-        
-        
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -47,52 +44,57 @@
 
             <Button
                 android:id="@+id/hint2button"
-                android:layout_width="83dp"
-                android:layout_height="45dp"
-                android:background="@drawable/ear"
-                android:onClick="onRhymeHintButtonClick" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ear"
+                android:gravity="left|center_vertical"
+                android:onClick="onRhymeHintButtonClick"
+                android:text="Rhyme" />
 
             <Button
                 android:id="@+id/hint1button"
-                android:layout_width="102dp"
-                android:layout_height="51dp"
-                android:background="@drawable/sentance"
-                android:onClick="onSentenceHintButtonClick" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/sentance"
+                android:gravity="left|center_vertical"
+                android:onClick="onRhymeHintButtonClick"
+                android:text="Sentance" />
 
             <Button
                 android:id="@+id/hint3button"
-                android:layout_width="111dp"
-                android:layout_height="58dp"
-                android:background="@drawable/answer"
-                android:onClick="onAnswerHintButtonClick" />
-
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/answer"
+                android:gravity="left|center_vertical"
+                android:onClick="onRhymeHintButtonClick"
+                android:text="Answer" />
         </LinearLayout>
 
         <Button
             android:id="@+id/speakButton"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:text="@string/speak" 
-            android:drawableLeft = "@drawable/ic_action_microphone"/>
+            android:drawableLeft="@drawable/ic_action_microphone"
+            android:text="@string/speak" />
     </LinearLayout>
 
-    <ViewFlipper 
-        android:id = "@+id/ViewFlipper"
+    <ViewFlipper
+        android:id="@+id/ViewFlipper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-	    android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true" >
 
-	   	 <TextView
-	        android:id="@+id/scoretext"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentTop="true"
-	        android:layout_centerHorizontal="true"
-	        android:textColor = "#000000"
-	        android:textSize = "30sp"
-	        android:layout_marginLeft = "7sp"
-	        android:text="@string/score" />
+        <TextView
+            android:id="@+id/scoretext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="7sp"
+            android:text="@string/score"
+            android:textColor="#000000"
+            android:textSize="30sp" />
     </ViewFlipper>
 
     <ProgressBar
@@ -102,17 +104,16 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ViewFlipper"
         android:layout_centerHorizontal="true" />
-            
 
     <Button
         android:id="@+id/btnChangeImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop = "true"
-        android:drawableLeft = "@drawable/finger_btn" />
-    	
-<!-- 
+        android:layout_alignParentTop="true"
+        android:drawableLeft="@drawable/finger_btn" />
+
+    <!--
     <Button
         android:id="@+id/nextSetButton"
         android:layout_width="wrap_content"
@@ -121,17 +122,16 @@
         android:layout_alignParentTop="true"
         android:onClick="onNextSetButtonClick"
         android:text="@string/nextSet" />
+    -->
 
- -->
     <Chronometer
         android:id="@+id/chronometer1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/scoretext"
-        android:layout_marginLeft ="7sp"
-        android:textSize="30sp"
-        android:text="Chronometer" />
-
+        android:layout_marginLeft="7sp"
+        android:text="Chronometer"
+        android:textSize="30sp" />
 
 </RelativeLayout>
